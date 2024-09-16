@@ -3,6 +3,6 @@ const config = {
   parent: "canvas-wrapper",
   width: 1920,
   height: 1080,
-  scene: Accueil,
+  scene: [Accueil, Jeu, Credits, Guide]
 };
 const game = new Phaser.Game(config);
