@@ -18,11 +18,11 @@ class Guide extends Phaser.Scene {
         let bg = this.add.image(config.width / 2, config.height / 2, 'BG').setAngle(90);
 
         //main menu
-        let mainMenu = this.add.image(config.width / 2, config.height / 2 + 100, 'mainMenu').setScale(0.5).setOrigin(0, 1);
+        let mainMenu = this.add.image(config.width / 2, config.height / 2 + 100, 'mainMenu').setScale(0.5);
         hudContainer.add(mainMenu);
 
         //replay
-        let replay = this.add.image(config.width / 2 + 100, config.height / 2 + 100, 'replay').setScale(0.5).setOrigin(0, 1);
+        let replay = this.add.image(config.width / 2 + 100, config.height / 2 + 100, 'replay').setScale(0.5);
         hudContainer.add(replay);
 
         mainMenu.setInteractive();
