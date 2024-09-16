@@ -16,8 +16,8 @@ class Guide extends Phaser.Scene {
         //BG
         let bg = this.add.image(config.width / 2, config.height / 2, 'BG').setAngle(90);
 
-        //closeBtn
-        let mainMenu = this.add.image(config.width / 2 + 800, config.height / 2 - 400, 'mainMenu').setScale(0.5).setOrigin(0, 1);
+        //main menu
+        let mainMenu = this.add.image(config.width / 2, config.height / 2 + 100, 'mainMenu').setScale(0.5);
         hudContainer.add(mainMenu);
 
         mainMenu.setInteractive();
