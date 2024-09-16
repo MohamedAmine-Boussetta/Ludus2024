@@ -47,6 +47,14 @@ class Accueil extends Phaser.Scene {
             this.scene.start('jeu');
         });
 
+        creditsBtn.on('pointerdown', () => {
+            this.scene.start('credits');
+        });
+
+        faqBtn.on('pointerdown', () => {
+            this.scene.start('guide');
+        });
+
     }
 
     update() { }
