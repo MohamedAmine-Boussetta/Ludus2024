@@ -17,7 +17,7 @@ class Credits extends Phaser.Scene {
         let bg = this.add.image(config.width / 2, config.height / 2, 'BG').setAngle(90);
 
         //closeBtn
-        let closeBtn = this.add.image(config.width / 2 + 500, config.height / 2 - 300, 'closeBtn').setScale(0.3).setOrigin(0, 1);
+        let closeBtn = this.add.image(config.width / 2 + 530, config.height / 2 - 270, 'closeBtn').setScale(0.3).setOrigin(0, 1);
         hudContainer.add(closeBtn);
 
         closeBtn.setInteractive();

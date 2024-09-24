@@ -6,7 +6,7 @@ class Jeu extends Phaser.Scene {
     preload() {
         this.load.image('BG', './assets/images/ui/Main_Menu/BG.png');
         this.load.image('exitBtn', './assets/images/ui/Main_Menu/Exit_BTN.png');
-        this.load.image("ship", "./assets/images/ui/Main")
+        this.load.image("ship", "./assets/images/ui/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Full health.png")
     }
 
     create() {
@@ -16,6 +16,7 @@ class Jeu extends Phaser.Scene {
 
         //BG
         let bg = this.add.image(config.width / 2, config.height / 2, 'BG').setAngle(90);
+        this.player = this.add.image(config.width / 2, config.height / 2, "ship").setScale(1.3);
 
         //exitBtn
         let exitBtn = this.add.image(config.width / 2, config.height / 2 + 330, 'exitBtn').setScale(0.5);
