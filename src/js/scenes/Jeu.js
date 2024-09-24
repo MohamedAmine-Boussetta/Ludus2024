@@ -43,7 +43,7 @@ class Jeu extends Phaser.Scene {
     }
 
     update() {
-        const flyspeed = 150;
+        const flyspeed = 200;
         let velocity = flyspeed;
 
         if (this.keys.left.isDown) {
