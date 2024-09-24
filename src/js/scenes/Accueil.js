@@ -29,16 +29,16 @@ class Accueil extends Phaser.Scene {
         let logo = this.add.image(config.width / 2, config.height / 2 - 200, 'logo').setScale(0.7);
 
         //Btn credits
-        let creditsBtn = this.add.image(config.width / 2 + -800, config.height / 2 + 530, 'InfoBtn').setOrigin(1, 1).setScale(0.5);
+        let creditsBtn = this.add.image(config.width / 2 + -450, config.height / 2 + 330, 'InfoBtn').setOrigin(1, 1).setScale(0.3);
         hudContainer.add(creditsBtn);
 
 
         //Btn comment jouer
-        let faqBtn = this.add.image(config.width / 2 + -660, config.height / 2 + 530, 'faqBtn').setOrigin(1, 1).setScale(0.5);
+        let faqBtn = this.add.image(config.width / 2 + -520, config.height / 2 + 330, 'faqBtn').setOrigin(1, 1).setScale(0.3);
         hudContainer.add(faqBtn);
 
         //sound_BTN
-        let soundBtn = this.add.image(config.width / 2 + 910, config.height / 2 + 530, 'soundBtn').setOrigin(1, 1).setScale(0.5);
+        let soundBtn = this.add.image(config.width / 2 + 580, config.height / 2 + 330, 'soundBtn').setOrigin(1, 1).setScale(0.3);
         hudContainer.add(soundBtn);
 
         startBtn.setInteractive();
