@@ -16,11 +16,12 @@ class Jeu extends Phaser.Scene {
 
         //BG
         let bg = this.add.image(config.width / 2, config.height / 2, 'BG').setAngle(90);
-        this.player = this.add.image(config.width / 2, config.height / 2, "ship").setScale(1.3);
 
         //exitBtn
         let exitBtn = this.add.image(config.width / 2, config.height / 2 + 330, 'exitBtn').setScale(0.5);
         hudContainer.add(exitBtn);
+
+
 
         exitBtn.setInteractive();
 
@@ -28,5 +29,9 @@ class Jeu extends Phaser.Scene {
             this.scene.start('accueil');
         });
 
+        //player
+         this.player = this.physics.add.image(config.width / 2, config.height / 2, "ship");
     }
+
+
 }

@@ -1,4 +1,4 @@
-class Guide extends Phaser.Scene {
+class Terminer extends Phaser.Scene {
     constructor() {
         super({ key: 'perdu' });
     }

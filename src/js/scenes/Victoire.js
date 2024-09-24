@@ -1,4 +1,4 @@
-class Guide extends Phaser.Scene {
+class Victoire extends Phaser.Scene {
     constructor() {
         super({ key: 'victoire' });
     }
