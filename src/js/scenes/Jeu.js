@@ -30,7 +30,37 @@ class Jeu extends Phaser.Scene {
         });
 
         //player
-         this.player = this.physics.add.image(config.width / 2, config.height / 2, "ship");
+        this.player = this.physics.add.image(config.width / 2, config.height / 2, "ship");
+
+        // Touches
+        this.keys = this.input.keyboard.addKeys({
+        left: Phaser.Input.Keyboard.KeyCodes.A,
+        right: Phaser.Input.Keyboard.KeyCodes.D,
+        down: Phaser.Input.Keyboard.KeyCodes.S,
+        up: Phaser.Input.Keyboard.KeyCodes.W,
+      });
+         
+    }
+
+    update() {
+        const flyspeed = 150;
+        let velocity = flyspeed;
+
+        if (this.keys.left.isDown) {
+            this.player.setVelocityX(-velocity);
+          } else if (this.keys.right.isDown) {
+            this.player.setVelocityX(velocity);
+        }else {
+            this.player.setVelocityX(0);
+        }
+
+        if (this.keys.down.isDown){
+            this.player.setVelocityY(velocity);
+        }else if(this.keys.up.isDown){
+            this.player.setVelocityY(-velocity);
+        }else {
+            this.player.setVelocityY(0);
+        }
     }
 
 
