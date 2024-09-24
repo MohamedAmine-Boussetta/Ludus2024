@@ -6,6 +6,7 @@ class Jeu extends Phaser.Scene {
     preload() {
         this.load.image('BG', './assets/images/ui/Main_Menu/BG.png');
         this.load.image('exitBtn', './assets/images/ui/Main_Menu/Exit_BTN.png');
+        this.load.image("ship", "./assets/images/ui/Main")
     }
 
     create() {
