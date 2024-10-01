@@ -4,8 +4,9 @@ const config = {
   width: 1280,
   height: 720,
   scene: [Accueil, Jeu, Credits, Guide, Victoire, Terminer],
+  pixelArt: true,
   physics: {
-    default: "arcade"
-  }
+    default: "arcade",
+  },
 };
 const game = new Phaser.Game(config);
