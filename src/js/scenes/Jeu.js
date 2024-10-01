@@ -15,12 +15,12 @@ class Jeu extends Phaser.Scene {
       "assets/images/ui/Main_Ship/Main Ship - Engines/PNGs/Main Ship - Engines - Base Engine.png"
     );
     this.load.spritesheet(
-      "idle",
-      "assets/images/ui/Main_Ship/Main Ship - Engine Effects/PNGs/Main Ship - Engines - Base Engine - Idle.png"
-    );
-    this.load.spritesheet(
-      "fly",
-      "assets/images/ui/Main_Ship/Main Ship - Engine Effects/PNGs/Main Ship - Engines - Base Engine - Powering.png"
+      "engineStart",
+      "assets/images/ui/Main_Ship/Main Ship - Engine Effects/PNGs/Main Ship - Engines - Base Engine - Idle.png",
+      {
+        frameWidth: 48,
+        frameHeight: 48,
+      }
     );
   }
 
@@ -51,7 +51,10 @@ class Jeu extends Phaser.Scene {
       .create(config.width / 2, config.height / 2, "ship")
       .setScale(1.7);
     this.player
-      .create(config.width / 2, config.height / 2 + 17, "engine")
+      .create(config.width / 2, config.height / 2 + 25, "engine")
+      .setScale(1.7);
+    this.engineStart = this.player
+      .create(config.width / 2, config.height / 2 + 26, "engineStart")
       .setScale(1.7);
 
     // Touches
@@ -64,17 +67,25 @@ class Jeu extends Phaser.Scene {
 
     this.anims.create({
       key: "idle",
-      frames: this.anims.generateFrameNumbers("idle", { start: 0, end: 2 }),
+      frames: this.anims.generateFrameNumbers("engineStart", {
+        start: 0,
+        end: 2,
+      }),
       frameRate: 10,
       repeat: -1,
     });
 
     this.anims.create({
       key: "fly",
-      frames: this.anims.generateFrameNumbers("fly", { start: 0, end: 3 }),
+      frames: this.anims.generateFrameNumbers("engineStart", {
+        start: 4,
+        end: 7,
+      }),
       frameRate: 10,
       repeat: -1,
     });
+
+    this.engineStart.anims.play("idle");
   }
 
   update() {
@@ -104,13 +115,5 @@ class Jeu extends Phaser.Scene {
     this.physics.world.wrap(this.player);
   }
 
-  handleAnimations() {
-    if (this.keys.left.isDown) {
-      this.player.anims.play("fly", true);
-    } else if (this.keys.right.isDown) {
-      this.player.anims.play("fly", true);
-    } else {
-      this.player.anims.play("idle", true);
-    }
-  }
+  handleAnimations() {}
 }
