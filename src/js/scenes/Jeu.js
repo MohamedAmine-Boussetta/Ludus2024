@@ -36,7 +36,7 @@ class Jeu extends Phaser.Scene {
     //player
     this.player = this.physics.add
       .image(config.width / 2, config.height / 2, "ship")
-      .setScale(2);
+      .setScale(1.7);
 
     // Touches
     this.keys = this.input.keyboard.addKeys({
