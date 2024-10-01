@@ -10,6 +10,18 @@ class Jeu extends Phaser.Scene {
       "ship",
       "./assets/images/ui/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Full health.png"
     );
+    this.load.image(
+      "engine",
+      "assets/images/ui/Main_Ship/Main Ship - Engines/PNGs/Main Ship - Engines - Base Engine.png"
+    );
+    this.load.spritesheet(
+      "idle",
+      "assets/images/ui/Main_Ship/Main Ship - Engine Effects/PNGs/Main Ship - Engines - Base Engine - Idle.png"
+    );
+    this.load.spritesheet(
+      "fly",
+      "assets/images/ui/Main_Ship/Main Ship - Engine Effects/PNGs/Main Ship - Engines - Base Engine - Powering.png"
+    );
   }
 
   create() {
@@ -34,8 +46,12 @@ class Jeu extends Phaser.Scene {
     });
 
     //player
-    this.player = this.physics.add
-      .image(config.width / 2, config.height / 2, "ship")
+    this.player = this.physics.add.group();
+    this.player
+      .create(config.width / 2, config.height / 2, "ship")
+      .setScale(1.7);
+    this.player
+      .create(config.width / 2, config.height / 2 + 17, "engine")
       .setScale(1.7);
 
     // Touches
@@ -45,9 +61,27 @@ class Jeu extends Phaser.Scene {
       down: Phaser.Input.Keyboard.KeyCodes.S,
       up: Phaser.Input.Keyboard.KeyCodes.W,
     });
+
+    this.anims.create({
+      key: "idle",
+      frames: this.anims.generateFrameNumbers("idle", { start: 0, end: 2 }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "fly",
+      frames: this.anims.generateFrameNumbers("fly", { start: 0, end: 3 }),
+      frameRate: 10,
+      repeat: -1,
+    });
   }
 
   update() {
+    this.handleMovement();
+    this.handleAnimations();
+  }
+  handleMovement() {
     const flyspeed = 200;
     let velocity = flyspeed;
 
@@ -65,6 +99,18 @@ class Jeu extends Phaser.Scene {
       this.player.setVelocityY(-velocity);
     } else {
       this.player.setVelocityY(0);
+    }
+
+    this.physics.world.wrap(this.player);
+  }
+
+  handleAnimations() {
+    if (this.keys.left.isDown) {
+      this.player.anims.play("fly", true);
+    } else if (this.keys.right.isDown) {
+      this.player.anims.play("fly", true);
+    } else {
+      this.player.anims.play("idle", true);
     }
   }
 }
