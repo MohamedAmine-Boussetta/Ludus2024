@@ -16,7 +16,7 @@ class Jeu extends Phaser.Scene {
     );
     this.load.spritesheet(
       "engineStart",
-      "assets/images/ui/Main_Ship/Main Ship - Engine Effects/PNGs/Main Ship - Engines - Base Engine - Idle.png",
+      "assets/images/ui/Main_Ship/Main Ship - Engine Effects/PNGs/Main Ship - Engines - Base Engine - Spritesheet.png",
       {
         frameWidth: 48,
         frameHeight: 48,
@@ -115,5 +115,12 @@ class Jeu extends Phaser.Scene {
     this.physics.world.wrap(this.player);
   }
 
-  handleAnimations() {}
+  handleAnimations() {
+
+    if (this.keys.down.isDown || this.keys.up.isDown || this.keys.left.isDown || this.keys.right.isDown) {
+      this.engineStart.anims.play("fly", true)
+    } else {
+      this.engineStart.anims.play("idle", true);
+    }
+  }
 }
