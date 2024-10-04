@@ -8,15 +8,15 @@ class Jeu extends Phaser.Scene {
     this.load.image("exitBtn", "./assets/images/ui/Main_Menu/Exit_BTN.png");
     this.load.image(
       "ship",
-      "./assets/images/ui/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Full health.png"
+      "./assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Full health.png"
     );
     this.load.image(
       "engine",
-      "assets/images/ui/Main_Ship/Main Ship - Engines/PNGs/Main Ship - Engines - Base Engine.png"
+      "./assets/images/characters/Main_Ship/Main Ship - Engines/PNGs/Main Ship - Engines - Base Engine.png"
     );
     this.load.spritesheet(
       "engineStart",
-      "assets/images/ui/Main_Ship/Main Ship - Engine Effects/PNGs/Main Ship - Engines - Base Engine - Spritesheet.png",
+      "./assets/images/characters/Main_Ship/Main Ship - Engine Effects/PNGs/Main Ship - Engines - Base Engine - Spritesheet.png",
       {
         frameWidth: 48,
         frameHeight: 48,
