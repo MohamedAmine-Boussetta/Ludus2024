@@ -81,7 +81,7 @@ class Jeu extends Phaser.Scene {
         start: 4,
         end: 7,
       }),
-      frameRate: 10,
+      frameRate: 8,
       repeat: -1,
     });
 
@@ -92,10 +92,10 @@ class Jeu extends Phaser.Scene {
     this.handleMovement();
     this.handleAnimations();
   }
+
   handleMovement() {
     const flyspeed = 200;
     let velocity = flyspeed;
-
     if (this.keys.left.isDown) {
       this.player.setVelocityX(-velocity);
     } else if (this.keys.right.isDown) {
@@ -111,12 +111,10 @@ class Jeu extends Phaser.Scene {
     } else {
       this.player.setVelocityY(0);
     }
-
     this.physics.world.wrap(this.player);
   }
 
   handleAnimations() {
-
     if (this.keys.down.isDown || this.keys.up.isDown || this.keys.left.isDown || this.keys.right.isDown) {
       this.engineStart.anims.play("fly", true)
     } else {
