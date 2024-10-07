@@ -8,15 +8,15 @@ class Jeu extends Phaser.Scene {
     this.load.image("exitBtn", "./assets/images/ui/Main_Menu/Exit_BTN.png");
     this.load.image(
       "ship",
-      "./assets/images/ui/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Full health.png"
+      "./assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Full health.png"
     );
     this.load.image(
       "engine",
-      "assets/images/ui/Main_Ship/Main Ship - Engines/PNGs/Main Ship - Engines - Base Engine.png"
+      "./assets/images/characters/Main_Ship/Main Ship - Engines/PNGs/Main Ship - Engines - Base Engine.png"
     );
     this.load.spritesheet(
       "engineStart",
-      "assets/images/ui/Main_Ship/Main Ship - Engine Effects/PNGs/Main Ship - Engines - Base Engine - Idle.png",
+      "./assets/images/characters/Main_Ship/Main Ship - Engine Effects/PNGs/Main Ship - Engines - Base Engine - Spritesheet.png",
       {
         frameWidth: 48,
         frameHeight: 48,
@@ -81,7 +81,7 @@ class Jeu extends Phaser.Scene {
         start: 4,
         end: 7,
       }),
-      frameRate: 10,
+      frameRate: 8,
       repeat: -1,
     });
 
@@ -92,10 +92,10 @@ class Jeu extends Phaser.Scene {
     this.handleMovement();
     this.handleAnimations();
   }
+
   handleMovement() {
     const flyspeed = 200;
     let velocity = flyspeed;
-
     if (this.keys.left.isDown) {
       this.player.setVelocityX(-velocity);
     } else if (this.keys.right.isDown) {
@@ -111,9 +111,14 @@ class Jeu extends Phaser.Scene {
     } else {
       this.player.setVelocityY(0);
     }
-
     this.physics.world.wrap(this.player);
   }
 
-  handleAnimations() {}
+  handleAnimations() {
+    if (this.keys.down.isDown || this.keys.up.isDown || this.keys.left.isDown || this.keys.right.isDown) {
+      this.engineStart.anims.play("fly", true)
+    } else {
+      this.engineStart.anims.play("idle", true);
+    }
+  }
 }
