@@ -7,6 +7,9 @@ const config = {
   pixelArt: true,
   physics: {
     default: "arcade",
+    arcade: {
+      debug: false,
+    }
   },
 };
 const game = new Phaser.Game(config);

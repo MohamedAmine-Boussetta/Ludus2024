@@ -22,6 +22,12 @@ class Jeu extends Phaser.Scene {
         frameHeight: 48,
       }
     );
+    this.load.spritesheet("rockets", "assets/images/characters/Main_Ship/Main Ship - Weapons/PNGs/Main Ship - Weapons - Rockets.png",
+      {
+        frameWidth: 48,
+        frameHeight: 48,
+      }
+    )
   }
 
   create() {
@@ -47,23 +53,30 @@ class Jeu extends Phaser.Scene {
 
     //player
     this.player = this.physics.add.group();
-    this.player
+    this.rockets = this.player.create(config.width / 2, config.height / 2, "rockets").setScale(1.7);
+    this.ship = this.player
       .create(config.width / 2, config.height / 2, "ship")
       .setScale(1.7);
-    this.player
-      .create(config.width / 2, config.height / 2 + 25, "engine")
-      .setScale(1.7);
+    this.engine = this.player
+      .create(config.width / 2, config.height / 2 + 20, "engine")
+      .setScale(1.5);
     this.engineStart = this.player
-      .create(config.width / 2, config.height / 2 + 26, "engineStart")
-      .setScale(1.7);
-
+      .create(config.width / 2, config.height / 2 + 22, "engineStart")
+      .setScale(1.5);
     // Touches
     this.keys = this.input.keyboard.addKeys({
       left: Phaser.Input.Keyboard.KeyCodes.A,
       right: Phaser.Input.Keyboard.KeyCodes.D,
       down: Phaser.Input.Keyboard.KeyCodes.S,
       up: Phaser.Input.Keyboard.KeyCodes.W,
+      space: Phaser.Input.Keyboard.KeyCodes.SPACE,
     });
+
+    //hitbox
+    this.rockets.body.setSize(0.1, 0.1);
+    this.engineStart.body.setSize(0.1, 0.1);
+    this.engine.body.setSize(0.1, 0.1)
+    this.ship.body.setSize(30, 35).setOffset(9, 11)
 
     this.anims.create({
       key: "idle",
@@ -86,6 +99,16 @@ class Jeu extends Phaser.Scene {
     });
 
     this.engineStart.anims.play("idle");
+
+    this.anims.create({
+      key: "shoot",
+      frames: this.anims.generateFrameNumbers("rockets", {
+        start: 0,
+        end: 15,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
   }
 
   update() {
@@ -119,6 +142,12 @@ class Jeu extends Phaser.Scene {
       this.engineStart.anims.play("fly", true)
     } else {
       this.engineStart.anims.play("idle", true);
+    }
+
+    if (this.keys.space.isDown){
+      this.rockets.anims.play("shoot", true)
+    }else if(this.keys.space.isUp){
+      this.rockets.anims.play("shoot", false)
     }
   }
 }
