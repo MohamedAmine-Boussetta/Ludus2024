@@ -57,11 +57,6 @@ class Jeu extends Phaser.Scene {
       this.scene.start("accueil");
     });
 
-    //asteroid
-    this.asteroid = this.add
-      .image(config.width / 2, config.height / 2, "asteroid")
-      .setScale(2);
-
     //player
     this.player = this.physics.add.group();
     this.rockets = this.player
@@ -122,6 +117,30 @@ class Jeu extends Phaser.Scene {
       }),
       frameRate: 8,
       repeat: -1,
+    });
+
+    //asteroid
+    const asteroid = this.add.image(
+      config.width / 2,
+      config.height / 2,
+      "asteroid"
+    );
+
+    this.moveAsteroid(asteroid);
+  }
+  moveAsteroid(asteroid) {
+    asteroid.x = -55;
+    asteroid.y = Phaser.Math.Between(400, 700);
+    asteroid.scale = Phaser.Math.Between(1, 4);
+
+    this.tweens.add({
+      targets: asteroid,
+      delay: Phaser.Math.Between(5000, 20000),
+      x: 1300,
+      duration: Phaser.Math.Between(1000, 4000),
+      onComplete: () => {
+        this.moveAsteroid(asteroid);
+      },
     });
   }
 
