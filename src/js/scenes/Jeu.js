@@ -150,7 +150,7 @@ class Jeu extends Phaser.Scene {
   }
 
   handleMovement() {
-    const flyspeed = 200;
+    const flyspeed = 250;
     let velocity = flyspeed;
     if (this.keys.left.isDown) {
       this.player.setVelocityX(-velocity);
