@@ -30,6 +30,10 @@ class Jeu extends Phaser.Scene {
         frameHeight: 48,
       }
     );
+    this.load.image(
+      "asteroid",
+      "assets/images/prop/Asteroids/PNGs/Asteroid 01 - Base.png"
+    );
   }
 
   create() {
@@ -52,6 +56,11 @@ class Jeu extends Phaser.Scene {
     exitBtn.on("pointerdown", () => {
       this.scene.start("accueil");
     });
+
+    //asteroid
+    this.asteroid = this.add
+      .image(config.width / 2, config.height / 2, "asteroid")
+      .setScale(2);
 
     //player
     this.player = this.physics.add.group();
