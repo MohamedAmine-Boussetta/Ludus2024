@@ -60,16 +60,16 @@ class Jeu extends Phaser.Scene {
     //player
     this.player = this.physics.add.group();
     this.rockets = this.player
-      .create(config.width / 2, config.height / 2, "rockets")
+      .create(config.width / 2, config.height / 2 + 150, "rockets")
       .setScale(1.7);
     this.engineStart = this.player
-      .create(config.width / 2, config.height / 2 + 4, "engineStart")
+      .create(config.width / 2, config.height / 2 + 154, "engineStart")
       .setScale(1.5);
     this.engine = this.player
-      .create(config.width / 2, config.height / 2 + 3, "engine")
+      .create(config.width / 2, config.height / 2 + 153, "engine")
       .setScale(1.5);
     this.ship = this.player
-      .create(config.width / 2, config.height / 2, "ship")
+      .create(config.width / 2, config.height / 2 + 150, "ship")
       .setScale(1.7);
 
     // Touches
@@ -129,7 +129,7 @@ class Jeu extends Phaser.Scene {
     this.moveAsteroid(asteroid);
   }
   moveAsteroid(asteroid) {
-    asteroid.x = -55;
+    asteroid.x = -80;
     asteroid.y = Phaser.Math.Between(400, 700);
     asteroid.scale = Phaser.Math.Between(1, 4);
 
