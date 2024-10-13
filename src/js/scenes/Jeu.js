@@ -85,7 +85,7 @@ class Jeu extends Phaser.Scene {
     this.rockets.body.setSize(0.1, 0.1);
     this.engineStart.body.setSize(0.1, 0.1);
     this.engine.body.setSize(0.1, 0.1);
-    this.ship.body.setSize(30, 35).setOffset(9, 11);
+    this.ship.body.setSize(30, 29).setOffset(9, 11);
 
     this.anims.create({
       key: "idle",
