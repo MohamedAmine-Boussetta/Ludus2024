@@ -34,8 +34,8 @@ class Jeu extends Phaser.Scene {
       "launcherBullet",
       "assets/images/characters/Main_Ship/Main ship - Weapons - Projectiles/PNGs/Main ship weapon - Projectile - Auto cannon bullet.png",
       {
-        frameWidth: 48,
-        frameHeight: 48,
+        frameWidth: 32,
+        frameHeight: 32,
       }
     );
     this.load.image(
@@ -80,11 +80,6 @@ class Jeu extends Phaser.Scene {
       .create(config.width / 2, config.height / 2, "ship")
       .setScale(1.7);
 
-    //bullet
-    this.launcherBullets = this.physics.add.group({
-      defaultKey: "launcherBullet",
-      maxSize: 1,
-    });
     // Touches
     this.keys = this.input.keyboard.addKeys({
       left: Phaser.Input.Keyboard.KeyCodes.A,
@@ -92,6 +87,25 @@ class Jeu extends Phaser.Scene {
       down: Phaser.Input.Keyboard.KeyCodes.S,
       up: Phaser.Input.Keyboard.KeyCodes.W,
       space: Phaser.Input.Keyboard.KeyCodes.SPACE,
+    });
+
+    //bullet
+    this.launcherBullets = this.physics.add.group();
+    for (let i = 0; i < 5; i++) {
+      this.launcherBullets.create(0, 0, "launcherBullet", 0);
+    }
+
+    this.input.on("this.keys.space.down", () => {
+      const launcherBullet = this.launcherBullets.get(
+        this.player.x,
+        this.player.y
+      );
+      if (launcherBullet) {
+        launcherBullet.setActive(true);
+        launcherBullet.setVisible(true);
+        launcherBullet.setVelocity(0, -600);
+        launcherBullet.start("bulletLauncher");
+      }
     });
 
     //hitbox
@@ -127,10 +141,19 @@ class Jeu extends Phaser.Scene {
       key: "shoot",
       frames: this.anims.generateFrameNumbers("launcher", {
         start: 0,
-        end: 15,
+        end: 11,
       }),
       frameRate: 8,
       repeat: -1,
+    });
+
+    this.anims.create({
+      key: "bulletLauncher",
+      frames: this.anims.generateFrameNumbers("launcherBullet", {
+        start: 0,
+        end: 3,
+      }),
+      frameRate: 8,
     });
 
     //asteroid
