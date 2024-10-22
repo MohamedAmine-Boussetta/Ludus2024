@@ -23,8 +23,16 @@ class Jeu extends Phaser.Scene {
       }
     );
     this.load.spritesheet(
-      "rockets",
-      "assets/images/characters/Main_Ship/Main Ship - Weapons/PNGs/Main Ship - Weapons - Rockets.png",
+      "launcher",
+      "assets/images/characters/Main_Ship/Main Ship - Weapons/PNGs/Main Ship - Weapons - Big Space Gun.png",
+      {
+        frameWidth: 48,
+        frameHeight: 48,
+      }
+    );
+    this.load.spritesheet(
+      "launcherBullet",
+      "assets/images/characters/Main_Ship/Main ship - Weapons - Projectiles/PNGs/Main ship weapon - Projectile - Auto cannon bullet.png",
       {
         frameWidth: 48,
         frameHeight: 48,
@@ -59,19 +67,24 @@ class Jeu extends Phaser.Scene {
 
     //player
     this.player = this.physics.add.group();
-    this.rockets = this.player
-      .create(config.width / 2, config.height / 2 + 150, "rockets")
+    this.launcher = this.player
+      .create(config.width / 2, config.height / 2, "launcher")
       .setScale(1.7);
     this.engineStart = this.player
-      .create(config.width / 2, config.height / 2 + 154, "engineStart")
+      .create(config.width / 2, config.height / 2 + 4, "engineStart")
       .setScale(1.5);
     this.engine = this.player
-      .create(config.width / 2, config.height / 2 + 153, "engine")
+      .create(config.width / 2, config.height / 2 + 3, "engine")
       .setScale(1.5);
     this.ship = this.player
-      .create(config.width / 2, config.height / 2 + 150, "ship")
+      .create(config.width / 2, config.height / 2, "ship")
       .setScale(1.7);
 
+    //bullet
+    this.launcherBullets = this.physics.add.group({
+      defaultKey: "launcherBullet",
+      maxSize: 1,
+    });
     // Touches
     this.keys = this.input.keyboard.addKeys({
       left: Phaser.Input.Keyboard.KeyCodes.A,
@@ -82,11 +95,12 @@ class Jeu extends Phaser.Scene {
     });
 
     //hitbox
-    this.rockets.body.setSize(0.1, 0.1);
+    this.launcher.body.setSize(0.1, 0.1);
     this.engineStart.body.setSize(0.1, 0.1);
     this.engine.body.setSize(0.1, 0.1);
-    this.ship.body.setSize(30, 29).setOffset(9, 11);
+    this.ship.body.setSize(30, 35).setOffset(9, 11);
 
+    //animations
     this.anims.create({
       key: "idle",
       frames: this.anims.generateFrameNumbers("engineStart", {
@@ -111,7 +125,7 @@ class Jeu extends Phaser.Scene {
 
     this.anims.create({
       key: "shoot",
-      frames: this.anims.generateFrameNumbers("rockets", {
+      frames: this.anims.generateFrameNumbers("launcher", {
         start: 0,
         end: 15,
       }),
@@ -128,8 +142,9 @@ class Jeu extends Phaser.Scene {
 
     this.moveAsteroid(asteroid);
   }
+
   moveAsteroid(asteroid) {
-    asteroid.x = -80;
+    asteroid.x = -55;
     asteroid.y = Phaser.Math.Between(400, 700);
     asteroid.scale = Phaser.Math.Between(1, 4);
 
@@ -183,9 +198,9 @@ class Jeu extends Phaser.Scene {
     }
 
     if (this.keys.space.isDown) {
-      this.rockets.anims.play("shoot", true);
+      this.launcher.anims.play("shoot", true);
     } else if (this.keys.space.isUp) {
-      this.rockets.anims.play("shoot", false);
+      this.launcher.anims.play("shoot", false);
     }
   }
 }
