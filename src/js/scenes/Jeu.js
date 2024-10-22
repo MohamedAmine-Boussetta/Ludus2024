@@ -89,25 +89,6 @@ class Jeu extends Phaser.Scene {
       space: Phaser.Input.Keyboard.KeyCodes.SPACE,
     });
 
-    //bullet
-    this.launcherBullets = this.physics.add.group();
-    for (let i = 0; i < 5; i++) {
-      this.launcherBullets.create(0, 0, "launcherBullet", 0);
-    }
-
-    this.input.on("this.keys.space.down", () => {
-      const launcherBullet = this.launcherBullets.get(
-        this.player.x,
-        this.player.y
-      );
-      if (launcherBullet) {
-        launcherBullet.setActive(true);
-        launcherBullet.setVisible(true);
-        launcherBullet.setVelocity(0, -600);
-        launcherBullet.start("bulletLauncher");
-      }
-    });
-
     //hitbox
     this.launcher.body.setSize(0.1, 0.1);
     this.engineStart.body.setSize(0.1, 0.1);
@@ -154,6 +135,27 @@ class Jeu extends Phaser.Scene {
         end: 3,
       }),
       frameRate: 8,
+    });
+
+    //bullet
+    this.launcherBullets = this.physics.add.group();
+    for (let i = 0; i < 5; i++) {
+      this.launcherBullets.create(300, -600, "launcherBullet", 0);
+    }
+    this.keys.space.on("down", () => {
+      const launcherBullet = this.launcherBullets.get(
+        this.player.x,
+        this.player.y
+      );
+
+      if (launcherBullet) {
+        launcherBullet.setActive(true);
+        launcherBullet.setVisible(true);
+        launcherBullet.setPosition(this.player.x, this.player.y);
+        launcherBullet.setVelocity(0, -600);
+        launcherBullet.anims.play("bulletLauncher");
+      }
+      console.log(launcherBullet);
     });
 
     //asteroid
