@@ -144,16 +144,16 @@ class Jeu extends Phaser.Scene {
     }
     this.keys.space.on("down", () => {
       const launcherBullet = this.launcherBullets.get(
-        this.player.x,
-        this.player.y
+        this.launcher.x,
+        this.launcher.y
       );
 
       if (launcherBullet) {
         launcherBullet.setActive(true);
         launcherBullet.setVisible(true);
-        launcherBullet.setPosition(this.player.x, this.player.y);
+        launcherBullet.setPosition(this.launcher.x, this.launcher.y);
         launcherBullet.setVelocity(0, -600);
-        launcherBullet.anims.play("bulletLauncher");
+        launcherBullet.anims.play("bulletLauncher", true);
       }
       console.log(launcherBullet);
     });
