@@ -138,49 +138,26 @@ class Jeu extends Phaser.Scene {
     });
 
     //bullet
-    // Dans la méthode create, créez les balles
     this.launcherBullets = this.physics.add.group();
     for (let i = 0; i < 5; i++) {
-      const bullet = this.launcherBullets.create(-100, -100, "launcherBullet", 0);
+      this.launcherBullets.create(300, -600, "launcherBullet", 0);
     }
-
-    // Variable pour suivre les balles actives
-    this.activeBullets = 0;
-
     this.keys.space.on("down", () => {
-      // Vérifiez d'abord si le joueur peut tirer et s'il y a moins de 5 balles actives
-      if (!this.canShoot || this.activeBullets >= 5) {
-        return;
+      const launcherBullet = this.launcherBullets.get(
+        this.player.x,
+        this.player.y
+      );
+
+      if (launcherBullet) {
+        launcherBullet.setActive(true);
+        launcherBullet.setVisible(true);
+        launcherBullet.setPosition(this.player.x, this.player.y);
+        launcherBullet.setVelocity(0, -600);
+        launcherBullet.anims.play("bulletLauncher");
       }
-
-      this.canShoot = false; // Empêche le tir immédiat
-      this.launcher.anims.play("shoot", true);
-
-      // Délai avant de tirer
-      setTimeout(() => {
-        const launcherBullet = this.launcherBullets.get(this.launcher.x, this.launcher.y);
-        
-        if (launcherBullet) {
-          launcherBullet.setActive(true);
-          launcherBullet.setVisible(true);
-          launcherBullet.setPosition(this.launcher.x, this.launcher.y);
-          launcherBullet.setVelocity(0, -600);
-          launcherBullet.anims.play("bulletLauncher", true);
-          
-          this.activeBullets++; // Incrémente le compteur de balles actives
-          console.log("Bullet fired:", launcherBullet);
-          
-          // Décrémente le compteur lorsqu'une balle sort de l'écran
-          launcherBullet.on('animationcomplete', () => {
-            this.activeBullets--; // Décrémente une balle active lorsque l'animation se termine
-            launcherBullet.setActive(false);
-            launcherBullet.setVisible(false);
-          });
-        }
-
-        this.canShoot = true; // Réactive le tir après le délai
-      }, 500); // Ajustez selon la durée de l'animation
+      console.log(launcherBullet);
     });
+
     //asteroid
     const asteroid = this.add.image(
       config.width / 2,
