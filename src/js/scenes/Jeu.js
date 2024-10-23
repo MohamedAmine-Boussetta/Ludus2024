@@ -138,10 +138,11 @@ class Jeu extends Phaser.Scene {
     });
 
     //bullet
-    this.launcherBullets = this.physics.add.group();
-    for (let i = 0; i < 5; i++) {
-      this.launcherBullets.create(300, -600, "launcherBullet", 0);
-    }
+    this.launcherBullets = this.physics.add.group({
+      defaultKey: "bullet",
+      maxSize: 1,
+    });
+
     this.keys.space.on("down", () => {
       const launcherBullet = this.launcherBullets.get(
         this.launcher.x,
@@ -153,9 +154,8 @@ class Jeu extends Phaser.Scene {
         launcherBullet.setVisible(true);
         launcherBullet.setPosition(this.launcher.x, this.launcher.y);
         launcherBullet.setVelocity(0, -600);
-        launcherBullet.anims.play("bulletLauncher", true);
+        launcherBullet.anims.play("bulletLauncher");
       }
-      console.log(launcherBullet);
     });
 
     //asteroid
@@ -187,6 +187,13 @@ class Jeu extends Phaser.Scene {
   update() {
     this.handleMovement();
     this.handleAnimations();
+    this.launcherBullets.children.each((bullet) => {
+      let cachee = !this.cameras.main.worldView.contains(bullet.x, bullet.y);
+      if (bullet.active && cachee) {
+        bullet.setActive(false);
+        bullet.setActive(false)
+      }
+    })
   }
 
   handleMovement() {
