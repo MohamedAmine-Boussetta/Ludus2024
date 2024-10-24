@@ -42,6 +42,7 @@ class Jeu extends Phaser.Scene {
       "asteroid",
       "assets/images/prop/Asteroids/PNGs/Asteroid 01 - Base.png"
     );
+    this.load.image("enemy", "assets/images/enemy/Nautolan/Designs - Base/PNGs/Nautolan Ship - Dreadnought - Base.png");
   }
 
   create() {
@@ -68,17 +69,20 @@ class Jeu extends Phaser.Scene {
     //player
     this.player = this.physics.add.group();
     this.launcher = this.player
-      .create(config.width / 2, config.height / 2, "launcher")
+      .create(config.width / 2, config.height / 2 + 100, "launcher")
       .setScale(1.7);
     this.engineStart = this.player
-      .create(config.width / 2, config.height / 2 + 4, "engineStart")
+      .create(config.width / 2, config.height / 2 + 104, "engineStart")
       .setScale(1.5);
     this.engine = this.player
-      .create(config.width / 2, config.height / 2 + 3, "engine")
+      .create(config.width / 2, config.height / 2 + 103, "engine")
       .setScale(1.5);
     this.ship = this.player
-      .create(config.width / 2, config.height / 2, "ship")
+      .create(config.width / 2, config.height / 2 + 100, "ship")
       .setScale(1.7);
+
+    //enemy
+    this.enemy = this.add.image(config.width / 2, config.height / 2 - 100, "enemy").setScale(2).setAngle(180);
 
     // Touches
     this.keys = this.input.keyboard.addKeys({
