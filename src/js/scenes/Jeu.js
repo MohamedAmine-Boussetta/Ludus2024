@@ -85,14 +85,8 @@ class Jeu extends Phaser.Scene {
     this.enemy = this.physics.add.sprite(50, 120, "enemy", 0).setAngle(180);
     this.enemy.setScale(2);
     this.enemy.pointsDeVie = 5;
-    this.enemyMoving = this.tweens.add({
-      targets: this.enemy,
-      x: config.width - 50,
-      duration: 3000,
-      ease: "Linear",
-      yoyo: true,
-      repeat: -1
-    });
+    this.randomX = Phaser.Math.Between(0, config.width);
+    this.randomY = Phaser.Math.Between(0, 360);
 
     // Touches
     this.keys = this.input.keyboard.addKeys({
@@ -151,27 +145,27 @@ class Jeu extends Phaser.Scene {
       frameRate: 8,
     });
 
-      //bullet
-      this.launcherBullets = this.physics.add.group({
+    //bullet
+    this.launcherBullets = this.physics.add.group({
       defaultKey: "bullet",
       maxSize: 1,
     });
-      this.keys.space.on("down", () => {
-        const launcherBullet = this.launcherBullets.get(
-          this.launcher.x,
-          this.launcher.y,
-        
-        );
-        launcherBullet.anims.play("bulletLauncher")
-        if (launcherBullet) {
-          launcherBullet.setActive(true);
-          launcherBullet.setVisible(true);
-          launcherBullet.setPosition(this.launcher.x, this.launcher.y);
-          launcherBullet.setVelocity(0, -600);
-        }
-  
-      });
-    
+    this.keys.space.on("down", () => {
+      const launcherBullet = this.launcherBullets.get(
+        this.launcher.x,
+        this.launcher.y,
+
+      );
+      launcherBullet.anims.play("bulletLauncher")
+      if (launcherBullet) {
+        launcherBullet.setActive(true);
+        launcherBullet.setVisible(true);
+        launcherBullet.setPosition(this.launcher.x, this.launcher.y);
+        launcherBullet.setVelocity(0, -600);
+      }
+
+    });
+
 
 
     //asteroid
@@ -203,6 +197,7 @@ class Jeu extends Phaser.Scene {
   update() {
     this.handleMovement();
     this.handleAnimations();
+    this.wrapAround();
     this.launcherBullets.children.each((bullet) => {
       let cachee = !this.cameras.main.worldView.contains(bullet.x, bullet.y);
       if (bullet.active && cachee) {
@@ -210,10 +205,20 @@ class Jeu extends Phaser.Scene {
         bullet.setActive(false)
       }
     })
+
+    // Mouvement aléatoire
+    this.enemy.x += (this.randomX - this.enemy.x) * 0.01;
+    this.enemy.y += (this.randomY - this.enemy.y) * 0.01;
+
+    // Régénérer de nouvelles positions aléatoires quand il atteint la cible
+    if (Phaser.Math.Distance.Between(this.enemy.x, this.enemy.y, this.randomX, this.randomY) < 0.5) {
+      this.randomX = Phaser.Math.Between(0, config.width);
+      this.randomY = Phaser.Math.Between(0, 360);
+    }
   }
 
   handleMovement() {
-    const flyspeed = 250;
+    const flyspeed = 400;
     let velocity = flyspeed;
     if (this.keys.left.isDown) {
       this.player.setVelocityX(-velocity);
@@ -230,7 +235,6 @@ class Jeu extends Phaser.Scene {
     } else {
       this.player.setVelocityY(0);
     }
-    this.physics.world.wrap(this.player);
   }
 
   handleAnimations() {
@@ -250,5 +254,9 @@ class Jeu extends Phaser.Scene {
     } else if (this.keys.space.isUp) {
       this.launcher.anims.play("shoot", false);
     }
+  }
+
+  wrapAround() {
+    this.physics.world.wrap(this.player, 20);
   }
 }
