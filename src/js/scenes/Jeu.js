@@ -137,26 +137,28 @@ class Jeu extends Phaser.Scene {
       frameRate: 8,
     });
 
-    //bullet
-    this.launcherBullets = this.physics.add.group({
+      //bullet
+      this.launcherBullets = this.physics.add.group({
       defaultKey: "bullet",
       maxSize: 1,
     });
+      this.keys.space.on("down", () => {
+        const launcherBullet = this.launcherBullets.get(
+          this.launcher.x,
+          this.launcher.y,
+        
+        );
+        launcherBullet.anims.play("bulletLauncher")
+        if (launcherBullet) {
+          launcherBullet.setActive(true);
+          launcherBullet.setVisible(true);
+          launcherBullet.setPosition(this.launcher.x, this.launcher.y);
+          launcherBullet.setVelocity(0, -600);
+        }
+  
+      });
+    
 
-    this.keys.space.on("down", () => {
-      const launcherBullet = this.launcherBullets.get(
-        this.launcher.x,
-        this.launcher.y
-      );
-
-      if (launcherBullet) {
-        launcherBullet.setActive(true);
-        launcherBullet.setVisible(true);
-        launcherBullet.setPosition(this.launcher.x, this.launcher.y);
-        launcherBullet.setVelocity(0, -600);
-        launcherBullet.anims.play("bulletLauncher");
-      }
-    });
 
     //asteroid
     const asteroid = this.add.image(
