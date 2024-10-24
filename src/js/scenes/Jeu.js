@@ -82,7 +82,17 @@ class Jeu extends Phaser.Scene {
       .setScale(1.7);
 
     //enemy
-    this.enemy = this.add.image(config.width / 2, config.height / 2 - 100, "enemy").setScale(2).setAngle(180);
+    this.enemy = this.physics.add.sprite(50, 120, "enemy", 0).setAngle(180);
+    this.enemy.setScale(2);
+    this.enemy.pointsDeVie = 5;
+    this.enemyMoving = this.tweens.add({
+      targets: this.enemy,
+      x: config.width - 50,
+      duration: 3000,
+      ease: "Linear",
+      yoyo: true,
+      repeat: -1
+    });
 
     // Touches
     this.keys = this.input.keyboard.addKeys({
