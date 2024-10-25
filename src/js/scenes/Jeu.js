@@ -87,6 +87,7 @@ class Jeu extends Phaser.Scene {
     this.enemy.pointsDeVie = 5;
     this.randomX = Phaser.Math.Between(0, config.width);
     this.randomY = Phaser.Math.Between(0, 360);
+    this.enemy.body.setSize(69, 100).setOffset(29, 10);
 
     // Touches
     this.keys = this.input.keyboard.addKeys({
@@ -98,9 +99,9 @@ class Jeu extends Phaser.Scene {
     });
 
     //hitbox
-    this.launcher.body.setSize(0.1, 0.1);
-    this.engineStart.body.setSize(0.1, 0.1);
-    this.engine.body.setSize(0.1, 0.1);
+    this.launcher.body.setSize(30, 35).setOffset(9, 11);
+    this.engineStart.body.setSize(33, 40).setOffset(7, 8);
+    this.engine.body.setSize(33, 40).setOffset(7, 8);
     this.ship.body.setSize(30, 35).setOffset(9, 11);
 
     //animations
@@ -164,6 +165,9 @@ class Jeu extends Phaser.Scene {
         launcherBullet.setVelocity(0, -600);
       }
 
+      // Activation de la collision
+      this.physics.add.collider(this.player, this.obstacle);
+
     });
 
 
@@ -176,6 +180,15 @@ class Jeu extends Phaser.Scene {
     );
 
     this.moveAsteroid(asteroid);
+
+    this.topBarrier = this.add.rectangle(config.width / 2, config.height / 2 - 370, 1280, 20, 0xff0000);
+    this.bottomBarrier = this.add.rectangle(config.width / 2, config.height / 2 + 369, 1280, 20, 0xff0000);
+    this.physics.add.existing(this.topBarrier);
+    this.physics.add.existing(this.bottomBarrier);
+    this.topBarrier.body.setImmovable();
+    this.bottomBarrier.body.setImmovable();
+    this.physics.add.collider(this.player, this.topBarrier);
+    this.physics.add.collider(this.player, this.bottomBarrier);
   }
 
   moveAsteroid(asteroid) {
