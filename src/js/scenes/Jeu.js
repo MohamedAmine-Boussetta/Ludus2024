@@ -43,6 +43,14 @@ class Jeu extends Phaser.Scene {
       "assets/images/prop/Asteroids/PNGs/Asteroid 01 - Base.png"
     );
     this.load.image("enemy", "assets/images/enemy/Nautolan/Designs - Base/PNGs/Nautolan Ship - Dreadnought - Base.png");
+    this.load.spritesheet(
+      "enemyBullet",
+      "assets/images/enemy/Nautolan/Weapon Effects - Projectiles/PNGs/Nautolan - Rocket.png",
+      {
+        frameWidth: 16,
+        frameHeight: 32,
+      }
+    );
   }
 
   create() {
@@ -88,6 +96,10 @@ class Jeu extends Phaser.Scene {
     this.randomX = Phaser.Math.Between(0, config.width);
     this.randomY = Phaser.Math.Between(0, 360);
     this.enemy.body.setSize(69, 100).setOffset(29, 10);
+    this.enemyBullets = this.physics.add.group({
+      defaultKey: "enemyBullet",
+      maxSize: 1
+    });
 
     // Touches
     this.keys = this.input.keyboard.addKeys({
@@ -145,6 +157,13 @@ class Jeu extends Phaser.Scene {
       }),
       frameRate: 8,
     });
+    this.anims.create({
+      key: "enemyShooting",
+      frames: this.anims.generateFrameNames("enemyBullet", {
+        start: 0,
+        end: 5
+      })
+    })
 
     //bullet
     this.launcherBullets = this.physics.add.group({
@@ -168,6 +187,19 @@ class Jeu extends Phaser.Scene {
       // Activation de la collision
       this.physics.add.collider(this.player, this.obstacle);
 
+    });
+    //enemy bullet
+    this.enemyFiring = this.time.addEvent({
+      delay: 1000,
+      loop: true,
+      callback: () => {
+        const bullet = this.enemyBullets.get(this.enemy.x, this.enemy.y + 32);
+        if (bullet) {
+          bullet.setActive(true);
+          bullet.setVisible(true);
+          bullet.setVelocity(0, 700);
+        }
+      }
     });
 
 
@@ -219,9 +251,17 @@ class Jeu extends Phaser.Scene {
       }
     })
 
+    this.enemyBullets.children.each((bullet) => {
+      let cachee = !this.cameras.main.worldView.contains(bullet.x, bullet.y);
+      if (bullet.active && cachee) {
+        bullet.setActive(false);
+        bullet.setVisible(false);
+      }
+    });
+
     // Mouvement aléatoire
-    this.enemy.x += (this.randomX - this.enemy.x) * 0.01;
-    this.enemy.y += (this.randomY - this.enemy.y) * 0.01;
+    this.enemy.x += (this.randomX - this.enemy.x) * 0.02;
+    this.enemy.y += (this.randomY - this.enemy.y) * 0.02;
 
     // Régénérer de nouvelles positions aléatoires quand il atteint la cible
     if (Phaser.Math.Distance.Between(this.enemy.x, this.enemy.y, this.randomX, this.randomY) < 0.5) {
