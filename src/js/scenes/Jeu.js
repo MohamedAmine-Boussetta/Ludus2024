@@ -202,6 +202,30 @@ class Jeu extends Phaser.Scene {
       }
     });
 
+    //Collisions balles
+    this.physics.add.overlap(this.enemy, this.launcherBullets, (enemy, bullet) => {
+      enemy.pointsDeVie -= 1;
+      bullet.setActive(false);
+      bullet.setVisible(false);
+      bullet.y = -999999;
+
+      if (enemy.pointsDeVie <= 0) {
+        this.enemyFiring.remove();
+        this.enemy.x = this.enemy.x;
+        enemy.body.checkCollision.none = true;
+        enemy.destroy();
+      }
+    });
+    this.physics.add.overlap(
+      this.player,
+      this.enemyBullets,
+      (player, bullet) => {
+        bullet.setActive(false);
+        bullet.setVisible(false);
+        bullet.y = -999999;
+      }
+    );
+
 
 
     //asteroid
