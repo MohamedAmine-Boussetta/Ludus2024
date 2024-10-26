@@ -180,7 +180,7 @@ class Jeu extends Phaser.Scene {
     );
 
     this.moveAsteroid(asteroid);
-
+    //World Border
     this.topBarrier = this.add.rectangle(config.width / 2, config.height / 2 - 370, 1280, 20, 0xff0000);
     this.bottomBarrier = this.add.rectangle(config.width / 2, config.height / 2 + 369, 1280, 20, 0xff0000);
     this.physics.add.existing(this.topBarrier);
