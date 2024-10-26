@@ -179,7 +179,7 @@ class Jeu extends Phaser.Scene {
         start: 0,
         end: 11
       }),
-      frameRate: 6
+      frameRate: 8
     });
 
     //bullet
