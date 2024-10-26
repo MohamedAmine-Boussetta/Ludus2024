@@ -51,6 +51,14 @@ class Jeu extends Phaser.Scene {
         frameHeight: 32,
       }
     );
+    this.load.spritesheet(
+      "enemyDeath",
+      "assets/images/enemy/Nautolan/Destruction/PNGs/Nautolan Ship - Dreadnought.png",
+      {
+        frameWidth: 128,
+        frameHeight: 128,
+      }
+    );
   }
 
   create() {
@@ -162,8 +170,17 @@ class Jeu extends Phaser.Scene {
       frames: this.anims.generateFrameNames("enemyBullet", {
         start: 0,
         end: 5
-      })
-    })
+      }),
+      frameRate: 8
+    });
+    this.anims.create({
+      key: "enemyDead",
+      frames: this.anims.generateFrameNames("enemyDeath", {
+        start: 0,
+        end: 11
+      }),
+      frameRate: 6
+    });
 
     //bullet
     this.launcherBullets = this.physics.add.group({
@@ -211,9 +228,12 @@ class Jeu extends Phaser.Scene {
 
       if (enemy.pointsDeVie <= 0) {
         this.enemyFiring.remove();
-        this.enemy.x = this.enemy.x;
+        this.enemy.stop();
         enemy.body.checkCollision.none = true;
-        enemy.destroy();
+        this.enemy.play("enemyDead");
+        enemy.on("animationcomplete", () => {
+          enemy.destroy();
+        });
       }
     });
     this.physics.add.overlap(
