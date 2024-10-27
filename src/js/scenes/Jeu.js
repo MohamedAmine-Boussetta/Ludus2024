@@ -100,14 +100,10 @@ class Jeu extends Phaser.Scene {
     //enemy
     this.enemy = this.physics.add.sprite(50, 120, "enemy", 0).setAngle(180);
     this.enemy.setScale(2);
-    this.enemy.pointsDeVie = 5;
+    this.enemy.pointsDeVie = 20;
     this.randomX = Phaser.Math.Between(0, config.width);
     this.randomY = Phaser.Math.Between(0, 360);
     this.enemy.body.setSize(69, 100).setOffset(29, 10);
-    this.enemyBullets = this.physics.add.group({
-      defaultKey: "enemyBullet",
-      maxSize: 1
-    });
 
     // Touches
     this.keys = this.input.keyboard.addKeys({
@@ -197,7 +193,7 @@ class Jeu extends Phaser.Scene {
       if (launcherBullet) {
         launcherBullet.setActive(true);
         launcherBullet.setVisible(true);
-        launcherBullet.setPosition(this.launcher.x, this.launcher.y);
+        launcherBullet.setPosition(this.launcher.x, this.launcher.y - 25);
         launcherBullet.setVelocity(0, -600);
       }
 
@@ -205,19 +201,26 @@ class Jeu extends Phaser.Scene {
       this.physics.add.collider(this.player, this.obstacle);
 
     });
-    //enemy bullet
+
+    // Cadence normale de tir pour l'ennemi
+    this.enemyBullets = this.physics.add.group({
+      defaultKey: "enemyBullet",
+      maxSize: 3
+    });
     this.enemyFiring = this.time.addEvent({
-      delay: 1000,
+      delay: 700, // délai de tir initial
       loop: true,
       callback: () => {
-        const bullet = this.enemyBullets.get(this.enemy.x, this.enemy.y + 32);
+        const bullet = this.enemyBullets.get(this.enemy.x, this.enemy.y + 72);
         if (bullet) {
           bullet.setActive(true);
           bullet.setVisible(true);
-          bullet.setVelocity(0, 700);
+          bullet.setVelocity(0, 900);
         }
       }
     });
+    this.enemyFiringFaster = false;
+
 
     //Collisions balles
     this.physics.add.overlap(this.enemy, this.launcherBullets, (enemy, bullet) => {
@@ -249,13 +252,13 @@ class Jeu extends Phaser.Scene {
 
 
     //asteroid
-    const asteroid = this.add.image(
-      config.width / 2,
-      config.height / 2,
-      "asteroid"
-    );
+    //const asteroid = this.add.image(
+    //  config.width / 2,
+    //  config.height / 2,
+    //  "asteroid"
+    // );
 
-    this.moveAsteroid(asteroid);
+    //this.moveAsteroid(asteroid);
     //World Border
     this.topBarrier = this.add.rectangle(config.width / 2, config.height / 2 - 370, 1280, 20, 0xff0000);
     this.bottomBarrier = this.add.rectangle(config.width / 2, config.height / 2 + 369, 1280, 20, 0xff0000);
@@ -267,21 +270,21 @@ class Jeu extends Phaser.Scene {
     this.physics.add.collider(this.player, this.bottomBarrier);
   }
 
-  moveAsteroid(asteroid) {
-    asteroid.x = -55;
-    asteroid.y = Phaser.Math.Between(400, 700);
-    asteroid.scale = Phaser.Math.Between(1, 4);
+  // moveAsteroid(asteroid) {
+  // asteroid.x = -55;
+  // asteroid.y = Phaser.Math.Between(400, 700);
+  // asteroid.scale = Phaser.Math.Between(1, 4);
 
-    this.tweens.add({
-      targets: asteroid,
-      delay: Phaser.Math.Between(5000, 20000),
-      x: 1300,
-      duration: Phaser.Math.Between(1000, 4000),
-      onComplete: () => {
-        this.moveAsteroid(asteroid);
-      },
-    });
-  }
+  // this.tweens.add({
+  //   targets: asteroid,
+  //   delay: Phaser.Math.Between(5000, 20000),
+  //   x: 1300,
+  //   duration: Phaser.Math.Between(1000, 4000),
+  //  onComplete: () => {
+  //    this.moveAsteroid(asteroid);
+  //   },
+  // });
+  // }
 
   update() {
     this.handleMovement();
@@ -303,14 +306,56 @@ class Jeu extends Phaser.Scene {
       }
     });
 
-    // Mouvement aléatoire
-    this.enemy.x += (this.randomX - this.enemy.x) * 0.02;
-    this.enemy.y += (this.randomY - this.enemy.y) * 0.02;
+    if (this.enemy.pointsDeVie >= 11 && this.enemy.pointsDeVie <= 20) {
+      // Mouvement aléatoire plus lent
+      this.enemy.x += (this.randomX - this.enemy.x) * 0.02;
+      this.enemy.y += (this.randomY - this.enemy.y) * 0.02;
 
-    // Régénérer de nouvelles positions aléatoires quand il atteint la cible
-    if (Phaser.Math.Distance.Between(this.enemy.x, this.enemy.y, this.randomX, this.randomY) < 0.5) {
-      this.randomX = Phaser.Math.Between(0, config.width);
-      this.randomY = Phaser.Math.Between(0, 360);
+      // Régénérer de nouvelles positions aléatoires
+      if (Phaser.Math.Distance.Between(this.enemy.x, this.enemy.y, this.randomX, this.randomY) < 0.5) {
+        this.randomX = Phaser.Math.Between(0, config.width);
+        this.randomY = Phaser.Math.Between(0, 360);
+      }
+    } else if (this.enemy.pointsDeVie <= 10) {
+      // Mouvement aléatoire plus rapide
+      this.enemy.x += (this.randomX - this.enemy.x) * 0.03;
+      this.enemy.y += (this.randomY - this.enemy.y) * 0.03;
+
+      // Régénérer de nouvelles positions aléatoires
+      if (Phaser.Math.Distance.Between(this.enemy.x, this.enemy.y, this.randomX, this.randomY) < 0.5) {
+        this.randomX = Phaser.Math.Between(0, config.width);
+        this.randomY = Phaser.Math.Between(0, 360);
+      }
+    };
+
+    // Vérifiez si l'ennemi a 10 points de vie ou moins
+    if (this.enemy.pointsDeVie <= 10) {
+      if (!this.enemyFiringFaster) {
+        // Supprimez l'ancienne boucle de tir
+        if (this.enemyFiring) {
+          this.enemyFiring.remove();
+        }
+
+        // Augmentez le nombre de balles maximales
+        this.enemyBullets.maxSize = 5; // Modifiez ce nombre selon vos besoins
+
+        // Créez une nouvelle cadence de tir plus rapide
+        this.enemyFiring = this.time.addEvent({
+          delay: 300, // Délai de tir plus rapide
+          loop: true,
+          callback: () => {
+            const bullet = this.enemyBullets.get(this.enemy.x, this.enemy.y + 72);
+            if (bullet) {
+              bullet.setActive(true);
+              bullet.setVisible(true);
+              bullet.setVelocity(0, 900);
+            }
+          }
+        });
+
+        // Marque que l'ennemi tire plus vite maintenant
+        this.enemyFiringFaster = true;
+      }
     }
   }
 
