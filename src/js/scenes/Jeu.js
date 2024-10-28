@@ -8,26 +8,13 @@ class Jeu extends Phaser.Scene {
   preload() {
     this.load.image("espace", "assets/images/ui/Main_Menu/starBg.webp");
     this.load.image("exitBtn", "./assets/images/ui/Main_Menu/Exit_BTN.png");
-    this.load.image(
-      "ship",
-      "./assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Full health.png"
-    );
-    this.load.image(
-      "shipDamage1",
-      "assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Slight damage.png"
-    );
-    this.load.image(
-      "shipDamage2",
-      "assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Damaged.png"
-    );
-    this.load.image(
-      "shipDamage3",
-      "assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Very damaged.png"
-    );
-    this.load.image(
-      "engine",
-      "assets/images/characters/Main_Ship/Main Ship - Engines/PNGs/Main Ship - Engines - Base Engine.png"
-    );
+    this.load.image("ship", "./assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Full health.png");
+    this.load.image("shipDamage1", "assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Slight damage.png");
+    this.load.image("shipDamage2", "assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Damaged.png");
+    this.load.image("shipDamage3", "assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Very damaged.png");
+    this.load.image("engine", "assets/images/characters/Main_Ship/Main Ship - Engines/PNGs/Main Ship - Engines - Base Engine.png");
+    this.load.image("enemy", "assets/images/enemy/Nautolan/Designs - Base/PNGs/Nautolan Ship - Dreadnought - Base.png");
+    this.load.image("asteroid", "assets/images/prop/Asteroids/PNGs/Asteroid 01 - Base.png");
     this.load.spritesheet(
       "engineStart",
       "./assets/images/characters/Main_Ship/Main Ship - Engine Effects/PNGs/Main Ship - Engines - Base Engine - Spritesheet.png", {
@@ -49,11 +36,6 @@ class Jeu extends Phaser.Scene {
         frameHeight: 32,
       }
     );
-    this.load.image(
-      "asteroid",
-      "assets/images/prop/Asteroids/PNGs/Asteroid 01 - Base.png"
-    );
-    this.load.image("enemy", "assets/images/enemy/Nautolan/Designs - Base/PNGs/Nautolan Ship - Dreadnought - Base.png");
     this.load.spritesheet(
       "enemyBullet",
       "assets/images/enemy/Nautolan/Weapon Effects - Projectiles/PNGs/Nautolan - Rocket.png", {
@@ -211,15 +193,13 @@ class Jeu extends Phaser.Scene {
       maxSize: 1,
     });
     this.keys.space.on("down", () => {
-      const launcherBullet = this.launcherBullets.get(this.launcher.x, this.launcher.y);
+      const launcherBullet = this.launcherBullets.get(this.launcher.x, this.launcher.y - 25);
       launcherBullet.anims.play("bulletLauncher")
       if (launcherBullet) {
         launcherBullet.setActive(true);
         launcherBullet.setVisible(true);
-        launcherBullet.setPosition(this.launcher.x, this.launcher.y - 25);
         launcherBullet.setVelocity(0, -600);
       }
-
     });
 
     //------------------------------------------------------------------------------------------Cadence normale de tir pour l'ennemi------------------------------------------------------------------------------------------
