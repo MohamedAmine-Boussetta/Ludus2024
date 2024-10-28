@@ -4,7 +4,7 @@ class Jeu extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("BG", "./assets/images/ui/Main_Menu/BG.png");
+    this.load.image("espace", "assets/images/ui/Main_Menu/starBg.webp");
     this.load.image("exitBtn", "./assets/images/ui/Main_Menu/Exit_BTN.png");
     this.load.image(
       "ship",
@@ -59,6 +59,19 @@ class Jeu extends Phaser.Scene {
         frameHeight: 128,
       }
     );
+    this.load.image(
+      "enemy2",
+      "assets/images/prop/Asteroids/PNGs/Asteroid 01 - Base.pngassets/images/enemy/Nautolan/Designs - Base/PNGs/Nautolan Ship - Battlecruiser - Base.png"
+    );
+    this.load.spritesheet(
+      "ray",
+      "assets/images/enemy/Nautolan/Weapon Effects - Projectiles/PNGs/Nautolan - Ray.png",
+      {
+        frameWidth: 18,
+        frameHeight: 38,
+      }
+    );
+
   }
 
   create() {
@@ -66,9 +79,8 @@ class Jeu extends Phaser.Scene {
     const hudContainer = this.add.container(0, 0).setDepth(1);
 
     //BG
-    let bg = this.add
-      .image(config.width / 2, config.height / 2, "BG")
-      .setAngle(90);
+    this.bg = this.add
+      .tileSprite(0, 0, config.width, config.height, "espace").setOrigin(0, 0);
 
     //exitBtn
     let exitBtn = this.add
@@ -290,6 +302,7 @@ class Jeu extends Phaser.Scene {
     this.handleMovement();
     this.handleAnimations();
     this.wrapAround();
+    this.bg.tilePositionY -= 1;
     this.launcherBullets.children.each((bullet) => {
       let cachee = !this.cameras.main.worldView.contains(bullet.x, bullet.y);
       if (bullet.active && cachee) {
