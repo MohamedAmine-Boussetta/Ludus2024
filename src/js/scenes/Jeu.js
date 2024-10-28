@@ -11,8 +11,20 @@ class Jeu extends Phaser.Scene {
       "./assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Full health.png"
     );
     this.load.image(
+      "shipDamage1",
+      "assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Slight damage.png"
+    );
+    this.load.image(
+      "shipDamage2",
+      "assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Damaged.png"
+    );
+    this.load.image(
+      "shipDamage3",
+      "./assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Full health.png"
+    );
+    this.load.image(
       "engine",
-      "./assets/images/characters/Main_Ship/Main Ship - Engines/PNGs/Main Ship - Engines - Base Engine.png"
+      "assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Very damaged.png"
     );
     this.load.spritesheet(
       "engineStart",
@@ -84,18 +96,14 @@ class Jeu extends Phaser.Scene {
 
     //player
     this.player = this.physics.add.group();
-    this.launcher = this.player
-      .create(config.width / 2, config.height / 2 + 100, "launcher")
-      .setScale(1.7);
-    this.engineStart = this.player
-      .create(config.width / 2, config.height / 2 + 104, "engineStart")
-      .setScale(1.5);
-    this.engine = this.player
-      .create(config.width / 2, config.height / 2 + 103, "engine")
-      .setScale(1.5);
-    this.ship = this.player
-      .create(config.width / 2, config.height / 2 + 100, "ship")
-      .setScale(1.7);
+    this.launcher = this.player.create(config.width / 2, config.height / 2 + 100, "launcher").setScale(1.7);
+    this.engineStart = this.player.create(config.width / 2, config.height / 2 + 104, "engineStart").setScale(1.5);
+    this.engine = this.player.create(config.width / 2, config.height / 2 + 103, "engine").setScale(1.5);
+    this.ship = this.player.create(config.width / 2, config.height / 2 + 100, "ship").setScale(1.7);
+    this.ship2 = this.player.create(config.width / 2, config.height / 2 + 100, "shipDamage1").setScale(1.7).setVisible(false);
+    this.ship3 = this.player.create(config.width / 2, config.height / 2 + 100, "shipDamage2").setScale(1.7).setVisible(false);
+    this.ship4 = this.player.create(config.width / 2, config.height / 2 + 100, "shipDamage3").setScale(1.7).setVisible(false);
+    this.player.pointsDeVie = 10;
 
     //enemy
     this.enemy = this.physics.add.sprite(50, 120, "enemy", 0).setAngle(180);
@@ -248,17 +256,25 @@ class Jeu extends Phaser.Scene {
         bullet.y = -999999;
       }
     );
+    this.physics.add.overlap(this.player, this.enemyBullets, (player, bullet) => {
+        player.pointsDeVie -= 1;
+        bullet.setActive(false);
+        bullet.setVisible(false);
+        bullet.y = -999999;
+      }
+    );
 
 
 
     //asteroid
-    //const asteroid = this.add.image(
-    //  config.width / 2,
-    //  config.height / 2,
-    //  "asteroid"
-    // );
+    const asteroid = this.add.image(
+      config.width / 2,
+      config.height / 2,
+      "asteroid"
+     );
 
-    //this.moveAsteroid(asteroid);
+    this.moveAsteroid(asteroid);
+
     //World Border
     this.topBarrier = this.add.rectangle(config.width / 2, config.height / 2 - 370, 1280, 20, 0xff0000);
     this.bottomBarrier = this.add.rectangle(config.width / 2, config.height / 2 + 369, 1280, 20, 0xff0000);
@@ -270,21 +286,21 @@ class Jeu extends Phaser.Scene {
     this.physics.add.collider(this.player, this.bottomBarrier);
   }
 
-  // moveAsteroid(asteroid) {
-  // asteroid.x = -55;
-  // asteroid.y = Phaser.Math.Between(400, 700);
-  // asteroid.scale = Phaser.Math.Between(1, 4);
+   moveAsteroid(asteroid) {
+   asteroid.x = -55;
+   asteroid.y = Phaser.Math.Between(400, 700);
+   asteroid.scale = Phaser.Math.Between(1, 4);
 
-  // this.tweens.add({
-  //   targets: asteroid,
-  //   delay: Phaser.Math.Between(5000, 20000),
-  //   x: 1300,
-  //   duration: Phaser.Math.Between(1000, 4000),
-  //  onComplete: () => {
-  //    this.moveAsteroid(asteroid);
-  //   },
-  // });
-  // }
+   this.tweens.add({
+     targets: asteroid,
+     delay: Phaser.Math.Between(5000, 20000),
+     x: 1300,
+     duration: Phaser.Math.Between(1000, 4000),
+    onComplete: () => {
+      this.moveAsteroid(asteroid);
+     },
+   });
+   }
 
   update() {
     this.handleMovement();
@@ -318,11 +334,11 @@ class Jeu extends Phaser.Scene {
       }
     } else if (this.enemy.pointsDeVie <= 10) {
       // Mouvement aléatoire plus rapide
-      this.enemy.x += (this.randomX - this.enemy.x) * 0.03;
-      this.enemy.y += (this.randomY - this.enemy.y) * 0.03;
+      this.enemy.x += (this.randomX - this.enemy.x) * 0.05;
+      this.enemy.y += (this.randomY - this.enemy.y) * 0.05;
 
       // Régénérer de nouvelles positions aléatoires
-      if (Phaser.Math.Distance.Between(this.enemy.x, this.enemy.y, this.randomX, this.randomY) < 0.5) {
+      if (Phaser.Math.Distance.Between(this.enemy.x, this.enemy.y, this.randomX, this.randomY) < 0.2) {
         this.randomX = Phaser.Math.Between(0, config.width);
         this.randomY = Phaser.Math.Between(0, 360);
       }
@@ -337,11 +353,10 @@ class Jeu extends Phaser.Scene {
         }
 
         // Augmentez le nombre de balles maximales
-        this.enemyBullets.maxSize = 5; // Modifiez ce nombre selon vos besoins
+        this.enemyBullets.maxSize = 5;
 
-        // Créez une nouvelle cadence de tir plus rapide
         this.enemyFiring = this.time.addEvent({
-          delay: 300, // Délai de tir plus rapide
+          delay: 300,
           loop: true,
           callback: () => {
             const bullet = this.enemyBullets.get(this.enemy.x, this.enemy.y + 72);
@@ -353,10 +368,22 @@ class Jeu extends Phaser.Scene {
           }
         });
 
-        // Marque que l'ennemi tire plus vite maintenant
         this.enemyFiringFaster = true;
       }
     }
+
+    if (this.player.pointsDeVie <= 8) {
+      this.ship.setVisible(false);
+      this.shipDamage1.setVisible(true); 
+  } 
+  if (this.player.pointsDeVie <= 6) {
+      this.shipDamage1.setVisible(false); 
+      this.shipDamage2.setVisible(true); 
+  }
+  if (this.player.pointsDeVie <= 4) {
+      this.shipDamage2.setVisible(false);
+      this.shipDamage3.setVisible(true);
+  }
   }
 
   handleMovement() {
