@@ -453,6 +453,9 @@ class Jeu extends Phaser.Scene {
       this.ship2.setVisible(false);
       this.ship3.setVisible(true);
     }
+    if (this.ship.pointsDeVie <= 0) {
+      this.scene.start("accueil");
+    }
   }
   //------------------------------------------------------------------------------------------handleMouvement------------------------------------------------------------------------------------------
   handleMovement() {
