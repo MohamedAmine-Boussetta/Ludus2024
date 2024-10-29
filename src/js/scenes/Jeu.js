@@ -1,51 +1,77 @@
 class Jeu extends Phaser.Scene {
   constructor() {
     super({
-      key: "jeu"
+      key: "jeu",
     });
   }
 
   preload() {
     this.load.image("espace", "assets/images/ui/Main_Menu/starBg.webp");
     this.load.image("exitBtn", "./assets/images/ui/Main_Menu/Exit_BTN.png");
-    this.load.image("ship", "./assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Full health.png");
-    this.load.image("shipDamage1", "assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Slight damage.png");
-    this.load.image("shipDamage2", "assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Damaged.png");
-    this.load.image("shipDamage3", "assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Very damaged.png");
-    this.load.image("engine", "assets/images/characters/Main_Ship/Main Ship - Engines/PNGs/Main Ship - Engines - Base Engine.png");
-    this.load.image("enemy", "assets/images/enemy/Nautolan/Designs - Base/PNGs/Nautolan Ship - Dreadnought - Base.png");
-    this.load.image("asteroid", "assets/images/prop/Asteroids/PNGs/Asteroid 01 - Base.png");
+    this.load.image(
+      "ship",
+      "./assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Full health.png"
+    );
+    this.load.image(
+      "shipDamage1",
+      "assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Slight damage.png"
+    );
+    this.load.image(
+      "shipDamage2",
+      "assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Damaged.png"
+    );
+    this.load.image(
+      "shipDamage3",
+      "assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Very damaged.png"
+    );
+    this.load.image(
+      "engine",
+      "assets/images/characters/Main_Ship/Main Ship - Engines/PNGs/Main Ship - Engines - Base Engine.png"
+    );
+    this.load.image(
+      "enemy",
+      "assets/images/enemy/Nautolan/Designs - Base/PNGs/Nautolan Ship - Dreadnought - Base.png"
+    );
+    this.load.image(
+      "asteroid",
+      "assets/images/prop/Asteroids/PNGs/Asteroid 01 - Base.png"
+    );
     this.load.spritesheet(
       "engineStart",
-      "./assets/images/characters/Main_Ship/Main Ship - Engine Effects/PNGs/Main Ship - Engines - Base Engine - Spritesheet.png", {
+      "./assets/images/characters/Main_Ship/Main Ship - Engine Effects/PNGs/Main Ship - Engines - Base Engine - Spritesheet.png",
+      {
         frameWidth: 48,
         frameHeight: 48,
       }
     );
     this.load.spritesheet(
       "launcher",
-      "assets/images/characters/Main_Ship/Main Ship - Weapons/PNGs/Main Ship - Weapons - Big Space Gun.png", {
+      "assets/images/characters/Main_Ship/Main Ship - Weapons/PNGs/Main Ship - Weapons - Big Space Gun.png",
+      {
         frameWidth: 48,
         frameHeight: 48,
       }
     );
     this.load.spritesheet(
       "launcherBullet",
-      "assets/images/characters/Main_Ship/Main ship - Weapons - Projectiles/PNGs/Main ship weapon - Projectile - Auto cannon bullet.png", {
+      "assets/images/characters/Main_Ship/Main ship - Weapons - Projectiles/PNGs/Main ship weapon - Projectile - Auto cannon bullet.png",
+      {
         frameWidth: 32,
         frameHeight: 32,
       }
     );
     this.load.spritesheet(
       "enemyBullet",
-      "assets/images/enemy/Nautolan/Weapon Effects - Projectiles/PNGs/Nautolan - Rocket.png", {
+      "assets/images/enemy/Nautolan/Weapon Effects - Projectiles/PNGs/Nautolan - Rocket.png",
+      {
         frameWidth: 16,
         frameHeight: 32,
       }
     );
     this.load.spritesheet(
       "enemyDeath",
-      "assets/images/enemy/Nautolan/Destruction/PNGs/Nautolan Ship - Dreadnought.png", {
+      "assets/images/enemy/Nautolan/Destruction/PNGs/Nautolan Ship - Dreadnought.png",
+      {
         frameWidth: 128,
         frameHeight: 128,
       }
@@ -53,7 +79,8 @@ class Jeu extends Phaser.Scene {
 
     this.load.spritesheet(
       "explosion",
-      "assets/images/fx/Explosions/explosion-1-g/spritesheet.png", {
+      "assets/images/fx/Explosions/explosion-1-g/spritesheet.png",
+      {
         frameWidth: 48,
         frameHeight: 48,
       }
@@ -66,7 +93,8 @@ class Jeu extends Phaser.Scene {
 
     //------------------------------------------------------------------------------------------BG------------------------------------------------------------------------------------------
     this.bg = this.add
-      .tileSprite(0, 0, config.width, config.height, "espace").setOrigin(0, 0);
+      .tileSprite(0, 0, config.width, config.height, "espace")
+      .setOrigin(0, 0);
 
     //------------------------------------------------------------------------------------------exitBtn------------------------------------------------------------------------------------------
     let exitBtn = this.add
@@ -82,15 +110,30 @@ class Jeu extends Phaser.Scene {
 
     //------------------------------------------------------------------------------------------player------------------------------------------------------------------------------------------
     this.player = this.physics.add.group();
-    this.launcher = this.player.create(config.width / 2, config.height / 2 + 100, "launcher").setScale(1.7);
-    this.engineStart = this.player.create(config.width / 2, config.height / 2 + 104, "engineStart").setScale(1.5);
-    this.engine = this.player.create(config.width / 2, config.height / 2 + 103, "engine").setScale(1.5);
-    this.ship = this.player.create(config.width / 2, config.height / 2 + 100, "ship").setScale(1.7);
-    this.ship1 = this.player.create(config.width / 2, config.height / 2 + 100, "shipDamage1").setScale(1.7).setVisible(false);
-    this.ship2 = this.player.create(config.width / 2, config.height / 2 + 100, "shipDamage2").setScale(1.7).setVisible(false);
-    this.ship3 = this.player.create(config.width / 2, config.height / 2 + 100, "shipDamage3").setScale(1.7).setVisible(false);
-
-
+    this.launcher = this.player
+      .create(config.width / 2, config.height / 2 + 100, "launcher")
+      .setScale(1.7);
+    this.engineStart = this.player
+      .create(config.width / 2, config.height / 2 + 104, "engineStart")
+      .setScale(1.5);
+    this.engine = this.player
+      .create(config.width / 2, config.height / 2 + 103, "engine")
+      .setScale(1.5);
+    this.ship = this.player
+      .create(config.width / 2, config.height / 2 + 100, "ship")
+      .setScale(1.7);
+    this.ship1 = this.player
+      .create(config.width / 2, config.height / 2 + 100, "shipDamage1")
+      .setScale(1.7)
+      .setVisible(false);
+    this.ship2 = this.player
+      .create(config.width / 2, config.height / 2 + 100, "shipDamage2")
+      .setScale(1.7)
+      .setVisible(false);
+    this.ship3 = this.player
+      .create(config.width / 2, config.height / 2 + 100, "shipDamage3")
+      .setScale(1.7)
+      .setVisible(false);
 
     this.ship.pointsDeVie = 10;
 
@@ -165,26 +208,26 @@ class Jeu extends Phaser.Scene {
       key: "enemyShooting",
       frames: this.anims.generateFrameNames("enemyBullet", {
         start: 0,
-        end: 5
+        end: 5,
       }),
-      frameRate: 8
+      frameRate: 8,
     });
     this.anims.create({
       key: "enemyDead",
       frames: this.anims.generateFrameNames("enemyDeath", {
         start: 0,
-        end: 11
+        end: 11,
       }),
-      frameRate: 8
+      frameRate: 8,
     });
 
     this.anims.create({
       key: "explode",
       frames: this.anims.generateFrameNames("explosion", {
         start: 0,
-        end: 6
+        end: 6,
       }),
-      frameRate: 8
+      frameRate: 8,
     });
 
     //------------------------------------------------------------------------------------------bullet------------------------------------------------------------------------------------------
@@ -193,8 +236,11 @@ class Jeu extends Phaser.Scene {
       maxSize: 1,
     });
     this.keys.space.on("down", () => {
-      const launcherBullet = this.launcherBullets.get(this.launcher.x, this.launcher.y - 25);
-      launcherBullet.anims.play("bulletLauncher")
+      const launcherBullet = this.launcherBullets.get(
+        this.launcher.x,
+        this.launcher.y - 25
+      );
+      launcherBullet.anims.play("bulletLauncher");
       if (launcherBullet) {
         launcherBullet.setActive(true);
         launcherBullet.setVisible(true);
@@ -205,7 +251,7 @@ class Jeu extends Phaser.Scene {
     //------------------------------------------------------------------------------------------Cadence normale de tir pour l'ennemi------------------------------------------------------------------------------------------
     this.enemyBullets = this.physics.add.group({
       defaultKey: "enemyBullet",
-      maxSize: 3
+      maxSize: 3,
     });
     this.enemyFiring = this.time.addEvent({
       delay: 700,
@@ -217,34 +263,37 @@ class Jeu extends Phaser.Scene {
           bullet.setVisible(true);
           bullet.setVelocity(0, 900);
         }
-      }
+      },
     });
     this.enemyFiringFaster = false;
 
-
     //------------------------------------------------------------------------------------------Collisions balles------------------------------------------------------------------------------------------
-    this.physics.add.overlap(this.enemy, this.launcherBullets, (enemy, bullet) => {
-      enemy.pointsDeVie -= 1;
-      bullet.setActive(false);
-      bullet.setVisible(false);
-      bullet.y = -999999;
+    this.physics.add.overlap(
+      this.enemy,
+      this.launcherBullets,
+      (enemy, bullet) => {
+        enemy.pointsDeVie -= 1;
+        bullet.setActive(false);
+        bullet.setVisible(false);
+        bullet.y = -999999;
 
-      if (enemy.pointsDeVie <= 0) {
-        this.enemyFiring.remove();
-        this.enemy.body.checkCollision.none = true;
-        this.enemy.play("enemyDead");
-        this.enemy.on("animationcomplete", () => {
-          this.enemy.destroy();
+        if (enemy.pointsDeVie <= 0) {
+          this.enemyFiring.remove();
+          this.enemy.body.checkCollision.none = true;
+          this.enemy.play("enemyDead");
+          this.enemy.on("animationcomplete", () => {
+            this.enemy.destroy();
+          });
+        }
+
+        let explosion = this.add.sprite(enemy.x, enemy.y + 100, "explode");
+        explosion.setScale(2);
+        explosion.play("explode");
+        explosion.on("animationcomplete", () => {
+          explosion.destroy();
         });
       }
-
-      let explosion = this.add.sprite(enemy.x, enemy.y + 100, "explode");
-      explosion.setScale(2);
-      explosion.play("explode");
-      explosion.on("animationcomplete", () => {
-        explosion.destroy();
-      });
-    });
+    );
 
     this.physics.add.overlap(this.ship, this.enemyBullets, (ship, bullet) => {
       ship.pointsDeVie -= 1;
@@ -254,17 +303,30 @@ class Jeu extends Phaser.Scene {
     });
 
     //------------------------------------------------------------------------------------------asteroid------------------------------------------------------------------------------------------
-    const asteroid = this.add.image(
+    const asteroid = this.physics.add.image(
       config.width / 2,
       config.height / 2,
       "asteroid"
     );
+    asteroid.setSize(30, 30);
 
     this.moveAsteroid(asteroid);
 
     //------------------------------------------------------------------------------------------World Border------------------------------------------------------------------------------------------
-    this.topBarrier = this.add.rectangle(config.width / 2, config.height / 2 - 370, 1280, 20, 0xff0000);
-    this.bottomBarrier = this.add.rectangle(config.width / 2, config.height / 2 + 369, 1280, 20, 0xff0000);
+    this.topBarrier = this.add.rectangle(
+      config.width / 2,
+      config.height / 2 - 370,
+      1280,
+      20,
+      0xff0000
+    );
+    this.bottomBarrier = this.add.rectangle(
+      config.width / 2,
+      config.height / 2 + 369,
+      1280,
+      20,
+      0xff0000
+    );
     this.physics.add.existing(this.topBarrier);
     this.physics.add.existing(this.bottomBarrier);
     this.topBarrier.body.setImmovable();
@@ -283,9 +345,10 @@ class Jeu extends Phaser.Scene {
 
     this.tweens.add({
       targets: asteroid,
-      delay: Phaser.Math.Between(5000, 20000),
+      delay: Phaser.Math.Between(1000, 5000),
       y: 1300,
-      duration: Phaser.Math.Between(1000, 4000),
+      x: Phaser.Math.Between(400, 800),
+      duration: Phaser.Math.Between(3000, 7000),
       onComplete: () => {
         this.moveAsteroid(asteroid);
       },
@@ -296,14 +359,14 @@ class Jeu extends Phaser.Scene {
     this.handleMovement();
     this.handleAnimations();
     this.wrapAround();
-    this.bg.tilePositionY -= 1;
+    this.bg.tilePositionY -= 7;
     this.launcherBullets.children.each((bullet) => {
       let cachee = !this.cameras.main.worldView.contains(bullet.x, bullet.y);
       if (bullet.active && cachee) {
         bullet.setActive(false);
-        bullet.setActive(false)
+        bullet.setActive(false);
       }
-    })
+    });
 
     this.enemyBullets.children.each((bullet) => {
       let cachee = !this.cameras.main.worldView.contains(bullet.x, bullet.y);
@@ -312,28 +375,43 @@ class Jeu extends Phaser.Scene {
         bullet.setVisible(false);
       }
     });
+    if (this.enemy.pointsDeVie !== 0) {
+      if (this.enemy.pointsDeVie >= 11 && this.enemy.pointsDeVie <= 20) {
+        //------------------------------------------------------------------------------------------Mouvement aléatoire plus lent------------------------------------------------------------------------------------------
+        this.enemy.x += (this.randomX - this.enemy.x) * 0.05;
+        this.enemy.y += (this.randomY - this.enemy.y) * 0.05;
 
-    if (this.enemy.pointsDeVie >= 11 && this.enemy.pointsDeVie <= 20) {
-      //------------------------------------------------------------------------------------------Mouvement aléatoire plus lent------------------------------------------------------------------------------------------
-      this.enemy.x += (this.randomX - this.enemy.x) * 0.02;
-      this.enemy.y += (this.randomY - this.enemy.y) * 0.02;
+        //------------------------------------------------------------------------------------------Régénérer de nouvelles positions aléatoires------------------------------------------------------------------------------------------
+        if (
+          Phaser.Math.Distance.Between(
+            this.enemy.x,
+            this.enemy.y,
+            this.randomX,
+            this.randomY
+          ) < 0.5
+        ) {
+          this.randomX = Phaser.Math.Between(0, config.width);
+          this.randomY = Phaser.Math.Between(0, 360);
+        }
+      } else if (this.enemy.pointsDeVie <= 10) {
+        //------------------------------------------------------------------------------------------Mouvement aléatoire plus rapide------------------------------------------------------------------------------------------
+        this.enemy.x += (this.randomX - this.enemy.x) * 0.07;
+        this.enemy.y += (this.randomY - this.enemy.y) * 0.07;
 
-      //------------------------------------------------------------------------------------------Régénérer de nouvelles positions aléatoires------------------------------------------------------------------------------------------
-      if (Phaser.Math.Distance.Between(this.enemy.x, this.enemy.y, this.randomX, this.randomY) < 0.5) {
-        this.randomX = Phaser.Math.Between(0, config.width);
-        this.randomY = Phaser.Math.Between(0, 360);
+        //------------------------------------------------------------------------------------------Régénérer de nouvelles positions aléatoires------------------------------------------------------------------------------------------
+        if (
+          Phaser.Math.Distance.Between(
+            this.enemy.x,
+            this.enemy.y,
+            this.randomX,
+            this.randomY
+          ) < 0.5
+        ) {
+          this.randomX = Phaser.Math.Between(0, config.width);
+          this.randomY = Phaser.Math.Between(0, 360);
+        }
       }
-    } else if (this.enemy.pointsDeVie <= 10) {
-      //------------------------------------------------------------------------------------------Mouvement aléatoire plus rapide------------------------------------------------------------------------------------------
-      this.enemy.x += (this.randomX - this.enemy.x) * 0.04;
-      this.enemy.y += (this.randomY - this.enemy.y) * 0.04;
-
-      //------------------------------------------------------------------------------------------Régénérer de nouvelles positions aléatoires------------------------------------------------------------------------------------------
-      if (Phaser.Math.Distance.Between(this.enemy.x, this.enemy.y, this.randomX, this.randomY) < 0.4) {
-        this.randomX = Phaser.Math.Between(0, config.width);
-        this.randomY = Phaser.Math.Between(0, 360);
-      }
-    };
+    }
 
     //------------------------------------------------------------------------------------------Phase2------------------------------------------------------------------------------------------
     if (this.enemy.pointsDeVie <= 10) {
@@ -347,13 +425,16 @@ class Jeu extends Phaser.Scene {
           delay: 400,
           loop: true,
           callback: () => {
-            const bullet = this.enemyBullets.get(this.enemy.x, this.enemy.y + 72);
+            const bullet = this.enemyBullets.get(
+              this.enemy.x,
+              this.enemy.y + 72
+            );
             if (bullet) {
               bullet.setActive(true);
               bullet.setVisible(true);
               bullet.setVelocity(0, 700);
             }
-          }
+          },
         });
 
         this.enemyFiringFaster = true;
@@ -395,7 +476,12 @@ class Jeu extends Phaser.Scene {
   }
   //------------------------------------------------------------------------------------------handleAnimations------------------------------------------------------------------------------------------
   handleAnimations() {
-    if (this.keys.down.isDown || this.keys.up.isDown || this.keys.left.isDown || this.keys.right.isDown) {
+    if (
+      this.keys.down.isDown ||
+      this.keys.up.isDown ||
+      this.keys.left.isDown ||
+      this.keys.right.isDown
+    ) {
       this.engineStart.anims.play("fly", true);
     } else {
       this.engineStart.anims.play("idle", true);
