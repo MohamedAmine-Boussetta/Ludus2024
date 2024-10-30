@@ -38,40 +38,35 @@ class Jeu extends Phaser.Scene {
     );
     this.load.spritesheet(
       "engineStart",
-      "./assets/images/characters/Main_Ship/Main Ship - Engine Effects/PNGs/Main Ship - Engines - Base Engine - Spritesheet.png",
-      {
+      "./assets/images/characters/Main_Ship/Main Ship - Engine Effects/PNGs/Main Ship - Engines - Base Engine - Spritesheet.png", {
         frameWidth: 48,
         frameHeight: 48,
       }
     );
     this.load.spritesheet(
       "launcher",
-      "assets/images/characters/Main_Ship/Main Ship - Weapons/PNGs/Main Ship - Weapons - Big Space Gun.png",
-      {
+      "assets/images/characters/Main_Ship/Main Ship - Weapons/PNGs/Main Ship - Weapons - Big Space Gun.png", {
         frameWidth: 48,
         frameHeight: 48,
       }
     );
     this.load.spritesheet(
       "launcherBullet",
-      "assets/images/characters/Main_Ship/Main ship - Weapons - Projectiles/PNGs/Main ship weapon - Projectile - Auto cannon bullet.png",
-      {
+      "assets/images/characters/Main_Ship/Main ship - Weapons - Projectiles/PNGs/Main ship weapon - Projectile - Auto cannon bullet.png", {
         frameWidth: 32,
         frameHeight: 32,
       }
     );
     this.load.spritesheet(
       "enemyBullet",
-      "assets/images/enemy/Nautolan/Weapon Effects - Projectiles/PNGs/Nautolan - Rocket.png",
-      {
+      "assets/images/enemy/Nautolan/Weapon Effects - Projectiles/PNGs/Nautolan - Rocket.png", {
         frameWidth: 16,
         frameHeight: 32,
       }
     );
     this.load.spritesheet(
       "enemyDeath",
-      "assets/images/enemy/Nautolan/Destruction/PNGs/Nautolan Ship - Dreadnought.png",
-      {
+      "assets/images/enemy/Nautolan/Destruction/PNGs/Nautolan Ship - Dreadnought.png", {
         frameWidth: 128,
         frameHeight: 128,
       }
@@ -79,8 +74,7 @@ class Jeu extends Phaser.Scene {
 
     this.load.spritesheet(
       "explosion",
-      "assets/images/fx/Explosions/explosion-1-g/spritesheet.png",
-      {
+      "assets/images/fx/Explosions/explosion-1-g/spritesheet.png", {
         frameWidth: 48,
         frameHeight: 48,
       }
@@ -244,7 +238,7 @@ class Jeu extends Phaser.Scene {
       if (launcherBullet) {
         launcherBullet.setActive(true);
         launcherBullet.setVisible(true);
-        launcherBullet.setVelocity(0, -600);
+        launcherBullet.setVelocity(0, -800);
       }
     });
 
@@ -262,6 +256,7 @@ class Jeu extends Phaser.Scene {
           bullet.setActive(true);
           bullet.setVisible(true);
           bullet.setVelocity(0, 900);
+          bullet.setScale(1.5)
         }
       },
     });
@@ -322,7 +317,7 @@ class Jeu extends Phaser.Scene {
     );
     this.bottomBarrier = this.add.rectangle(
       config.width / 2,
-      config.height / 2 + 369,
+      config.height / 2 + 370,
       1280,
       20,
       0xff0000
@@ -336,6 +331,11 @@ class Jeu extends Phaser.Scene {
 
     //------------------------------------------------------------------------------------------Activation de la collision------------------------------------------------------------------------------------------
     this.physics.add.collider(this.player, this.obstacle);
+    this.physics.add.collider(this.player, this.enemy);
+    this.enemy.setImmovable();
+    this.physics.add.overlap(this.ship, this.enemy, (ship, enemy) => {
+      ship.pointsDeVie -= 1
+    })
   }
 
   moveAsteroid(asteroid) {
@@ -359,7 +359,7 @@ class Jeu extends Phaser.Scene {
     this.handleMovement();
     this.handleAnimations();
     this.wrapAround();
-    this.bg.tilePositionY -= 7;
+    this.bg.tilePositionY -= 5;
     this.launcherBullets.children.each((bullet) => {
       let cachee = !this.cameras.main.worldView.contains(bullet.x, bullet.y);
       if (bullet.active && cachee) {
@@ -378,8 +378,8 @@ class Jeu extends Phaser.Scene {
     if (this.enemy.pointsDeVie !== 0) {
       if (this.enemy.pointsDeVie >= 11 && this.enemy.pointsDeVie <= 20) {
         //------------------------------------------------------------------------------------------Mouvement aléatoire plus lent------------------------------------------------------------------------------------------
-        this.enemy.x += (this.randomX - this.enemy.x) * 0.05;
-        this.enemy.y += (this.randomY - this.enemy.y) * 0.05;
+        this.enemy.x += (this.randomX - this.enemy.x) * 0.03;
+        this.enemy.y += (this.randomY - this.enemy.y) * 0.03;
 
         //------------------------------------------------------------------------------------------Régénérer de nouvelles positions aléatoires------------------------------------------------------------------------------------------
         if (
@@ -388,15 +388,15 @@ class Jeu extends Phaser.Scene {
             this.enemy.y,
             this.randomX,
             this.randomY
-          ) < 0.5
+          ) < 0.6
         ) {
           this.randomX = Phaser.Math.Between(0, config.width);
           this.randomY = Phaser.Math.Between(0, 360);
         }
       } else if (this.enemy.pointsDeVie <= 10) {
         //------------------------------------------------------------------------------------------Mouvement aléatoire plus rapide------------------------------------------------------------------------------------------
-        this.enemy.x += (this.randomX - this.enemy.x) * 0.07;
-        this.enemy.y += (this.randomY - this.enemy.y) * 0.07;
+        this.enemy.x += (this.randomX - this.enemy.x) * 0.05;
+        this.enemy.y += (this.randomY - this.enemy.y) * 0.05;
 
         //------------------------------------------------------------------------------------------Régénérer de nouvelles positions aléatoires------------------------------------------------------------------------------------------
         if (
