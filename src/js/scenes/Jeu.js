@@ -79,6 +79,13 @@ class Jeu extends Phaser.Scene {
         frameHeight: 48,
       }
     );
+    this.load.spritesheet(
+      "invincibleFrame",
+      "assets/images/characters/Main_Ship/Main Ship - Shields/PNGs/Main Ship - Shields - Invincibility Shield.png", {
+        frameWidth: 64,
+        frameHeight: 64,
+      }
+    );
   }
 
   create() {
@@ -128,6 +135,7 @@ class Jeu extends Phaser.Scene {
       .create(config.width / 2, config.height / 2 + 100, "shipDamage3")
       .setScale(1.7)
       .setVisible(false);
+    this.shield = this.player.create(config.width / 2, config.height / 2 + 100, "invincibleFrame").setScale(1.7).setVisible(false);
 
     this.ship.pointsDeVie = 10;
 
@@ -146,6 +154,7 @@ class Jeu extends Phaser.Scene {
       down: Phaser.Input.Keyboard.KeyCodes.S,
       up: Phaser.Input.Keyboard.KeyCodes.W,
       space: Phaser.Input.Keyboard.KeyCodes.SPACE,
+      shift: Phaser.Input.Keyboard.KeyCodes.SHIFT,
     });
 
     //------------------------------------------------------------------------------------------hitbox------------------------------------------------------------------------------------------
@@ -223,6 +232,14 @@ class Jeu extends Phaser.Scene {
       }),
       frameRate: 8,
     });
+    this.anims.create({
+      key: "iFrame",
+      frames: this.anims.generateFrameNames("invincibleFrame", {
+        start: 0,
+        end: 9,
+      }),
+      frameRate: 8,
+    });
 
     //------------------------------------------------------------------------------------------bullet------------------------------------------------------------------------------------------
     this.launcherBullets = this.physics.add.group({
@@ -230,15 +247,17 @@ class Jeu extends Phaser.Scene {
       maxSize: 1,
     });
     this.keys.space.on("down", () => {
-      const launcherBullet = this.launcherBullets.get(
-        this.launcher.x,
-        this.launcher.y - 25
-      );
-      launcherBullet.anims.play("bulletLauncher");
-      if (launcherBullet) {
-        launcherBullet.setActive(true);
-        launcherBullet.setVisible(true);
-        launcherBullet.setVelocity(0, -800);
+      if (!this.isDashing) { // Vérifie si le joueur n'est pas en train de dashing
+        const launcherBullet = this.launcherBullets.get(
+          this.launcher.x,
+          this.launcher.y - 25
+        );
+        if (launcherBullet) {
+          launcherBullet.setActive(true);
+          launcherBullet.setVisible(true);
+          launcherBullet.setVelocity(0, -800);
+          launcherBullet.anims.play("bulletLauncher");
+        }
       }
     });
 
@@ -291,11 +310,14 @@ class Jeu extends Phaser.Scene {
     );
 
     this.physics.add.overlap(this.ship, this.enemyBullets, (ship, bullet) => {
-      ship.pointsDeVie -= 1;
+      if (!this.player.invincible) {
+        ship.pointsDeVie -= 1;
+      }
       bullet.setActive(false);
       bullet.setVisible(false);
       bullet.y = -999999;
     });
+    
 
     //------------------------------------------------------------------------------------------asteroid------------------------------------------------------------------------------------------
     const asteroid = this.physics.add.image(
@@ -336,6 +358,13 @@ class Jeu extends Phaser.Scene {
     this.physics.add.overlap(this.ship, this.enemy, (ship, enemy) => {
       ship.pointsDeVie -= 1
     })
+    this.physics.add.overlap(this.ship, asteroid, (ship, aseroid) => {
+      if (!this.player.invincible) {
+        ship.pointsDeVie -= 1;
+      }
+    })
+
+    this.isDashing = false;
   }
 
   moveAsteroid(asteroid) {
@@ -460,23 +489,57 @@ class Jeu extends Phaser.Scene {
   //------------------------------------------------------------------------------------------handleMouvement------------------------------------------------------------------------------------------
   handleMovement() {
     const flyspeed = 500;
+    const dashSpeed = 3000; 
     let velocity = flyspeed;
-    if (this.keys.left.isDown) {
-      this.player.setVelocityX(-velocity);
+  
+    if (this.keys.left.isDown && this.keys.shift.isDown && !this.isDashing) {
+      this.isDashing = true; 
+      this.shield.setVisible(true);
+      this.shield.play("iFrame");
+  
+      this.player.invincible = true;
+  
+      this.time.delayedCall(1000, () => { 
+        this.isDashing = false; 
+        this.player.setVelocityX(0); 
+        this.shield.setVisible(false);
+        this.player.invincible = false;
+      });
+  
+      this.player.setVelocityX(-dashSpeed);
+    } else if (this.keys.left.isDown) {
+      this.player.setVelocityX(-velocity); 
+    } else if (this.keys.right.isDown && this.keys.shift.isDown && !this.isDashing) {
+      this.isDashing = true; 
+      this.shield.setVisible(true);
+      this.shield.play("iFrame");
+  
+      this.player.invincible = true;
+  
+      this.time.delayedCall(1000, () => { 
+        this.isDashing = false; 
+        this.player.setVelocityX(0); 
+        this.shield.setVisible(false);
+        this.player.invincible = false;
+      });
+  
+      this.player.setVelocityX(dashSpeed);
     } else if (this.keys.right.isDown) {
-      this.player.setVelocityX(velocity);
-    } else {
-      this.player.setVelocityX(0);
+      this.player.setVelocityX(velocity); 
+    }else {
+      this.player.setVelocityX(0); 
     }
-
+  
     if (this.keys.down.isDown) {
-      this.player.setVelocityY(velocity);
+      this.player.setVelocityY(velocity); 
     } else if (this.keys.up.isDown) {
-      this.player.setVelocityY(-velocity);
+      this.player.setVelocityY(-velocity); 
     } else {
       this.player.setVelocityY(0);
     }
   }
+  
+  
   //------------------------------------------------------------------------------------------handleAnimations------------------------------------------------------------------------------------------
   handleAnimations() {
     if (
