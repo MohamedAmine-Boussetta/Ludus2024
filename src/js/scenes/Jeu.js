@@ -165,6 +165,7 @@ class Jeu extends Phaser.Scene {
     this.ship1.body.setSize(30, 30).setOffset(9, 11);
     this.ship2.body.setSize(30, 30).setOffset(9, 11);
     this.ship3.body.setSize(30, 30).setOffset(9, 11);
+    this.shield.body.setSize(30, 32).setOffset(17, 18)
 
     //------------------------------------------------------------------------------------------animations------------------------------------------------------------------------------------------
     this.anims.create({
@@ -483,7 +484,7 @@ class Jeu extends Phaser.Scene {
       this.ship3.setVisible(true);
     }
     if (this.ship.pointsDeVie <= 0) {
-      this.scene.start("accueil");
+      this.scene.start("perdu");
     }
   }
   //------------------------------------------------------------------------------------------handleMouvement------------------------------------------------------------------------------------------

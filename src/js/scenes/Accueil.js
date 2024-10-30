@@ -10,6 +10,7 @@ class Accueil extends Phaser.Scene {
         this.load.image('faqBtn', './assets/images/ui/Buttons/BTNs/FAQ_BTN.png');
         this.load.image('soundBtn', './assets/images/ui/Buttons/BTNs/Sound_BTN.png');
         this.load.image('logo', './assets/images/ui/Logo.png')
+        this.load.image("titre", "assets/images/ui/Main_Menu/titre.png")
     }
 
     create() {
@@ -27,6 +28,7 @@ class Accueil extends Phaser.Scene {
 
         //logo
         let logo = this.add.image(config.width / 2, config.height / 2 - 200, 'logo').setScale(0.7);
+        let titre = this.add.image(config.width / 2, config.height / 2 - 220, "titre").setScale(2);
 
         //Btn credits
         let creditsBtn = this.add.image(config.width / 2 + -450, config.height / 2 + 330, 'InfoBtn').setOrigin(1, 1).setScale(0.3);
