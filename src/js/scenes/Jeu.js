@@ -175,6 +175,7 @@ class Jeu extends Phaser.Scene {
       up: Phaser.Input.Keyboard.KeyCodes.W,
       space: Phaser.Input.Keyboard.KeyCodes.SPACE,
       shift: Phaser.Input.Keyboard.KeyCodes.SHIFT,
+      escape: Phaser.Input.Keyboard.KeyCodes.ESC,
     });
 
     //------------------------------------------------------------------------------------------hitbox------------------------------------------------------------------------------------------
