@@ -97,12 +97,19 @@ class Jeu extends Phaser.Scene {
       }
     );
     this.load.audio("shootSound", "assets/audios/sfx/sfx_tir_player.wav");
+    this.load.audio("enemyHit", "assets/audios/sfx/enemy_Hit.wav");
   }
 
   create() {
     pdvTxt = 10;
     //----------------------------------------------------------------------------------------Audio---------------------------------------------------------------
     this.shootSound = this.sound.add('shootSound', {
+      mute: false,
+      volume: 0.5,
+      rate: 1,
+      delay: 0,
+    });
+    this.enemyHit = this.sound.add('enemyHit', {
       mute: false,
       volume: 0.5,
       rate: 1,
@@ -318,6 +325,7 @@ class Jeu extends Phaser.Scene {
       this.launcherBullets,
       (enemy, bullet) => {
         enemy.pointsDeVie -= 1;
+        this.enemyHit.play()
         bullet.setActive(false);
         bullet.setVisible(false);
         bullet.y = -999999;
