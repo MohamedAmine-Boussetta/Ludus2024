@@ -44,6 +44,15 @@ class Accueil extends Phaser.Scene {
         let soundBtn = this.add.image(config.width / 2 + 580, config.height / 2 + 330, 'soundBtn').setOrigin(1, 1).setScale(0.3);
         hudContainer.add(soundBtn);
 
+        this.bgMusic = this.sound.add('bgMusic', {
+            mute: false,
+            volume: 0.5,
+            rate: 1,    
+            loop: true,
+            delay: 0,
+          });
+          this.bgMusic.play();
+
         startBtn.setInteractive();
         creditsBtn.setInteractive();
         faqBtn.setInteractive();
@@ -51,6 +60,7 @@ class Accueil extends Phaser.Scene {
 
         startBtn.on('pointerdown', () => {
             this.scene.start('jeu');
+            this.bgMusic.stop()
         });
 
         creditsBtn.on('pointerdown', () => {
@@ -60,15 +70,6 @@ class Accueil extends Phaser.Scene {
         faqBtn.on('pointerdown', () => {
             this.scene.start('guide');
         });
-
-        this.bgMusic = this.sound.add('bgMusic', {
-            mute: false,
-            volume: 0.5,
-            rate: 1,    
-            loop: true,
-            delay: 0,
-          });
-          this.bgMusic.play();
 
         let musicPause = false
         soundBtn.on("pointerdown", () => {

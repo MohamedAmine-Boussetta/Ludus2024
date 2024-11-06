@@ -96,10 +96,18 @@ class Jeu extends Phaser.Scene {
         frameHeight: 64,
       }
     );
+    this.load.audio("shootSound", "assets/audios/sfx/sfx_tir_player.wav");
   }
 
   create() {
     pdvTxt = 10;
+    //----------------------------------------------------------------------------------------Audio---------------------------------------------------------------
+    this.shootSound = this.sound.add('shootSound', {
+      mute: false,
+      volume: 0.5,
+      rate: 1,
+      delay: 0,
+    });
     //------------------------------------------------------------------------------------------HUD------------------------------------------------------------------------------------------
     const hudContainer = this.add.container(0, 0).setDepth(1);
 
@@ -270,7 +278,6 @@ class Jeu extends Phaser.Scene {
     });
     this.keys.space.on("down", () => {
       if (!this.isDashing) {
-        // Vérifie si le joueur n'est pas en train de dashing
         const launcherBullet = this.launcherBullets.get(
           this.launcher.x,
           this.launcher.y - 25
@@ -280,6 +287,7 @@ class Jeu extends Phaser.Scene {
           launcherBullet.setVisible(true);
           launcherBullet.setVelocity(0, -800);
           launcherBullet.anims.play("bulletLauncher");
+          this.shootSound.play()
         }
       }
     });
