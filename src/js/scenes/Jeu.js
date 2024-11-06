@@ -98,6 +98,8 @@ class Jeu extends Phaser.Scene {
     );
     this.load.audio("shootSound", "assets/audios/sfx/sfx_tir_player.wav");
     this.load.audio("enemyHit", "assets/audios/sfx/enemy_Hit.wav");
+    this.load.audio("bossMusic", "assets/audios/music/boss_music.mp3");
+    this.load.audio("shootSound2", "assets/audios/sfx/sfx_tir_boss.wav");
   }
 
   create() {
@@ -109,12 +111,25 @@ class Jeu extends Phaser.Scene {
       rate: 1,
       delay: 0,
     });
+    this.shootSound2 = this.sound.add('shootSound2', {
+      mute: false,
+      volume: 0.5,
+      rate: 1,
+      delay: 0,
+    });
     this.enemyHit = this.sound.add('enemyHit', {
       mute: false,
       volume: 0.5,
       rate: 1,
       delay: 0,
     });
+    this.bossMusic = this.sound.add('bossMusic', {
+      mute: false,
+      volume: 0.5,
+      rate: 1,
+      delay: 0,
+    });
+    this.bossMusic.play();
     //------------------------------------------------------------------------------------------HUD------------------------------------------------------------------------------------------
     const hudContainer = this.add.container(0, 0).setDepth(1);
 
@@ -133,6 +148,7 @@ class Jeu extends Phaser.Scene {
 
     exitBtn.on("pointerdown", () => {
       this.scene.start("accueil");
+      this.bossMusic.stop();
     });
 
     //------------------------------------------------------------------------------------------player------------------------------------------------------------------------------------------
@@ -177,7 +193,7 @@ class Jeu extends Phaser.Scene {
     //------------------------------------------------------------------------------------------enemy------------------------------------------------------------------------------------------
     this.enemy = this.physics.add.sprite(50, 120, "enemy", 0).setAngle(180);
     this.enemy.setScale(2);
-    this.enemy.pointsDeVie = 20;
+    this.enemy.pointsDeVie = 40;
     this.randomX = Phaser.Math.Between(0, config.width);
     this.randomY = Phaser.Math.Between(0, 360);
     this.enemy.body.setSize(69, 100).setOffset(29, 10);
@@ -314,6 +330,7 @@ class Jeu extends Phaser.Scene {
           bullet.setVisible(true);
           bullet.setVelocity(0, 900);
           bullet.setScale(1.5);
+          this.shootSound2.play();
         }
       },
     });
@@ -325,7 +342,7 @@ class Jeu extends Phaser.Scene {
       this.launcherBullets,
       (enemy, bullet) => {
         enemy.pointsDeVie -= 1;
-        this.enemyHit.play()
+        this.enemyHit.play();
         bullet.setActive(false);
         bullet.setVisible(false);
         bullet.y = -999999;
@@ -449,7 +466,7 @@ class Jeu extends Phaser.Scene {
       }
     });
     if (this.enemy.pointsDeVie !== 0) {
-      if (this.enemy.pointsDeVie >= 11 && this.enemy.pointsDeVie <= 20) {
+      if (this.enemy.pointsDeVie >= 21 && this.enemy.pointsDeVie <= 40) {
         //------------------------------------------------------------------------------------------Mouvement aléatoire plus lent------------------------------------------------------------------------------------------
         this.enemy.x += (this.randomX - this.enemy.x) * 0.03;
         this.enemy.y += (this.randomY - this.enemy.y) * 0.03;
@@ -466,7 +483,7 @@ class Jeu extends Phaser.Scene {
           this.randomX = Phaser.Math.Between(0, config.width);
           this.randomY = Phaser.Math.Between(0, 360);
         }
-      } else if (this.enemy.pointsDeVie <= 10) {
+      } else if (this.enemy.pointsDeVie <= 20) {
         //------------------------------------------------------------------------------------------Mouvement aléatoire plus rapide------------------------------------------------------------------------------------------
         this.enemy.x += (this.randomX - this.enemy.x) * 0.1;
         this.enemy.y += (this.randomY - this.enemy.y) * 0.1;
@@ -487,7 +504,7 @@ class Jeu extends Phaser.Scene {
     }
 
     //------------------------------------------------------------------------------------------Phase2------------------------------------------------------------------------------------------
-    if (this.enemy.pointsDeVie <= 10) {
+    if (this.enemy.pointsDeVie <= 20) {
       if (!this.enemyFiringFaster) {
         if (this.enemyFiring) {
           this.enemyFiring.remove();
@@ -506,6 +523,7 @@ class Jeu extends Phaser.Scene {
               bullet.setActive(true);
               bullet.setVisible(true);
               bullet.setVelocity(0, 700);
+              this.shootSound2.play()
             }
           },
         });
@@ -528,6 +546,7 @@ class Jeu extends Phaser.Scene {
     }
     if (this.ship.pointsDeVie <= 0) {
       this.scene.start("perdu");
+      this.bossMusic.stop();
     }
   }
   //------------------------------------------------------------------------------------------handleMouvement------------------------------------------------------------------------------------------
