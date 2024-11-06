@@ -1,3 +1,6 @@
+let pdvTxt = 10;
+let pdvCounter;
+
 class Jeu extends Phaser.Scene {
   constructor() {
     super({
@@ -38,35 +41,40 @@ class Jeu extends Phaser.Scene {
     );
     this.load.spritesheet(
       "engineStart",
-      "./assets/images/characters/Main_Ship/Main Ship - Engine Effects/PNGs/Main Ship - Engines - Base Engine - Spritesheet.png", {
+      "./assets/images/characters/Main_Ship/Main Ship - Engine Effects/PNGs/Main Ship - Engines - Base Engine - Spritesheet.png",
+      {
         frameWidth: 48,
         frameHeight: 48,
       }
     );
     this.load.spritesheet(
       "launcher",
-      "assets/images/characters/Main_Ship/Main Ship - Weapons/PNGs/Main Ship - Weapons - Big Space Gun.png", {
+      "assets/images/characters/Main_Ship/Main Ship - Weapons/PNGs/Main Ship - Weapons - Big Space Gun.png",
+      {
         frameWidth: 48,
         frameHeight: 48,
       }
     );
     this.load.spritesheet(
       "launcherBullet",
-      "assets/images/characters/Main_Ship/Main ship - Weapons - Projectiles/PNGs/Main ship weapon - Projectile - Auto cannon bullet.png", {
+      "assets/images/characters/Main_Ship/Main ship - Weapons - Projectiles/PNGs/Main ship weapon - Projectile - Auto cannon bullet.png",
+      {
         frameWidth: 32,
         frameHeight: 32,
       }
     );
     this.load.spritesheet(
       "enemyBullet",
-      "assets/images/enemy/Nautolan/Weapon Effects - Projectiles/PNGs/Nautolan - Rocket.png", {
+      "assets/images/enemy/Nautolan/Weapon Effects - Projectiles/PNGs/Nautolan - Rocket.png",
+      {
         frameWidth: 16,
         frameHeight: 32,
       }
     );
     this.load.spritesheet(
       "enemyDeath",
-      "assets/images/enemy/Nautolan/Destruction/PNGs/Nautolan Ship - Dreadnought.png", {
+      "assets/images/enemy/Nautolan/Destruction/PNGs/Nautolan Ship - Dreadnought.png",
+      {
         frameWidth: 128,
         frameHeight: 128,
       }
@@ -74,14 +82,16 @@ class Jeu extends Phaser.Scene {
 
     this.load.spritesheet(
       "explosion",
-      "assets/images/fx/Explosions/explosion-1-g/spritesheet.png", {
+      "assets/images/fx/Explosions/explosion-1-g/spritesheet.png",
+      {
         frameWidth: 48,
         frameHeight: 48,
       }
     );
     this.load.spritesheet(
       "invincibleFrame",
-      "assets/images/characters/Main_Ship/Main Ship - Shields/PNGs/Main Ship - Shields - Invincibility Shield.png", {
+      "assets/images/characters/Main_Ship/Main Ship - Shields/PNGs/Main Ship - Shields - Invincibility Shield.png",
+      {
         frameWidth: 64,
         frameHeight: 64,
       }
@@ -89,6 +99,7 @@ class Jeu extends Phaser.Scene {
   }
 
   create() {
+    pdvTxt = 10;
     //------------------------------------------------------------------------------------------HUD------------------------------------------------------------------------------------------
     const hudContainer = this.add.container(0, 0).setDepth(1);
 
@@ -135,9 +146,18 @@ class Jeu extends Phaser.Scene {
       .create(config.width / 2, config.height / 2 + 100, "shipDamage3")
       .setScale(1.7)
       .setVisible(false);
-    this.shield = this.player.create(config.width / 2, config.height / 2 + 100, "invincibleFrame").setScale(1.7).setVisible(false);
+    this.shield = this.player
+      .create(config.width / 2, config.height / 2 + 100, "invincibleFrame")
+      .setScale(1.7)
+      .setVisible(false);
 
     this.ship.pointsDeVie = 10;
+
+    pdvCounter = this.add.text(
+      config.width / 2 - 600,
+      config.height / 2 - 340,
+      "PV: " + pdvTxt
+    );
 
     //------------------------------------------------------------------------------------------enemy------------------------------------------------------------------------------------------
     this.enemy = this.physics.add.sprite(50, 120, "enemy", 0).setAngle(180);
@@ -155,6 +175,7 @@ class Jeu extends Phaser.Scene {
       up: Phaser.Input.Keyboard.KeyCodes.W,
       space: Phaser.Input.Keyboard.KeyCodes.SPACE,
       shift: Phaser.Input.Keyboard.KeyCodes.SHIFT,
+      escape: Phaser.Input.Keyboard.KeyCodes.ESC,
     });
 
     //------------------------------------------------------------------------------------------hitbox------------------------------------------------------------------------------------------
@@ -165,7 +186,7 @@ class Jeu extends Phaser.Scene {
     this.ship1.body.setSize(30, 30).setOffset(9, 11);
     this.ship2.body.setSize(30, 30).setOffset(9, 11);
     this.ship3.body.setSize(30, 30).setOffset(9, 11);
-    this.shield.body.setSize(30, 32).setOffset(17, 18)
+    this.shield.body.setSize(30, 32).setOffset(17, 18);
 
     //------------------------------------------------------------------------------------------animations------------------------------------------------------------------------------------------
     this.anims.create({
@@ -248,7 +269,8 @@ class Jeu extends Phaser.Scene {
       maxSize: 1,
     });
     this.keys.space.on("down", () => {
-      if (!this.isDashing) { // Vérifie si le joueur n'est pas en train de dashing
+      if (!this.isDashing) {
+        // Vérifie si le joueur n'est pas en train de dashing
         const launcherBullet = this.launcherBullets.get(
           this.launcher.x,
           this.launcher.y - 25
@@ -276,7 +298,7 @@ class Jeu extends Phaser.Scene {
           bullet.setActive(true);
           bullet.setVisible(true);
           bullet.setVelocity(0, 900);
-          bullet.setScale(1.5)
+          bullet.setScale(1.5);
         }
       },
     });
@@ -313,12 +335,13 @@ class Jeu extends Phaser.Scene {
     this.physics.add.overlap(this.ship, this.enemyBullets, (ship, bullet) => {
       if (!this.player.invincible) {
         ship.pointsDeVie -= 1;
+        pdvTxt--;
+        pdvCounter.setText("PV: " + pdvTxt);
       }
       bullet.setActive(false);
       bullet.setVisible(false);
       bullet.y = -999999;
     });
-    
 
     //------------------------------------------------------------------------------------------asteroid------------------------------------------------------------------------------------------
     const asteroid = this.physics.add.image(
@@ -357,13 +380,17 @@ class Jeu extends Phaser.Scene {
     this.physics.add.collider(this.player, this.enemy);
     this.enemy.setImmovable();
     this.physics.add.overlap(this.ship, this.enemy, (ship, enemy) => {
-      ship.pointsDeVie -= 1
-    })
+      ship.pointsDeVie -= 1;
+      pdvTxt--;
+      pdvCounter.setText("PV: " + pdvTxt);
+    });
     this.physics.add.overlap(this.ship, asteroid, (ship, aseroid) => {
       if (!this.player.invincible) {
         ship.pointsDeVie -= 1;
+        pdvTxt--;
+        pdvCounter.setText("PV: " + pdvTxt);
       }
-    })
+    });
 
     this.isDashing = false;
   }
@@ -490,57 +517,60 @@ class Jeu extends Phaser.Scene {
   //------------------------------------------------------------------------------------------handleMouvement------------------------------------------------------------------------------------------
   handleMovement() {
     const flyspeed = 500;
-    const dashSpeed = 3000; 
+    const dashSpeed = 3000;
     let velocity = flyspeed;
-  
+
     if (this.keys.left.isDown && this.keys.shift.isDown && !this.isDashing) {
-      this.isDashing = true; 
+      this.isDashing = true;
       this.shield.setVisible(true);
       this.shield.play("iFrame");
-  
+
       this.player.invincible = true;
-  
-      this.time.delayedCall(1000, () => { 
-        this.isDashing = false; 
-        this.player.setVelocityX(0); 
+
+      this.time.delayedCall(1000, () => {
+        this.isDashing = false;
+        this.player.setVelocityX(0);
         this.shield.setVisible(false);
         this.player.invincible = false;
       });
-  
+
       this.player.setVelocityX(-dashSpeed);
     } else if (this.keys.left.isDown) {
-      this.player.setVelocityX(-velocity); 
-    } else if (this.keys.right.isDown && this.keys.shift.isDown && !this.isDashing) {
-      this.isDashing = true; 
+      this.player.setVelocityX(-velocity);
+    } else if (
+      this.keys.right.isDown &&
+      this.keys.shift.isDown &&
+      !this.isDashing
+    ) {
+      this.isDashing = true;
       this.shield.setVisible(true);
       this.shield.play("iFrame");
-  
+
       this.player.invincible = true;
-  
-      this.time.delayedCall(1000, () => { 
-        this.isDashing = false; 
-        this.player.setVelocityX(0); 
+
+      this.time.delayedCall(1000, () => {
+        this.isDashing = false;
+        this.player.setVelocityX(0);
         this.shield.setVisible(false);
         this.player.invincible = false;
       });
-  
+
       this.player.setVelocityX(dashSpeed);
     } else if (this.keys.right.isDown) {
-      this.player.setVelocityX(velocity); 
-    }else {
-      this.player.setVelocityX(0); 
+      this.player.setVelocityX(velocity);
+    } else {
+      this.player.setVelocityX(0);
     }
-  
+
     if (this.keys.down.isDown) {
-      this.player.setVelocityY(velocity); 
+      this.player.setVelocityY(velocity);
     } else if (this.keys.up.isDown) {
-      this.player.setVelocityY(-velocity); 
+      this.player.setVelocityY(-velocity);
     } else {
       this.player.setVelocityY(0);
     }
   }
-  
-  
+
   //------------------------------------------------------------------------------------------handleAnimations------------------------------------------------------------------------------------------
   handleAnimations() {
     if (
