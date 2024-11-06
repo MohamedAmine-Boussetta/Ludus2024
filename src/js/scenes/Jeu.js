@@ -425,8 +425,8 @@ class Jeu extends Phaser.Scene {
         }
       } else if (this.enemy.pointsDeVie <= 10) {
         //------------------------------------------------------------------------------------------Mouvement aléatoire plus rapide------------------------------------------------------------------------------------------
-        this.enemy.x += (this.randomX - this.enemy.x) * 0.05;
-        this.enemy.y += (this.randomY - this.enemy.y) * 0.05;
+        this.enemy.x += (this.randomX - this.enemy.x) * 0.1;
+        this.enemy.y += (this.randomY - this.enemy.y) * 0.1;
 
         //------------------------------------------------------------------------------------------Régénérer de nouvelles positions aléatoires------------------------------------------------------------------------------------------
         if (
