@@ -1,3 +1,6 @@
+let pdvTxt = 10;
+let pdvCounter;
+
 class Jeu extends Phaser.Scene {
   constructor() {
     super({
@@ -86,9 +89,40 @@ class Jeu extends Phaser.Scene {
         frameHeight: 64,
       }
     );
+    this.load.audio("shootSound", "assets/audios/sfx/sfx_tir_player.wav");
+    this.load.audio("enemyHit", "assets/audios/sfx/enemy_Hit.wav");
+    this.load.audio("bossMusic", "assets/audios/music/boss_music.mp3");
+    this.load.audio("shootSound2", "assets/audios/sfx/sfx_tir_boss.wav");
   }
 
   create() {
+    pdvTxt = 10;
+    //----------------------------------------------------------------------------------------Audio---------------------------------------------------------------
+    this.shootSound = this.sound.add('shootSound', {
+      mute: false,
+      volume: 0.5,
+      rate: 1,
+      delay: 0,
+    });
+    this.shootSound2 = this.sound.add('shootSound2', {
+      mute: false,
+      volume: 0.5,
+      rate: 1,
+      delay: 0,
+    });
+    this.enemyHit = this.sound.add('enemyHit', {
+      mute: false,
+      volume: 0.5,
+      rate: 1,
+      delay: 0,
+    });
+    this.bossMusic = this.sound.add('bossMusic', {
+      mute: false,
+      volume: 0.5,
+      rate: 1,
+      delay: 0,
+    });
+    this.bossMusic.play();
     //------------------------------------------------------------------------------------------HUD------------------------------------------------------------------------------------------
     const hudContainer = this.add.container(0, 0).setDepth(1);
 
@@ -107,6 +141,7 @@ class Jeu extends Phaser.Scene {
 
     exitBtn.on("pointerdown", () => {
       this.scene.start("accueil");
+      this.bossMusic.stop();
     });
 
     //------------------------------------------------------------------------------------------player------------------------------------------------------------------------------------------
@@ -135,14 +170,23 @@ class Jeu extends Phaser.Scene {
       .create(config.width / 2, config.height / 2 + 100, "shipDamage3")
       .setScale(1.7)
       .setVisible(false);
-    this.shield = this.player.create(config.width / 2, config.height / 2 + 100, "invincibleFrame").setScale(1.7).setVisible(false);
+    this.shield = this.player
+      .create(config.width / 2, config.height / 2 + 100, "invincibleFrame")
+      .setScale(1.7)
+      .setVisible(false);
 
     this.ship.pointsDeVie = 10;
+
+    pdvCounter = this.add.text(
+      config.width / 2 - 600,
+      config.height / 2 - 340,
+      "PV: " + pdvTxt
+    );
 
     //------------------------------------------------------------------------------------------enemy------------------------------------------------------------------------------------------
     this.enemy = this.physics.add.sprite(50, 120, "enemy", 0).setAngle(180);
     this.enemy.setScale(2);
-    this.enemy.pointsDeVie = 20;
+    this.enemy.pointsDeVie = 40;
     this.randomX = Phaser.Math.Between(0, config.width);
     this.randomY = Phaser.Math.Between(0, 360);
     this.enemy.body.setSize(69, 100).setOffset(29, 10);
@@ -155,6 +199,7 @@ class Jeu extends Phaser.Scene {
       up: Phaser.Input.Keyboard.KeyCodes.W,
       space: Phaser.Input.Keyboard.KeyCodes.SPACE,
       shift: Phaser.Input.Keyboard.KeyCodes.SHIFT,
+      escape: Phaser.Input.Keyboard.KeyCodes.ESC,
     });
 
     //------------------------------------------------------------------------------------------hitbox------------------------------------------------------------------------------------------
@@ -165,7 +210,7 @@ class Jeu extends Phaser.Scene {
     this.ship1.body.setSize(30, 30).setOffset(9, 11);
     this.ship2.body.setSize(30, 30).setOffset(9, 11);
     this.ship3.body.setSize(30, 30).setOffset(9, 11);
-    this.shield.body.setSize(30, 32).setOffset(17, 18)
+    this.shield.body.setSize(30, 32).setOffset(17, 18);
 
     //------------------------------------------------------------------------------------------animations------------------------------------------------------------------------------------------
     this.anims.create({
@@ -248,7 +293,7 @@ class Jeu extends Phaser.Scene {
       maxSize: 1,
     });
     this.keys.space.on("down", () => {
-      if (!this.isDashing) { // Vérifie si le joueur n'est pas en train de dashing
+      if (!this.isDashing) {
         const launcherBullet = this.launcherBullets.get(
           this.launcher.x,
           this.launcher.y - 25
@@ -258,6 +303,7 @@ class Jeu extends Phaser.Scene {
           launcherBullet.setVisible(true);
           launcherBullet.setVelocity(0, -800);
           launcherBullet.anims.play("bulletLauncher");
+          this.shootSound.play()
         }
       }
     });
@@ -276,7 +322,8 @@ class Jeu extends Phaser.Scene {
           bullet.setActive(true);
           bullet.setVisible(true);
           bullet.setVelocity(0, 900);
-          bullet.setScale(1.5)
+          bullet.setScale(1.5);
+          this.shootSound2.play();
         }
       },
     });
@@ -288,6 +335,7 @@ class Jeu extends Phaser.Scene {
       this.launcherBullets,
       (enemy, bullet) => {
         enemy.pointsDeVie -= 1;
+        this.enemyHit.play();
         bullet.setActive(false);
         bullet.setVisible(false);
         bullet.y = -999999;
@@ -313,6 +361,8 @@ class Jeu extends Phaser.Scene {
     this.physics.add.overlap(this.ship, this.enemyBullets, (ship, bullet) => {
       if (!this.player.invincible) {
         ship.pointsDeVie -= 1;
+        pdvTxt--;
+        pdvCounter.setText("PV: " + pdvTxt);
       }
       bullet.setActive(false);
       bullet.setVisible(false);
@@ -357,13 +407,17 @@ class Jeu extends Phaser.Scene {
     this.physics.add.collider(this.player, this.enemy);
     this.enemy.setImmovable();
     this.physics.add.overlap(this.ship, this.enemy, (ship, enemy) => {
-      ship.pointsDeVie -= 1
-    })
+      ship.pointsDeVie -= 1;
+      pdvTxt--;
+      pdvCounter.setText("PV: " + pdvTxt);
+    });
     this.physics.add.overlap(this.ship, asteroid, (ship, aseroid) => {
       if (!this.player.invincible) {
         ship.pointsDeVie -= 1;
+        pdvTxt--;
+        pdvCounter.setText("PV: " + pdvTxt);
       }
-    })
+    });
 
     this.isDashing = false;
   }
@@ -406,7 +460,7 @@ class Jeu extends Phaser.Scene {
       }
     });
     if (this.enemy.pointsDeVie !== 0) {
-      if (this.enemy.pointsDeVie >= 11 && this.enemy.pointsDeVie <= 20) {
+      if (this.enemy.pointsDeVie >= 21 && this.enemy.pointsDeVie <= 40) {
         //------------------------------------------------------------------------------------------Mouvement aléatoire plus lent------------------------------------------------------------------------------------------
         this.enemy.x += (this.randomX - this.enemy.x) * 0.03;
         this.enemy.y += (this.randomY - this.enemy.y) * 0.03;
@@ -423,10 +477,11 @@ class Jeu extends Phaser.Scene {
           this.randomX = Phaser.Math.Between(0, config.width);
           this.randomY = Phaser.Math.Between(0, 360);
         }
-      } else if (this.enemy.pointsDeVie <= 10) {
+      } else if (this.enemy.pointsDeVie <= 20) {
         //------------------------------------------------------------------------------------------Mouvement aléatoire plus rapide------------------------------------------------------------------------------------------
-        this.enemy.x += (this.randomX - this.enemy.x) * 1.05;
-        this.enemy.y += (this.randomY - this.enemy.y) * 1.05;
+
+        this.enemy.x += (this.randomX - this.enemy.x) * 0.1;
+        this.enemy.y += (this.randomY - this.enemy.y) * 0.1;
 
         //------------------------------------------------------------------------------------------Régénérer de nouvelles positions aléatoires------------------------------------------------------------------------------------------
         if (
@@ -444,7 +499,7 @@ class Jeu extends Phaser.Scene {
     }
 
     //------------------------------------------------------------------------------------------Phase2------------------------------------------------------------------------------------------
-    if (this.enemy.pointsDeVie <= 10) {
+    if (this.enemy.pointsDeVie <= 20) {
       if (!this.enemyFiringFaster) {
         if (this.enemyFiring) {
           this.enemyFiring.remove();
@@ -463,6 +518,7 @@ class Jeu extends Phaser.Scene {
               bullet.setActive(true);
               bullet.setVisible(true);
               bullet.setVelocity(0, 700);
+              this.shootSound2.play()
             }
           },
         });
@@ -485,62 +541,78 @@ class Jeu extends Phaser.Scene {
     }
     if (this.ship.pointsDeVie <= 0) {
       this.scene.start("perdu");
+      this.bossMusic.stop();
     }
   }
   //------------------------------------------------------------------------------------------handleMouvement------------------------------------------------------------------------------------------
   handleMovement() {
-    const flyspeed = 500;
-    const dashSpeed = 3000;
-    let velocity = flyspeed;
+      const flyspeed = 500;
+      const dashSpeed = 3000;
+      let velocity = flyspeed;
 
-    if (this.keys.left.isDown && this.keys.shift.isDown && !this.isDashing) {
-      this.isDashing = true;
-      this.shield.setVisible(true);
-      this.shield.play("iFrame");
+      if (this.keys.left.isDown && this.keys.shift.isDown && !this.isDashing) {
+        this.isDashing = true;
+        this.shield.setVisible(true);
+        this.shield.play("iFrame");
 
-      this.player.invincible = true;
+        this.player.invincible = true;
 
-      this.time.delayedCall(1000, () => {
-        this.isDashing = false;
+        this.time.delayedCall(1000, () => {
+          this.isDashing = false;
+          this.player.setVelocityX(0);
+          this.shield.setVisible(false);
+          this.player.invincible = false;
+        });
+
+        this.player.setVelocityX(-dashSpeed);
+      } else if (this.keys.left.isDown) {
+        this.player.setVelocityX(-velocity); <<
+        << << < HEAD
+      } else if (this.keys.right.isDown && this.keys.shift.isDown && !this.isDashing) {
+        ===
+        === =
+      } else if (
+        this.keys.right.isDown &&
+        this.keys.shift.isDown &&
+        !this.isDashing
+      ) {
+        >>>
+        >>> > e81ea47686125ff6dbab88d0be56cee7732f6246
+        this.isDashing = true;
+        this.shield.setVisible(true);
+        this.shield.play("iFrame");
+
+        this.player.invincible = true;
+
+        this.time.delayedCall(1000, () => {
+          this.isDashing = false;
+          this.player.setVelocityX(0);
+          this.shield.setVisible(false);
+          this.player.invincible = false;
+        });
+
+        this.player.setVelocityX(dashSpeed);
+      } else if (this.keys.right.isDown) {
+        this.player.setVelocityX(velocity);
+      } else {
         this.player.setVelocityX(0);
-        this.shield.setVisible(false);
-        this.player.invincible = false;
-      });
+      }
 
-      this.player.setVelocityX(-dashSpeed);
-    } else if (this.keys.left.isDown) {
-      this.player.setVelocityX(-velocity);
-    } else if (this.keys.right.isDown && this.keys.shift.isDown && !this.isDashing) {
-      this.isDashing = true;
-      this.shield.setVisible(true);
-      this.shield.play("iFrame");
-
-      this.player.invincible = true;
-
-      this.time.delayedCall(1000, () => {
-        this.isDashing = false;
-        this.player.setVelocityX(0);
-        this.shield.setVisible(false);
-        this.player.invincible = false;
-      });
-
-      this.player.setVelocityX(dashSpeed);
-    } else if (this.keys.right.isDown) {
-      this.player.setVelocityX(velocity);
-    } else {
-      this.player.setVelocityX(0);
+      if (this.keys.down.isDown) {
+        this.player.setVelocityY(velocity);
+      } else if (this.keys.up.isDown) {
+        this.player.setVelocityY(-velocity);
+      } else {
+        this.player.setVelocityY(0);
+      }
     }
 
-    if (this.keys.down.isDown) {
-      this.player.setVelocityY(velocity);
-    } else if (this.keys.up.isDown) {
-      this.player.setVelocityY(-velocity);
-    } else {
-      this.player.setVelocityY(0);
-    }
-  }
+    <<
+    << << < HEAD
 
-
+    ===
+    === = >>>
+    >>> > e81ea47686125ff6dbab88d0be56cee7732f6246
   //------------------------------------------------------------------------------------------handleAnimations------------------------------------------------------------------------------------------
   handleAnimations() {
     if (

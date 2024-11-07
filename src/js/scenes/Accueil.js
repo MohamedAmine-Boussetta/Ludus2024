@@ -11,6 +11,7 @@ class Accueil extends Phaser.Scene {
         this.load.image('soundBtn', './assets/images/ui/Buttons/BTNs/Sound_BTN.png');
         this.load.image('logo', './assets/images/ui/Logo.png')
         this.load.image("titre", "assets/images/ui/Main_Menu/titre.png")
+        this.load.audio("bgMusic", "assets/audios/music/music_menu.mp3")
     }
 
     create() {
@@ -43,6 +44,15 @@ class Accueil extends Phaser.Scene {
         let soundBtn = this.add.image(config.width / 2 + 580, config.height / 2 + 330, 'soundBtn').setOrigin(1, 1).setScale(0.3);
         hudContainer.add(soundBtn);
 
+        this.bgMusic = this.sound.add('bgMusic', {
+            mute: false,
+            volume: 0.5,
+            rate: 1,    
+            loop: true,
+            delay: 0,
+          });
+          this.bgMusic.play();
+
         startBtn.setInteractive();
         creditsBtn.setInteractive();
         faqBtn.setInteractive();
@@ -50,6 +60,7 @@ class Accueil extends Phaser.Scene {
 
         startBtn.on('pointerdown', () => {
             this.scene.start('jeu');
+            this.bgMusic.stop()
         });
 
         creditsBtn.on('pointerdown', () => {
@@ -60,6 +71,16 @@ class Accueil extends Phaser.Scene {
             this.scene.start('guide');
         });
 
+        let musicPause = false
+        soundBtn.on("pointerdown", () => {
+            if (musicPause === false) {
+                this.bgMusic.stop();
+                musicPause = true;
+            } else {
+                this.bgMusic.play(); 
+                musicPause = false;
+            }
+        });
     }
 
     update() { }
