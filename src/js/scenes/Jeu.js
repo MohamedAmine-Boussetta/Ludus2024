@@ -318,7 +318,7 @@ class Jeu extends Phaser.Scene {
       bullet.setVisible(false);
       bullet.y = -999999;
     });
-    
+
 
     //------------------------------------------------------------------------------------------asteroid------------------------------------------------------------------------------------------
     const asteroid = this.physics.add.image(
@@ -425,8 +425,8 @@ class Jeu extends Phaser.Scene {
         }
       } else if (this.enemy.pointsDeVie <= 10) {
         //------------------------------------------------------------------------------------------Mouvement aléatoire plus rapide------------------------------------------------------------------------------------------
-        this.enemy.x += (this.randomX - this.enemy.x) * 0.05;
-        this.enemy.y += (this.randomY - this.enemy.y) * 0.05;
+        this.enemy.x += (this.randomX - this.enemy.x) * 1.05;
+        this.enemy.y += (this.randomY - this.enemy.y) * 1.05;
 
         //------------------------------------------------------------------------------------------Régénérer de nouvelles positions aléatoires------------------------------------------------------------------------------------------
         if (
@@ -490,57 +490,57 @@ class Jeu extends Phaser.Scene {
   //------------------------------------------------------------------------------------------handleMouvement------------------------------------------------------------------------------------------
   handleMovement() {
     const flyspeed = 500;
-    const dashSpeed = 3000; 
+    const dashSpeed = 3000;
     let velocity = flyspeed;
-  
+
     if (this.keys.left.isDown && this.keys.shift.isDown && !this.isDashing) {
-      this.isDashing = true; 
+      this.isDashing = true;
       this.shield.setVisible(true);
       this.shield.play("iFrame");
-  
+
       this.player.invincible = true;
-  
-      this.time.delayedCall(1000, () => { 
-        this.isDashing = false; 
-        this.player.setVelocityX(0); 
+
+      this.time.delayedCall(1000, () => {
+        this.isDashing = false;
+        this.player.setVelocityX(0);
         this.shield.setVisible(false);
         this.player.invincible = false;
       });
-  
+
       this.player.setVelocityX(-dashSpeed);
     } else if (this.keys.left.isDown) {
-      this.player.setVelocityX(-velocity); 
+      this.player.setVelocityX(-velocity);
     } else if (this.keys.right.isDown && this.keys.shift.isDown && !this.isDashing) {
-      this.isDashing = true; 
+      this.isDashing = true;
       this.shield.setVisible(true);
       this.shield.play("iFrame");
-  
+
       this.player.invincible = true;
-  
-      this.time.delayedCall(1000, () => { 
-        this.isDashing = false; 
-        this.player.setVelocityX(0); 
+
+      this.time.delayedCall(1000, () => {
+        this.isDashing = false;
+        this.player.setVelocityX(0);
         this.shield.setVisible(false);
         this.player.invincible = false;
       });
-  
+
       this.player.setVelocityX(dashSpeed);
     } else if (this.keys.right.isDown) {
-      this.player.setVelocityX(velocity); 
-    }else {
-      this.player.setVelocityX(0); 
+      this.player.setVelocityX(velocity);
+    } else {
+      this.player.setVelocityX(0);
     }
-  
+
     if (this.keys.down.isDown) {
-      this.player.setVelocityY(velocity); 
+      this.player.setVelocityY(velocity);
     } else if (this.keys.up.isDown) {
-      this.player.setVelocityY(-velocity); 
+      this.player.setVelocityY(-velocity);
     } else {
       this.player.setVelocityY(0);
     }
   }
-  
-  
+
+
   //------------------------------------------------------------------------------------------handleAnimations------------------------------------------------------------------------------------------
   handleAnimations() {
     if (
