@@ -546,73 +546,65 @@ class Jeu extends Phaser.Scene {
   }
   //------------------------------------------------------------------------------------------handleMouvement------------------------------------------------------------------------------------------
   handleMovement() {
-      const flyspeed = 500;
-      const dashSpeed = 3000;
-      let velocity = flyspeed;
+    const flyspeed = 500;
+    const dashSpeed = 3000;
+    let velocity = flyspeed;
 
-      if (this.keys.left.isDown && this.keys.shift.isDown && !this.isDashing) {
-        this.isDashing = true;
-        this.shield.setVisible(true);
-        this.shield.play("iFrame");
+    if (this.keys.left.isDown && this.keys.shift.isDown && !this.isDashing) {
+      this.isDashing = true;
+      this.shield.setVisible(true);
+      this.shield.play("iFrame");
 
-        this.player.invincible = true;
+      this.player.invincible = true;
 
-        this.time.delayedCall(1000, () => {
-          this.isDashing = false;
-          this.player.setVelocityX(0);
-          this.shield.setVisible(false);
-          this.player.invincible = false;
-        });
-
-        this.player.setVelocityX(-dashSpeed);
-      } else if (this.keys.left.isDown) {
-        this.player.setVelocityX(-velocity); <<
-        << << < HEAD
-      } else if (this.keys.right.isDown && this.keys.shift.isDown && !this.isDashing) {
-        ===
-        === =
-      } else if (
-        this.keys.right.isDown &&
-        this.keys.shift.isDown &&
-        !this.isDashing
-      ) {
-        >>>
-        >>> > e81ea47686125ff6dbab88d0be56cee7732f6246
-        this.isDashing = true;
-        this.shield.setVisible(true);
-        this.shield.play("iFrame");
-
-        this.player.invincible = true;
-
-        this.time.delayedCall(1000, () => {
-          this.isDashing = false;
-          this.player.setVelocityX(0);
-          this.shield.setVisible(false);
-          this.player.invincible = false;
-        });
-
-        this.player.setVelocityX(dashSpeed);
-      } else if (this.keys.right.isDown) {
-        this.player.setVelocityX(velocity);
-      } else {
+      this.time.delayedCall(1000, () => {
+        this.isDashing = false;
         this.player.setVelocityX(0);
-      }
+        this.shield.setVisible(false);
+        this.player.invincible = false;
+      });
 
-      if (this.keys.down.isDown) {
-        this.player.setVelocityY(velocity);
-      } else if (this.keys.up.isDown) {
-        this.player.setVelocityY(-velocity);
-      } else {
-        this.player.setVelocityY(0);
-      }
+      this.player.setVelocityX(-dashSpeed);
+    } else if (this.keys.left.isDown) {
+      this.player.setVelocityX(-velocity);
+
+    } else if (this.keys.right.isDown && this.keys.shift.isDown && !this.isDashing) {
+
+    } else if (
+      this.keys.right.isDown &&
+      this.keys.shift.isDown &&
+      !this.isDashing
+    ) {
+
+      this.isDashing = true;
+      this.shield.setVisible(true);
+      this.shield.play("iFrame");
+
+      this.player.invincible = true;
+
+      this.time.delayedCall(1000, () => {
+        this.isDashing = false;
+        this.player.setVelocityX(0);
+        this.shield.setVisible(false);
+        this.player.invincible = false;
+      });
+
+      this.player.setVelocityX(dashSpeed);
+    } else if (this.keys.right.isDown) {
+      this.player.setVelocityX(velocity);
+    } else {
+      this.player.setVelocityX(0);
     }
 
-    <<
-    << << < HEAD
+    if (this.keys.down.isDown) {
+      this.player.setVelocityY(velocity);
+    } else if (this.keys.up.isDown) {
+      this.player.setVelocityY(-velocity);
+    } else {
+      this.player.setVelocityY(0);
+    }
+  }
 
-    ===
-    === = >>>
-    >>> > e81ea47686125ff6dbab88d0be56cee7732f6246
   //------------------------------------------------------------------------------------------handleAnimations------------------------------------------------------------------------------------------
   handleAnimations() {
     if (
