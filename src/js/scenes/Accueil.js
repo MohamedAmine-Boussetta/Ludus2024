@@ -1,6 +1,8 @@
 class Accueil extends Phaser.Scene {
     constructor() {
-        super({ key: 'accueil' });
+        super({
+            key: 'accueil'
+        });
     }
 
     preload() {
@@ -46,12 +48,12 @@ class Accueil extends Phaser.Scene {
 
         this.bgMusic = this.sound.add('bgMusic', {
             mute: false,
-            volume: 0.5,
-            rate: 1,    
+            volume: 0.1,
+            rate: 1,
             loop: true,
             delay: 0,
-          });
-          this.bgMusic.play();
+        });
+        this.bgMusic.play();
 
         startBtn.setInteractive();
         creditsBtn.setInteractive();
@@ -77,11 +79,11 @@ class Accueil extends Phaser.Scene {
                 this.bgMusic.stop();
                 musicPause = true;
             } else {
-                this.bgMusic.play(); 
+                this.bgMusic.play();
                 musicPause = false;
             }
         });
     }
 
-    update() { }
+    update() {}
 }
