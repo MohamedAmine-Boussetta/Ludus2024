@@ -1,6 +1,8 @@
 class Guide extends Phaser.Scene {
   constructor() {
-    super({ key: "guide" });
+    super({
+      key: "guide"
+    });
   }
 
   preload() {
@@ -10,9 +12,9 @@ class Guide extends Phaser.Scene {
       "./assets/images/ui/Buttons/BTNs/Close_BTN.png"
     );
     this.load.image(
-      "A",
-      "assets/images/ui/Keyboard/Keyboard/Letters/L. Key 1.png"
+      this.load.image("commentJouer", "assets/images/ui/Main_Menu/Comment jouer.png")
     );
+    this.load.image("bg", "assets/images/background/bg.png")
   }
 
   create() {
@@ -20,9 +22,7 @@ class Guide extends Phaser.Scene {
     const hudContainer = this.add.container(0, 0).setDepth(1);
 
     //BG
-    let bg = this.add
-      .image(config.width / 2, config.height / 2, "BG")
-      .setAngle(90);
+    let bg = this.add.image(config.width / 2, config.height / 2, "bg").setScale(0.7)
 
     //closeBtn
     let closeBtn = this.add
@@ -30,8 +30,9 @@ class Guide extends Phaser.Scene {
       .setScale(0.3)
       .setOrigin(0, 1);
     hudContainer.add(closeBtn);
+    closeBtn.setInteractive();
 
-    let A = this.add.closeBtn.setInteractive();
+    let cmtJouer = this.add.image(config.width / 2, config.height / 2 - 45, "commentJouer").setScale(1.2);
 
     closeBtn.on("pointerdown", () => {
       this.scene.start("accueil");

@@ -568,8 +568,6 @@ class Jeu extends Phaser.Scene {
     } else if (this.keys.left.isDown) {
       this.player.setVelocityX(-velocity);
 
-    } else if (this.keys.right.isDown && this.keys.shift.isDown && !this.isDashing) {
-
     } else if (
       this.keys.right.isDown &&
       this.keys.shift.isDown &&
