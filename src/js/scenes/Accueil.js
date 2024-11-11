@@ -48,7 +48,7 @@ class Accueil extends Phaser.Scene {
 
         this.bgMusic = this.sound.add('bgMusic', {
             mute: false,
-            volume: 0.1,
+            volume: 0.3,
             rate: 1,
             loop: true,
             delay: 0,
