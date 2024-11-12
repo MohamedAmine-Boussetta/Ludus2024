@@ -36,6 +36,7 @@ class Guide extends Phaser.Scene {
 
     closeBtn.on("pointerdown", () => {
       this.scene.start("accueil");
+      this.sound.stopAll();
     });
   }
 }

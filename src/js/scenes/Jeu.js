@@ -10,7 +10,6 @@ class Jeu extends Phaser.Scene {
 
   preload() {
     this.load.image("espace", "assets/images/ui/Main_Menu/starBg.webp");
-    this.load.image("exitBtn", "./assets/images/ui/Main_Menu/Exit_BTN.png");
     this.load.image(
       "ship",
       "./assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Full health.png"
@@ -89,6 +88,11 @@ class Jeu extends Phaser.Scene {
         frameHeight: 64,
       }
     );
+
+    this.load.spritesheet("gunBuff", "assets/images/prop/Foozle_2DS0016_Void_PickupsPack/Weapons/PNGs/Pickup Icon - Weapons - Big Space Gun 2000.png", {
+      frameWidth: 32,
+      frameHeight: 32,
+    })
     this.load.audio("shootSound", "assets/audios/sfx/sfx_tir_player.wav");
     this.load.audio("enemyHit", "assets/audios/sfx/enemy_Hit.wav");
     this.load.audio("bossMusic", "assets/audios/music/boss_music.mp3");
@@ -123,26 +127,11 @@ class Jeu extends Phaser.Scene {
       delay: 0,
     });
     this.bossMusic.play();
-    //------------------------------------------------------------------------------------------HUD------------------------------------------------------------------------------------------
-    const hudContainer = this.add.container(0, 0).setDepth(1);
 
     //------------------------------------------------------------------------------------------BG------------------------------------------------------------------------------------------
     this.bg = this.add
       .tileSprite(0, 0, config.width, config.height, "espace")
       .setOrigin(0, 0);
-
-    //------------------------------------------------------------------------------------------exitBtn------------------------------------------------------------------------------------------
-    let exitBtn = this.add
-      .image(config.width / 2, config.height / 2 + 330, "exitBtn")
-      .setScale(0.5);
-    hudContainer.add(exitBtn);
-
-    exitBtn.setInteractive();
-
-    exitBtn.on("pointerdown", () => {
-      this.scene.start("accueil");
-      this.bossMusic.stop();
-    });
 
     //------------------------------------------------------------------------------------------player------------------------------------------------------------------------------------------
     this.player = this.physics.add.group();
@@ -287,6 +276,14 @@ class Jeu extends Phaser.Scene {
       frameRate: 8,
     });
 
+    this.anims.create({
+      key: "gunBuff",
+      frames: this.anims.generateFrameNames("gunBuff", {
+        start: 0,
+        end: 14,
+      })
+    })
+
     //------------------------------------------------------------------------------------------bullet------------------------------------------------------------------------------------------
     this.launcherBullets = this.physics.add.group({
       defaultKey: "bullet",
@@ -307,6 +304,8 @@ class Jeu extends Phaser.Scene {
         }
       }
     });
+    //---------------------------------------------------------------------------------------------Bonus----------------------------------------------------------------------------------------
+    this.gunBonus = this.physics.add.sprite(config.width / 2, config.height / 2, "gunBuff").setVisible()
 
     //------------------------------------------------------------------------------------------Cadence normale de tir pour l'ennemi------------------------------------------------------------------------------------------
     this.enemyBullets = this.physics.add.group({
@@ -420,6 +419,22 @@ class Jeu extends Phaser.Scene {
     });
 
     this.isDashing = false;
+    //---------------------------------------------------------------------------------------------------Pause-------------------------------------------------------------------------------------------
+    this.isPaused = false;
+    this.isInvisible = false;
+    this.input.keyboard.on("keydown-ESC", () => {
+      if (!this.isPaused) {
+        this.scene.launch('pause'); // Lance la scène de pause
+        this.scene.pause(); // Met la scène principale en pause
+        this.isPaused = true;
+      }
+    });
+
+
+  }
+
+  resumeGame() {
+    this.isPaused = false;
   }
 
   moveAsteroid(asteroid) {

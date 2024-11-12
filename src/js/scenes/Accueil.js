@@ -71,6 +71,7 @@ class Accueil extends Phaser.Scene {
 
         faqBtn.on('pointerdown', () => {
             this.scene.start('guide');
+            this.sound.stopAll();
         });
 
         let musicPause = false
