@@ -1,10 +1,12 @@
 class Credits extends Phaser.Scene {
     constructor() {
-        super({ key: 'credits' });
+        super({
+            key: 'credits'
+        });
     }
 
     preload() {
-        this.load.image('BG', './assets/images/ui/Main_Menu/BG.png');
+
         this.load.image('closeBtn', './assets/images/ui/Buttons/BTNs/Close_BTN.png');
     }
 
@@ -25,6 +27,28 @@ class Credits extends Phaser.Scene {
         closeBtn.on('pointerdown', () => {
             this.scene.start('accueil');
         });
+
+        let creditsContainer = this.add.container(config.width / 2 - 250, config.height / 2);
+
+        let creditText1 = this.add.text(0, -200, "Développé par : MAB", {
+            fontSize: '32px',
+            fill: '#ffffff'
+        });
+        let creditText2 = this.add.text(0, -150, "Assets par : Nom de l'artiste", {
+            fontSize: '32px',
+            fill: '#ffffff'
+        });
+        let creditText3 = this.add.text(0, -100, "Musique par : Nom du compositeur", {
+            fontSize: '32px',
+            fill: '#ffffff'
+        });
+        let creditText4 = this.add.text(0, -50, "Merci d'avoir joué !", {
+            fontSize: '32px',
+            fill: '#ffffff'
+        });
+
+        creditsContainer.add([creditText1, creditText2, creditText3, creditText4]);
+
 
     }
 }

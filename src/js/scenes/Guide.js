@@ -6,7 +6,6 @@ class Guide extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("BG", "./assets/images/ui/Main_Menu/BG.png");
     this.load.image(
       "closeBtn",
       "./assets/images/ui/Buttons/BTNs/Close_BTN.png"

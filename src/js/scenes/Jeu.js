@@ -458,6 +458,9 @@ class Jeu extends Phaser.Scene {
     this.handleMovement();
     this.handleAnimations();
     this.wrapAround();
+    this.handlePlayerHp();
+    this.handleEnemyMovement();
+    this.handlePhase2();
     this.bg.tilePositionY -= 5;
     this.launcherBullets.children.each((bullet) => {
       let cachee = !this.cameras.main.worldView.contains(bullet.x, bullet.y);
@@ -474,92 +477,8 @@ class Jeu extends Phaser.Scene {
         bullet.setVisible(false);
       }
     });
-    if (this.enemy.pointsDeVie !== 0) {
-      if (this.enemy.pointsDeVie >= 21 && this.enemy.pointsDeVie <= 40) {
-        //------------------------------------------------------------------------------------------Mouvement aléatoire plus lent------------------------------------------------------------------------------------------
-        this.enemy.x += (this.randomX - this.enemy.x) * 0.03;
-        this.enemy.y += (this.randomY - this.enemy.y) * 0.03;
-
-        //------------------------------------------------------------------------------------------Régénérer de nouvelles positions aléatoires------------------------------------------------------------------------------------------
-        if (
-          Phaser.Math.Distance.Between(
-            this.enemy.x,
-            this.enemy.y,
-            this.randomX,
-            this.randomY
-          ) < 0.6
-        ) {
-          this.randomX = Phaser.Math.Between(0, config.width);
-          this.randomY = Phaser.Math.Between(0, 360);
-        }
-      } else if (this.enemy.pointsDeVie <= 20) {
-        //------------------------------------------------------------------------------------------Mouvement aléatoire plus rapide------------------------------------------------------------------------------------------
-
-        this.enemy.x += (this.randomX - this.enemy.x) * 0.1;
-        this.enemy.y += (this.randomY - this.enemy.y) * 0.1;
-
-        //------------------------------------------------------------------------------------------Régénérer de nouvelles positions aléatoires------------------------------------------------------------------------------------------
-        if (
-          Phaser.Math.Distance.Between(
-            this.enemy.x,
-            this.enemy.y,
-            this.randomX,
-            this.randomY
-          ) < 0.5
-        ) {
-          this.randomX = Phaser.Math.Between(0, config.width);
-          this.randomY = Phaser.Math.Between(0, 360);
-        }
-      }
-    }
-
-    //------------------------------------------------------------------------------------------Phase2------------------------------------------------------------------------------------------
-    if (this.enemy.pointsDeVie <= 20) {
-      if (!this.enemyFiringFaster) {
-        if (this.enemyFiring) {
-          this.enemyFiring.remove();
-        }
-        this.enemyBullets.maxSize = 5;
-
-        this.enemyFiring = this.time.addEvent({
-          delay: 400,
-          loop: true,
-          callback: () => {
-            const bullet = this.enemyBullets.get(
-              this.enemy.x,
-              this.enemy.y + 72
-            );
-            if (bullet) {
-              bullet.setActive(true);
-              bullet.setVisible(true);
-              bullet.setVelocity(0, 700);
-              this.shootSound2.play()
-            }
-          },
-        });
-
-        this.enemyFiringFaster = true;
-      }
-    }
-
-    if (this.ship.pointsDeVie <= 8) {
-      this.ship.setVisible(false);
-      this.ship1.setVisible(true);
-    }
-    if (this.ship.pointsDeVie <= 6) {
-      this.ship1.setVisible(false);
-      this.ship2.setVisible(true);
-    }
-    if (this.ship.pointsDeVie <= 4) {
-      this.ship2.setVisible(false);
-      this.ship3.setVisible(true);
-    }
-    if (this.ship.pointsDeVie <= 0) {
-      this.scene.start("perdu");
-      this.bossMusic.stop();
-    }
   }
-  //------------------------------------------------------------------------------------------handleMouvement------------------------------------------------------------------------------------------
+
   handleMovement() {
     const flyspeed = 500;
     const dashSpeed = 3000;
@@ -618,7 +537,6 @@ class Jeu extends Phaser.Scene {
     }
   }
 
-  //------------------------------------------------------------------------------------------handleAnimations------------------------------------------------------------------------------------------
   handleAnimations() {
     if (
       this.keys.down.isDown ||
@@ -640,5 +558,96 @@ class Jeu extends Phaser.Scene {
 
   wrapAround() {
     this.physics.world.wrap(this.player, 20);
+  }
+
+  handleEnemyMovement() {
+    if (this.enemy.pointsDeVie !== 0) {
+      if (this.enemy.pointsDeVie >= 21 && this.enemy.pointsDeVie <= 40) {
+        //------------------------------------------------------------------------------------------Mouvement aléatoire plus lent------------------------------------------------------------------------------------------
+        this.enemy.x += (this.randomX - this.enemy.x) * 0.03;
+        this.enemy.y += (this.randomY - this.enemy.y) * 0.03;
+
+        //------------------------------------------------------------------------------------------Régénérer de nouvelles positions aléatoires------------------------------------------------------------------------------------------
+        if (
+          Phaser.Math.Distance.Between(
+            this.enemy.x,
+            this.enemy.y,
+            this.randomX,
+            this.randomY
+          ) < 0.6
+        ) {
+          this.randomX = Phaser.Math.Between(0, config.width);
+          this.randomY = Phaser.Math.Between(0, 360);
+        }
+      } else if (this.enemy.pointsDeVie <= 20) {
+        //------------------------------------------------------------------------------------------Mouvement aléatoire plus rapide------------------------------------------------------------------------------------------
+
+        this.enemy.x += (this.randomX - this.enemy.x) * 0.1;
+        this.enemy.y += (this.randomY - this.enemy.y) * 0.1;
+
+        //------------------------------------------------------------------------------------------Régénérer de nouvelles positions aléatoires------------------------------------------------------------------------------------------
+        if (
+          Phaser.Math.Distance.Between(
+            this.enemy.x,
+            this.enemy.y,
+            this.randomX,
+            this.randomY
+          ) < 0.5
+        ) {
+          this.randomX = Phaser.Math.Between(0, config.width);
+          this.randomY = Phaser.Math.Between(0, 360);
+        }
+      }
+    }
+  }
+
+  handlePhase2() {
+    if (this.enemy.pointsDeVie <= 20) {
+      if (!this.enemyFiringFaster) {
+        if (this.enemyFiring) {
+          this.enemyFiring.remove();
+        }
+        this.enemyBullets.maxSize = 5;
+
+        this.enemyFiring = this.time.addEvent({
+          delay: 400,
+          loop: true,
+          callback: () => {
+            const bullet = this.enemyBullets.get(
+              this.enemy.x,
+              this.enemy.y + 72
+            );
+            if (bullet) {
+              bullet.setActive(true);
+              bullet.setVisible(true);
+              bullet.setVelocity(0, 700);
+              this.shootSound2.play()
+            }
+          },
+        });
+
+        this.enemyFiringFaster = true;
+      }
+    }
+  }
+
+
+  handlePlayerHp() {
+    if (this.ship.pointsDeVie <= 8) {
+      this.ship.setVisible(false);
+      this.ship1.setVisible(true);
+    }
+    if (this.ship.pointsDeVie <= 6) {
+      this.ship1.setVisible(false);
+      this.ship2.setVisible(true);
+    }
+    if (this.ship.pointsDeVie <= 4) {
+      this.ship2.setVisible(false);
+      this.ship3.setVisible(true);
+    }
+    if (this.ship.pointsDeVie <= 0) {
+      this.scene.start("perdu");
+      this.bossMusic.stop();
+    }
   }
 }

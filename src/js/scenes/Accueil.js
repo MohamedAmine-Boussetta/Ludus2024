@@ -67,6 +67,7 @@ class Accueil extends Phaser.Scene {
 
         creditsBtn.on('pointerdown', () => {
             this.scene.start('credits');
+            this.sound.stopAll();
         });
 
         faqBtn.on('pointerdown', () => {
