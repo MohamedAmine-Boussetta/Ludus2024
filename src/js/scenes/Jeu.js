@@ -421,7 +421,6 @@ class Jeu extends Phaser.Scene {
     this.isDashing = false;
     //---------------------------------------------------------------------------------------------------Pause-------------------------------------------------------------------------------------------
     this.isPaused = false;
-    this.isInvisible = false;
     this.input.keyboard.on("keydown-ESC", () => {
       if (!this.isPaused) {
         this.scene.launch('pause'); // Lance la scène de pause
