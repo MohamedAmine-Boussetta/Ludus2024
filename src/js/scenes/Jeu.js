@@ -1,5 +1,7 @@
 let pdvTxt = 10;
 let pdvCounter;
+this.bonusActive = false;
+this.flyspeed = 500;
 
 class Jeu extends Phaser.Scene {
   constructor() {
@@ -89,7 +91,7 @@ class Jeu extends Phaser.Scene {
       }
     );
 
-    this.load.spritesheet("gunBuff", "assets/images/prop/Foozle_2DS0016_Void_PickupsPack/Weapons/PNGs/Pickup Icon - Weapons - Big Space Gun 2000.png", {
+    this.load.spritesheet("engineBuff", "assets/images/prop/Foozle_2DS0016_Void_PickupsPack/Engines/PNGs/Pickup Icon - Engines - Base Engine.png", {
       frameWidth: 32,
       frameHeight: 32,
     })
@@ -101,6 +103,8 @@ class Jeu extends Phaser.Scene {
 
   create() {
     pdvTxt = 10;
+    this.bonusActive = false;
+    this.flyspeed = 500;
     //----------------------------------------------------------------------------------------Audio---------------------------------------------------------------
     this.shootSound = this.sound.add('shootSound', {
       mute: false,
@@ -277,8 +281,8 @@ class Jeu extends Phaser.Scene {
     });
 
     this.anims.create({
-      key: "gunBuff",
-      frames: this.anims.generateFrameNames("gunBuff", {
+      key: "engineBuff",
+      frames: this.anims.generateFrameNames("engineBuff", {
         start: 0,
         end: 14,
       })
@@ -305,8 +309,22 @@ class Jeu extends Phaser.Scene {
       }
     });
     //---------------------------------------------------------------------------------------------Bonus----------------------------------------------------------------------------------------
-    this.gunBonus = this.physics.add.sprite(config.width / 2, config.height / 2, "gunBuff").setVisible()
 
+    this.bonus = this.physics.add.sprite(
+      Phaser.Math.Between(100, config.width - 100),
+      Phaser.Math.Between(100, config.height - 100),
+      "engineBuff"
+    ).setVisible(false);
+
+
+    this.bonusIcon = this.add.image(50, 50, "engineBuff").setVisible(false);
+    this.bonusTimerText = this.add.text(80, 45, "", {
+      font: "24px Arial",
+      fill: "#FFFFFF"
+    }).setVisible(false);
+
+
+    this.physics.add.overlap(this.ship, this.bonus, this.collectBonus, null, this);
     //------------------------------------------------------------------------------------------Cadence normale de tir pour l'ennemi------------------------------------------------------------------------------------------
     this.enemyBullets = this.physics.add.group({
       defaultKey: "enemyBullet",
@@ -454,7 +472,6 @@ class Jeu extends Phaser.Scene {
   }
 
   update() {
-    this.handleMovement();
     this.handleAnimations();
     this.wrapAround();
     this.handlePlayerHp();
@@ -476,12 +493,31 @@ class Jeu extends Phaser.Scene {
         bullet.setVisible(false);
       }
     });
+
+    if (!this.bonusActive && !this.bonus.visible && Phaser.Math.Between(0, 1000) < 1) {
+      this.bonus.setPosition(
+        Phaser.Math.Between(100, config.width - 100),
+        Phaser.Math.Between(100, config.height - 100)
+      ).setVisible(true);
+      this.bonusActive = true;
+    }
+
+    if (this.bonusActive && this.bonusEndTime) {
+      const remainingTime = Math.ceil((this.bonusEndTime - this.time.now) / 1000);
+      this.bonusTimerText.setText(remainingTime);
+
+      if (remainingTime <= 0) {
+        this.bonusIcon.setVisible(false);
+        this.bonusTimerText.setVisible(false);
+      }
+    }
+
+    this.handleMovement();
   }
 
   handleMovement() {
-    const flyspeed = 500;
     const dashSpeed = 3000;
-    let velocity = flyspeed;
+    let velocity = this.flyspeed || 500;
 
     if (this.keys.left.isDown && this.keys.shift.isDown && !this.isDashing) {
       this.isDashing = true;
@@ -648,5 +684,25 @@ class Jeu extends Phaser.Scene {
       this.scene.start("perdu");
       this.bossMusic.stop();
     }
+  }
+
+  collectBonus(player, bonus) {
+    bonus.setVisible(false);
+    this.bonusActive = true;
+
+    this.flyspeed = 700;
+
+    this.bonusIcon.setVisible(true);
+    this.bonusTimerText.setVisible(true);
+
+
+    const buffDuration = 15000;
+    this.bonusEndTime = this.time.now + buffDuration;
+
+    this.time.delayedCall(15000, () => {
+      this.flyspeed = 500;
+      this.bonusActive = false;
+    });
+
   }
 }
