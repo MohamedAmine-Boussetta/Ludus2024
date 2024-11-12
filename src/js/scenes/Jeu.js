@@ -447,6 +447,31 @@ class Jeu extends Phaser.Scene {
       }
     });
 
+    //--------------------------------------------------------------------------------------------------Timer------------------------------------------------------------------------------------
+    this.timerText = this.add.text(config.width / 2, 20, 'Temps restant: 3:00', {
+      font: '32px Arial',
+      fill: '#FFFFFF'
+    }).setOrigin(0.5);
+
+    this.timeLeft = 180;
+
+    this.timeEvent = this.time.addEvent({
+      delay: 1000,
+      callback: () => {
+        this.timeLeft--;
+
+        let minutes = Math.floor(this.timeLeft / 60);
+        let seconds = this.timeLeft % 60;
+        this.timerText.setText(`Temps restant: ${minutes}:${seconds < 10 ? '0' + seconds : seconds}`);
+
+        if (this.timeLeft <= 0) {
+          this.scene.start("perdu");
+        }
+      },
+      callbackScope: this,
+      loop: true
+    });
+
 
   }
 
