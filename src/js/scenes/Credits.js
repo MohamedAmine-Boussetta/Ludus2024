@@ -34,15 +34,18 @@ class Credits extends Phaser.Scene {
             fontSize: '32px',
             fill: '#ffffff'
         });
-        let creditText2 = this.add.text(0, -150, "Assets par : Foozle (Itch.io)", {
+        let creditText2 = this.add.text(0, -150, `Assets par : Foozle (Itch.io)
+             ansimuz(Itch.io)`, {
             fontSize: '32px',
             fill: '#ffffff'
         });
-        let creditText3 = this.add.text(0, -100, "Musique et sons par : Nom du compositeur", {
+        let creditText3 = this.add.text(0, -80, `Musiques et sons par : Bobjt(OpenGameArt.org)
+            (pas de nom sur le son)(Mixkit)
+            alperomeresin(Pixabay)`, {
             fontSize: '32px',
             fill: '#ffffff'
         });
-        let creditText4 = this.add.text(0, -50, "Merci d'avoir joué !", {
+        let creditText4 = this.add.text(0, 30, "Merci d'avoir joué !", {
             fontSize: '32px',
             fill: '#ffffff'
         });

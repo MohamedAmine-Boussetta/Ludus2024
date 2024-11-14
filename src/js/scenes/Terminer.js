@@ -1,6 +1,8 @@
 class Terminer extends Phaser.Scene {
   constructor() {
-    super({ key: "perdu" });
+    super({
+      key: "perdu"
+    });
   }
 
   preload() {
@@ -8,6 +10,7 @@ class Terminer extends Phaser.Scene {
     this.load.image("mainMenu", "./assets/images/ui/Buttons/BTNs/Play_BTN.png");
     this.load.image("replay", "./assets/images/ui/Buttons/BTNs/Replay_BTN.png");
     this.load.image("perdu", "assets/images/ui/You_Lose/Perdu.png");
+    this.load.audio("defeatSound", "assets/audios/music/Perdu.mp3");
   }
 
   create() {
@@ -19,12 +22,23 @@ class Terminer extends Phaser.Scene {
       .image(config.width / 2, config.height / 2, "BG")
       .setAngle(90);
 
+
     //text
     let perdu = this.add.image(
       config.width / 2,
       config.height / 2 - 200,
       "perdu"
     );
+
+    //Sound
+    this.defeatSound = this.sound.add('defeatSound', {
+      mute: false,
+      volume: 0.5,
+      rate: 1,
+      delay: 0,
+    });
+    this.defeatSound.play();
+
 
     //main menu
     let mainMenu = this.add

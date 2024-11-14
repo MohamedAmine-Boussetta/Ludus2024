@@ -41,10 +41,6 @@ class Jeu extends Phaser.Scene {
       "asteroid",
       "assets/images/prop/Asteroids/PNGs/Asteroid 01 - Base.png"
     );
-    this.load.image(
-      "enemyCircuit",
-      "assets/images/prop/Foozle_2DS0016_Void_PickupsPack/Shield Generators/PNGs/Pickup Icon - Shield Generator - Front Shield.png"
-    );
     this.load.spritesheet(
       "engineStart",
       "./assets/images/characters/Main_Ship/Main Ship - Engine Effects/PNGs/Main Ship - Engines - Base Engine - Spritesheet.png", {
@@ -96,10 +92,10 @@ class Jeu extends Phaser.Scene {
       }
     );
 
-    this.load.spritesheet("engineBuff", "assets/images/prop/Foozle_2DS0016_Void_PickupsPack/Engines/PNGs/Pickup Icon - Engines - Base Engine.png", {
+    this.load.spritesheet("enemyCircuit", "assets/images/prop/Foozle_2DS0016_Void_PickupsPack/Shield Generators/PNGs/Pickup Icon - Shield Generator - Front Shield.png", {
       frameWidth: 32,
       frameHeight: 32,
-    })
+    });
     this.load.audio("shootSound", "assets/audios/sfx/sfx_tir_player.wav");
     this.load.audio("enemyHit", "assets/audios/sfx/enemy_Hit.wav");
     this.load.audio("bossMusic", "assets/audios/music/boss_music.mp3");
@@ -287,12 +283,14 @@ class Jeu extends Phaser.Scene {
     });
 
     this.anims.create({
-      key: "engineBuff",
-      frames: this.anims.generateFrameNames("engineBuff", {
+      key: "enemyCircuitAnim",
+      frames: this.anims.generateFrameNames("enemyCircuit", {
         start: 0,
         end: 14,
-      })
-    })
+      }),
+      frameRate: 8,
+      repeat: -1
+    });
 
     //------------------------------------------------------------------------------------------bullet------------------------------------------------------------------------------------------
     this.launcherBullets = this.physics.add.group({
@@ -473,12 +471,19 @@ class Jeu extends Phaser.Scene {
     });
 
     //-----------------------------------------------------------------------------------------------------enemyCircuit------------------------------------------------------------------
-    this.enemyCircuit = this.physics.add.image(50, 120, "enemyCircuit", 0).setVisible(false)
+    this.enemyCircuit = this.physics.add.sprite(config.width / 2, config.height / 2, "enemyCircuit", 0).setVisible(false)
+    let canPickUp = false;
 
+    this.time.delayedCall(15000, () => {
+      canPickUp = true;
+    })
     this.physics.add.overlap(this.ship, this.enemyCircuit, (ship, enemyCircuit) => {
-      enemyCircuitActive = true;
-      this.enemyCircuit.setVisible(false); // Hide or destroy the circuit after pickup
-      this.enemyCircuit.destroy();
+      if (canPickUp) {
+        enemyCircuitActive = true;
+        this.enemyCircuit.setVisible(false);
+        this.enemyCircuit.anims.play("enemyCircuitAnim");
+        this.enemyCircuit.destroy();
+      }
     });
   }
 
@@ -631,8 +636,8 @@ class Jeu extends Phaser.Scene {
       } else if (this.enemy.pointsDeVie <= 20) {
         //------------------------------------------------------------------------------------------Mouvement aléatoire plus rapide------------------------------------------------------------------------------------------
 
-        this.enemy.x += (this.randomX - this.enemy.x) * 0.06;
-        this.enemy.y += (this.randomY - this.enemy.y) * 0.06;
+        this.enemy.x += (this.randomX - this.enemy.x) * 0.05;
+        this.enemy.y += (this.randomY - this.enemy.y) * 0.05;
 
         //------------------------------------------------------------------------------------------Régénérer de nouvelles positions aléatoires------------------------------------------------------------------------------------------
         if (
