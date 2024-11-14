@@ -181,7 +181,7 @@ class Jeu extends Phaser.Scene {
     //------------------------------------------------------------------------------------------enemy------------------------------------------------------------------------------------------
     this.enemy = this.physics.add.sprite(50, 120, "enemy", 0).setAngle(180);
     this.enemy.setScale(2);
-    this.enemy.pointsDeVie = 25;
+    this.enemy.pointsDeVie = 40;
     this.randomX = Phaser.Math.Between(0, config.width);
     this.randomY = Phaser.Math.Between(0, 360);
     this.enemy.body.setSize(69, 100).setOffset(29, 10);
