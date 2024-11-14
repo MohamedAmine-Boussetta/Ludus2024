@@ -2,6 +2,7 @@ let pdvTxt = 10;
 let pdvCounter;
 this.bonusActive = false;
 this.flyspeed = 500;
+let enemyCircuitActive = false;
 
 class Jeu extends Phaser.Scene {
   constructor() {
@@ -39,6 +40,10 @@ class Jeu extends Phaser.Scene {
     this.load.image(
       "asteroid",
       "assets/images/prop/Asteroids/PNGs/Asteroid 01 - Base.png"
+    );
+    this.load.image(
+      "enemyCircuit",
+      "assets/images/prop/Foozle_2DS0016_Void_PickupsPack/Shield Generators/PNGs/Pickup Icon - Shield Generator - Front Shield.png"
     );
     this.load.spritesheet(
       "engineStart",
@@ -103,6 +108,7 @@ class Jeu extends Phaser.Scene {
 
   create() {
     pdvTxt = 10;
+    enemyCircuitActive = false;
     this.bonusActive = false;
     this.flyspeed = 500;
     //----------------------------------------------------------------------------------------Audio---------------------------------------------------------------
@@ -179,7 +185,7 @@ class Jeu extends Phaser.Scene {
     //------------------------------------------------------------------------------------------enemy------------------------------------------------------------------------------------------
     this.enemy = this.physics.add.sprite(50, 120, "enemy", 0).setAngle(180);
     this.enemy.setScale(2);
-    this.enemy.pointsDeVie = 40;
+    this.enemy.pointsDeVie = 25;
     this.randomX = Phaser.Math.Between(0, config.width);
     this.randomY = Phaser.Math.Between(0, 360);
     this.enemy.body.setSize(69, 100).setOffset(29, 10);
@@ -308,23 +314,7 @@ class Jeu extends Phaser.Scene {
         }
       }
     });
-    //---------------------------------------------------------------------------------------------Bonus----------------------------------------------------------------------------------------
 
-    this.bonus = this.physics.add.sprite(
-      Phaser.Math.Between(100, config.width - 100),
-      Phaser.Math.Between(100, config.height - 100),
-      "engineBuff"
-    ).setVisible(false);
-
-
-    this.bonusIcon = this.add.image(50, 50, "engineBuff").setVisible(false);
-    this.bonusTimerText = this.add.text(80, 45, "", {
-      font: "24px Arial",
-      fill: "#FFFFFF"
-    }).setVisible(false);
-
-
-    this.physics.add.overlap(this.ship, this.bonus, this.collectBonus, null, this);
     //------------------------------------------------------------------------------------------Cadence normale de tir pour l'ennemi------------------------------------------------------------------------------------------
     this.enemyBullets = this.physics.add.group({
       defaultKey: "enemyBullet",
@@ -351,27 +341,38 @@ class Jeu extends Phaser.Scene {
       this.enemy,
       this.launcherBullets,
       (enemy, bullet) => {
-        enemy.pointsDeVie -= 1;
-        this.enemyHit.play();
-        bullet.setActive(false);
-        bullet.setVisible(false);
-        bullet.y = -999999;
+        // Check enemy health and item activation status
+        if (enemy.pointsDeVie > 20 || (enemy.pointsDeVie <= 20 && enemyCircuitActive)) {
+          // Enemy can take damage
+          enemy.pointsDeVie -= 1;
+          this.enemyHit.play();
+          bullet.setActive(false);
+          bullet.setVisible(false);
+          bullet.y = -999999;
 
-        if (enemy.pointsDeVie <= 0) {
-          this.enemyFiring.remove();
-          this.enemy.body.checkCollision.none = true;
-          this.enemy.play("enemyDead");
-          this.enemy.on("animationcomplete", () => {
-            this.enemy.destroy();
+          // Handle enemy death
+          if (enemy.pointsDeVie <= 0) {
+            this.enemyFiring.remove();
+            this.enemy.body.checkCollision.none = true;
+            this.enemy.play("enemyDead");
+            this.enemy.on("animationcomplete", () => {
+              this.enemy.destroy();
+              this.scene.start("victoire")
+            });
+          }
+
+          let explosion = this.add.sprite(enemy.x, enemy.y + 100, "explode");
+          explosion.setScale(2);
+          explosion.play("explode");
+          explosion.on("animationcomplete", () => {
+            explosion.destroy();
           });
+        } else {
+          // Bullet does not affect the enemy
+          bullet.setActive(false);
+          bullet.setVisible(false);
+          bullet.y = -999999;
         }
-
-        let explosion = this.add.sprite(enemy.x, enemy.y + 100, "explode");
-        explosion.setScale(2);
-        explosion.play("explode");
-        explosion.on("animationcomplete", () => {
-          explosion.destroy();
-        });
       }
     );
 
@@ -385,7 +386,6 @@ class Jeu extends Phaser.Scene {
       bullet.setVisible(false);
       bullet.y = -999999;
     });
-
 
     //------------------------------------------------------------------------------------------asteroid------------------------------------------------------------------------------------------
     const asteroid = this.physics.add.image(
@@ -472,7 +472,14 @@ class Jeu extends Phaser.Scene {
       loop: true
     });
 
+    //-----------------------------------------------------------------------------------------------------enemyCircuit------------------------------------------------------------------
+    this.enemyCircuit = this.physics.add.image(50, 120, "enemyCircuit", 0).setVisible(false)
 
+    this.physics.add.overlap(this.ship, this.enemyCircuit, (ship, enemyCircuit) => {
+      enemyCircuitActive = true;
+      this.enemyCircuit.setVisible(false); // Hide or destroy the circuit after pickup
+      this.enemyCircuit.destroy();
+    });
   }
 
   resumeGame() {
@@ -518,27 +525,9 @@ class Jeu extends Phaser.Scene {
         bullet.setVisible(false);
       }
     });
-
-    if (!this.bonusActive && !this.bonus.visible && Phaser.Math.Between(0, 1000) < 1) {
-      this.bonus.setPosition(
-        Phaser.Math.Between(100, config.width - 100),
-        Phaser.Math.Between(100, config.height - 100)
-      ).setVisible(true);
-      this.bonusActive = true;
-    }
-
-    if (this.bonusActive && this.bonusEndTime) {
-      const remainingTime = Math.ceil((this.bonusEndTime - this.time.now) / 1000);
-      this.bonusTimerText.setText(remainingTime);
-
-      if (remainingTime <= 0) {
-        this.bonusIcon.setVisible(false);
-        this.bonusTimerText.setVisible(false);
-      }
-    }
-
     this.handleMovement();
   }
+
 
   handleMovement() {
     const dashSpeed = 3000;
@@ -642,8 +631,8 @@ class Jeu extends Phaser.Scene {
       } else if (this.enemy.pointsDeVie <= 20) {
         //------------------------------------------------------------------------------------------Mouvement aléatoire plus rapide------------------------------------------------------------------------------------------
 
-        this.enemy.x += (this.randomX - this.enemy.x) * 0.1;
-        this.enemy.y += (this.randomY - this.enemy.y) * 0.1;
+        this.enemy.x += (this.randomX - this.enemy.x) * 0.06;
+        this.enemy.y += (this.randomY - this.enemy.y) * 0.06;
 
         //------------------------------------------------------------------------------------------Régénérer de nouvelles positions aléatoires------------------------------------------------------------------------------------------
         if (
@@ -663,6 +652,7 @@ class Jeu extends Phaser.Scene {
 
   handlePhase2() {
     if (this.enemy.pointsDeVie <= 20) {
+      this.enemyCircuit.setVisible(true);
       if (!this.enemyFiringFaster) {
         if (this.enemyFiring) {
           this.enemyFiring.remove();
@@ -691,7 +681,6 @@ class Jeu extends Phaser.Scene {
     }
   }
 
-
   handlePlayerHp() {
     if (this.ship.pointsDeVie <= 8) {
       this.ship.setVisible(false);
@@ -711,23 +700,4 @@ class Jeu extends Phaser.Scene {
     }
   }
 
-  collectBonus(player, bonus) {
-    bonus.setVisible(false);
-    this.bonusActive = true;
-
-    this.flyspeed = 700;
-
-    this.bonusIcon.setVisible(true);
-    this.bonusTimerText.setVisible(true);
-
-
-    const buffDuration = 15000;
-    this.bonusEndTime = this.time.now + buffDuration;
-
-    this.time.delayedCall(15000, () => {
-      this.flyspeed = 500;
-      this.bonusActive = false;
-    });
-
-  }
 }
