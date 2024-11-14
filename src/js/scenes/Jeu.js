@@ -43,35 +43,40 @@ class Jeu extends Phaser.Scene {
     );
     this.load.spritesheet(
       "engineStart",
-      "./assets/images/characters/Main_Ship/Main Ship - Engine Effects/PNGs/Main Ship - Engines - Base Engine - Spritesheet.png", {
+      "./assets/images/characters/Main_Ship/Main Ship - Engine Effects/PNGs/Main Ship - Engines - Base Engine - Spritesheet.png",
+      {
         frameWidth: 48,
         frameHeight: 48,
       }
     );
     this.load.spritesheet(
       "launcher",
-      "assets/images/characters/Main_Ship/Main Ship - Weapons/PNGs/Main Ship - Weapons - Big Space Gun.png", {
+      "assets/images/characters/Main_Ship/Main Ship - Weapons/PNGs/Main Ship - Weapons - Big Space Gun.png",
+      {
         frameWidth: 48,
         frameHeight: 48,
       }
     );
     this.load.spritesheet(
       "launcherBullet",
-      "assets/images/characters/Main_Ship/Main ship - Weapons - Projectiles/PNGs/Main ship weapon - Projectile - Auto cannon bullet.png", {
+      "assets/images/characters/Main_Ship/Main ship - Weapons - Projectiles/PNGs/Main ship weapon - Projectile - Auto cannon bullet.png",
+      {
         frameWidth: 32,
         frameHeight: 32,
       }
     );
     this.load.spritesheet(
       "enemyBullet",
-      "assets/images/enemy/Nautolan/Weapon Effects - Projectiles/PNGs/Nautolan - Rocket.png", {
+      "assets/images/enemy/Nautolan/Weapon Effects - Projectiles/PNGs/Nautolan - Rocket.png",
+      {
         frameWidth: 16,
         frameHeight: 32,
       }
     );
     this.load.spritesheet(
       "enemyDeath",
-      "assets/images/enemy/Nautolan/Destruction/PNGs/Nautolan Ship - Dreadnought.png", {
+      "assets/images/enemy/Nautolan/Destruction/PNGs/Nautolan Ship - Dreadnought.png",
+      {
         frameWidth: 128,
         frameHeight: 128,
       }
@@ -79,23 +84,29 @@ class Jeu extends Phaser.Scene {
 
     this.load.spritesheet(
       "explosion",
-      "assets/images/fx/Explosions/explosion-1-g/spritesheet.png", {
+      "assets/images/fx/Explosions/explosion-1-g/spritesheet.png",
+      {
         frameWidth: 48,
         frameHeight: 48,
       }
     );
     this.load.spritesheet(
       "invincibleFrame",
-      "assets/images/characters/Main_Ship/Main Ship - Shields/PNGs/Main Ship - Shields - Invincibility Shield.png", {
+      "assets/images/characters/Main_Ship/Main Ship - Shields/PNGs/Main Ship - Shields - Invincibility Shield.png",
+      {
         frameWidth: 64,
         frameHeight: 64,
       }
     );
 
-    this.load.spritesheet("enemyCircuit", "assets/images/prop/Foozle_2DS0016_Void_PickupsPack/Shield Generators/PNGs/Pickup Icon - Shield Generator - Front Shield.png", {
-      frameWidth: 32,
-      frameHeight: 32,
-    });
+    this.load.spritesheet(
+      "enemyCircuit",
+      "assets/images/prop/Foozle_2DS0016_Void_PickupsPack/Shield Generators/PNGs/Pickup Icon - Shield Generator - Front Shield.png",
+      {
+        frameWidth: 32,
+        frameHeight: 32,
+      }
+    );
     this.load.audio("shootSound", "assets/audios/sfx/sfx_tir_player.wav");
     this.load.audio("enemyHit", "assets/audios/sfx/enemy_Hit.wav");
     this.load.audio("bossMusic", "assets/audios/music/boss_music.mp3");
@@ -108,25 +119,25 @@ class Jeu extends Phaser.Scene {
     this.bonusActive = false;
     this.flyspeed = 500;
     //----------------------------------------------------------------------------------------Audio---------------------------------------------------------------
-    this.shootSound = this.sound.add('shootSound', {
+    this.shootSound = this.sound.add("shootSound", {
       mute: false,
       volume: 0.5,
       rate: 1,
       delay: 0,
     });
-    this.shootSound2 = this.sound.add('shootSound2', {
+    this.shootSound2 = this.sound.add("shootSound2", {
       mute: false,
       volume: 0.5,
       rate: 1,
       delay: 0,
     });
-    this.enemyHit = this.sound.add('enemyHit', {
+    this.enemyHit = this.sound.add("enemyHit", {
       mute: false,
       volume: 0.5,
       rate: 1,
       delay: 0,
     });
-    this.bossMusic = this.sound.add('bossMusic', {
+    this.bossMusic = this.sound.add("bossMusic", {
       mute: false,
       volume: 0.5,
       rate: 1,
@@ -289,7 +300,7 @@ class Jeu extends Phaser.Scene {
         end: 14,
       }),
       frameRate: 8,
-      repeat: -1
+      repeat: -1,
     });
 
     //------------------------------------------------------------------------------------------bullet------------------------------------------------------------------------------------------
@@ -308,7 +319,7 @@ class Jeu extends Phaser.Scene {
           launcherBullet.setVisible(true);
           launcherBullet.setVelocity(0, -800);
           launcherBullet.anims.play("bulletLauncher");
-          this.shootSound.play()
+          this.shootSound.play();
         }
       }
     });
@@ -340,7 +351,10 @@ class Jeu extends Phaser.Scene {
       this.launcherBullets,
       (enemy, bullet) => {
         // Check enemy health and item activation status
-        if (enemy.pointsDeVie > 20 || (enemy.pointsDeVie <= 20 && enemyCircuitActive)) {
+        if (
+          enemy.pointsDeVie > 20 ||
+          (enemy.pointsDeVie <= 20 && enemyCircuitActive)
+        ) {
           // Enemy can take damage
           enemy.pointsDeVie -= 1;
           this.enemyHit.play();
@@ -355,7 +369,7 @@ class Jeu extends Phaser.Scene {
             this.enemy.play("enemyDead");
             this.enemy.on("animationcomplete", () => {
               this.enemy.destroy();
-              this.scene.start("victoire")
+              this.scene.start("victoire");
             });
           }
 
@@ -439,17 +453,19 @@ class Jeu extends Phaser.Scene {
     this.isPaused = false;
     this.input.keyboard.on("keydown-ESC", () => {
       if (!this.isPaused) {
-        this.scene.launch('pause'); // Lance la scène de pause
+        this.scene.launch("pause"); // Lance la scène de pause
         this.scene.pause(); // Met la scène principale en pause
         this.isPaused = true;
       }
     });
 
     //--------------------------------------------------------------------------------------------------Timer------------------------------------------------------------------------------------
-    this.timerText = this.add.text(config.width / 2, 20, 'Temps restant: 3:00', {
-      font: '32px Arial',
-      fill: '#FFFFFF'
-    }).setOrigin(0.5);
+    this.timerText = this.add
+      .text(config.width / 2, 20, "Temps restant: 3:00", {
+        font: "32px Arial",
+        fill: "#FFFFFF",
+      })
+      .setOrigin(0.5);
 
     this.timeLeft = 180;
 
@@ -460,31 +476,39 @@ class Jeu extends Phaser.Scene {
 
         let minutes = Math.floor(this.timeLeft / 60);
         let seconds = this.timeLeft % 60;
-        this.timerText.setText(`Temps restant: ${minutes}:${seconds < 10 ? '0' + seconds : seconds}`);
+        this.timerText.setText(
+          `Temps restant: ${minutes}:${seconds < 10 ? "0" + seconds : seconds}`
+        );
 
         if (this.timeLeft <= 0) {
           this.scene.start("perdu");
         }
       },
       callbackScope: this,
-      loop: true
+      loop: true,
     });
 
     //-----------------------------------------------------------------------------------------------------enemyCircuit------------------------------------------------------------------
-    this.enemyCircuit = this.physics.add.sprite(config.width / 2, config.height / 2, "enemyCircuit", 0).setVisible(false)
+    this.enemyCircuit = this.physics.add
+      .sprite(config.width / 2, config.height / 2, "enemyCircuit", 0)
+      .setVisible(false);
     let canPickUp = false;
 
     this.time.delayedCall(15000, () => {
       canPickUp = true;
-    })
-    this.physics.add.overlap(this.ship, this.enemyCircuit, (ship, enemyCircuit) => {
-      if (canPickUp) {
-        enemyCircuitActive = true;
-        this.enemyCircuit.setVisible(false);
-        this.enemyCircuit.anims.play("enemyCircuitAnim");
-        this.enemyCircuit.destroy();
-      }
     });
+    this.physics.add.overlap(
+      this.ship,
+      this.enemyCircuit,
+      (ship, enemyCircuit) => {
+        if (canPickUp) {
+          enemyCircuitActive = true;
+          this.enemyCircuit.setVisible(false);
+          this.enemyCircuit.anims.play("enemyCircuitAnim");
+          this.enemyCircuit.destroy();
+        }
+      }
+    );
   }
 
   resumeGame() {
@@ -533,7 +557,6 @@ class Jeu extends Phaser.Scene {
     this.handleMovement();
   }
 
-
   handleMovement() {
     const dashSpeed = 3000;
     let velocity = this.flyspeed || 500;
@@ -555,13 +578,11 @@ class Jeu extends Phaser.Scene {
       this.player.setVelocityX(-dashSpeed);
     } else if (this.keys.left.isDown) {
       this.player.setVelocityX(-velocity);
-
     } else if (
       this.keys.right.isDown &&
       this.keys.shift.isDown &&
       !this.isDashing
     ) {
-
       this.isDashing = true;
       this.shield.setVisible(true);
       this.shield.play("iFrame");
@@ -618,8 +639,8 @@ class Jeu extends Phaser.Scene {
     if (this.enemy.pointsDeVie !== 0) {
       if (this.enemy.pointsDeVie >= 21 && this.enemy.pointsDeVie <= 40) {
         //------------------------------------------------------------------------------------------Mouvement aléatoire plus lent------------------------------------------------------------------------------------------
-        this.enemy.x += (this.randomX - this.enemy.x) * 0.03;
-        this.enemy.y += (this.randomY - this.enemy.y) * 0.03;
+        this.enemy.x += (this.randomX - this.enemy.x) * 0.04;
+        this.enemy.y += (this.randomY - this.enemy.y) * 0.04;
 
         //------------------------------------------------------------------------------------------Régénérer de nouvelles positions aléatoires------------------------------------------------------------------------------------------
         if (
@@ -636,8 +657,8 @@ class Jeu extends Phaser.Scene {
       } else if (this.enemy.pointsDeVie <= 20) {
         //------------------------------------------------------------------------------------------Mouvement aléatoire plus rapide------------------------------------------------------------------------------------------
 
-        this.enemy.x += (this.randomX - this.enemy.x) * 0.05;
-        this.enemy.y += (this.randomY - this.enemy.y) * 0.05;
+        this.enemy.x += (this.randomX - this.enemy.x) * 0.06;
+        this.enemy.y += (this.randomY - this.enemy.y) * 0.06;
 
         //------------------------------------------------------------------------------------------Régénérer de nouvelles positions aléatoires------------------------------------------------------------------------------------------
         if (
@@ -676,7 +697,7 @@ class Jeu extends Phaser.Scene {
               bullet.setActive(true);
               bullet.setVisible(true);
               bullet.setVelocity(0, 700);
-              this.shootSound2.play()
+              this.shootSound2.play();
             }
           },
         });
@@ -704,5 +725,4 @@ class Jeu extends Phaser.Scene {
       this.bossMusic.stop();
     }
   }
-
 }
