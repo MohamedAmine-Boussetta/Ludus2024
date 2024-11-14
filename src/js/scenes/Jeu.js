@@ -365,6 +365,8 @@ class Jeu extends Phaser.Scene {
           // Handle enemy death
           if (enemy.pointsDeVie <= 0) {
             this.enemyFiring.remove();
+            this.cameras.main.flash(500);
+            this.cameras.main.shake(1000, 0.07, false);
             this.enemy.body.checkCollision.none = true;
             this.enemy.play("enemyDead");
             this.enemy.on("animationcomplete", () => {
@@ -410,20 +412,12 @@ class Jeu extends Phaser.Scene {
     this.moveAsteroid(asteroid);
 
     //------------------------------------------------------------------------------------------World Border------------------------------------------------------------------------------------------
-    this.topBarrier = this.add.rectangle(
-      config.width / 2,
-      config.height / 2 - 370,
-      1280,
-      20,
-      0xff0000
-    );
-    this.bottomBarrier = this.add.rectangle(
-      config.width / 2,
-      config.height / 2 + 370,
-      1280,
-      20,
-      0xff0000
-    );
+    this.topBarrier = this.add
+      .rectangle(config.width / 2, config.height / 2 - 370, 1280, 20, 0xff0000)
+      .setVisible(false);
+    this.bottomBarrier = this.add
+      .rectangle(config.width / 2, config.height / 2 + 370, 1280, 20, 0xff0000)
+      .setVisible(false);
     this.physics.add.existing(this.topBarrier);
     this.physics.add.existing(this.bottomBarrier);
     this.topBarrier.body.setImmovable();
