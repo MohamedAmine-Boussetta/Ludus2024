@@ -10,7 +10,7 @@ class Victoire extends Phaser.Scene {
     this.load.image("mainMenu", "./assets/images/ui/Buttons/BTNs/Play_BTN.png");
     this.load.image("replay", "./assets/images/ui/Buttons/BTNs/Replay_BTN.png");
     this.load.image("victoire", "assets/images/ui/You_Win/Victoire.png");
-    this.load.audio("victoireSound", "./assets/audios/music/VictorySmall.wav");
+    this.load.audio("victoireSound", "assets/audios/music/VictorySmall.mp3");
   }
 
   create() {
@@ -30,13 +30,13 @@ class Victoire extends Phaser.Scene {
     );
 
     //Sound
-    //this.victorySound = this.sound.add("victoireSound", {
-    //  mute: false,
-    //  volume: 0.5,
-    //  rate: 1,
-    //  delay: 0,
-    // });
-    // this.victorySound.play();
+    this.victorySound = this.sound.add("victoireSound", {
+      mute: false,
+      volume: 0.5,
+      rate: 1,
+      delay: 0,
+    });
+    this.victorySound.play();
 
     //main menu
     let mainMenu = this.add
