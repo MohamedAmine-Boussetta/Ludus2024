@@ -11,6 +11,7 @@ class Accueil extends Phaser.Scene {
         this.load.image('InfoBtn', './assets/images/ui/Main_Menu/Info_BTN.png');
         this.load.image('faqBtn', './assets/images/ui/Buttons/BTNs/FAQ_BTN.png');
         this.load.image('soundBtn', './assets/images/ui/Buttons/BTNs/Sound_BTN.png');
+        this.load.image('soundBtnOff', 'assets/images/ui/Setting/Sound_BTN_OFF.png');
         this.load.image('logo', './assets/images/ui/Logo.png')
         this.load.image("titre", "assets/images/ui/Main_Menu/titre.png")
         this.load.audio("bgMusic", "assets/audios/music/music_menu.mp3")
@@ -43,8 +44,10 @@ class Accueil extends Phaser.Scene {
         hudContainer.add(faqBtn);
 
         //sound_BTN
-        let soundBtn = this.add.image(config.width / 2 + 580, config.height / 2 + 330, 'soundBtn').setOrigin(1, 1).setScale(0.3);
-        hudContainer.add(soundBtn);
+        this.soundBtn = this.add.image(config.width / 2 + 580, config.height / 2 + 330, 'soundBtn').setOrigin(1, 1).setScale(0.3).setVisible(true);
+        this.soundBtnOff = this.add.image(config.width / 2 + 580, config.height / 2 + 330, "soundBtnOff").setOrigin(1, 1).setScale(0.3).setVisible(false);
+        hudContainer.add(this.soundBtn);
+        hudContainer.add(this.soundBtnOff);
 
         this.bgMusic = this.sound.add('bgMusic', {
             mute: false,
@@ -58,7 +61,8 @@ class Accueil extends Phaser.Scene {
         startBtn.setInteractive();
         creditsBtn.setInteractive();
         faqBtn.setInteractive();
-        soundBtn.setInteractive();
+        this.soundBtn.setInteractive();
+        this.soundBtnOff.setInteractive();
 
         startBtn.on('pointerdown', () => {
             this.scene.start('jeu');
@@ -75,16 +79,26 @@ class Accueil extends Phaser.Scene {
             this.sound.stopAll();
         });
 
-        let musicPause = false
-        soundBtn.on("pointerdown", () => {
-            if (musicPause === false) {
-                this.bgMusic.stop();
-                musicPause = true;
-            } else {
-                this.bgMusic.play();
-                musicPause = false;
+        this.musicPause = false
+        this.soundBtn.on("pointerdown", () => {
+            if (this.musicPause === false) {
+                this.bgMusic.pause();
+                this.musicPause = true;
+                this.soundBtnOff.setVisible(true);
+                this.soundBtn.setVisible(false);
             }
+
         });
+        this.soundBtnOff.on("pointerdown", () => {
+            if (this.musicPause === true) {
+                this.bgMusic.resume();
+                this.musicPause = false;
+                this.soundBtnOff.setVisible(false);
+                this.soundBtn.setVisible(true);
+            }
+
+        });
+
     }
 
     update() {}

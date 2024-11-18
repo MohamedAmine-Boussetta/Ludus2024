@@ -31,7 +31,7 @@ class Guide extends Phaser.Scene {
     hudContainer.add(closeBtn);
     closeBtn.setInteractive();
 
-    let cmtJouer = this.add.image(config.width / 2, config.height / 2 - 45, "commentJouer").setScale(1.2);
+    let cmtJouer = this.add.image(config.width / 2, config.height / 2, "commentJouer").setScale(1);
 
     closeBtn.on("pointerdown", () => {
       this.scene.start("accueil");
