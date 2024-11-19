@@ -3,7 +3,6 @@ let pdvCounter;
 this.bonusActive = false;
 this.flyspeed = 500;
 let enemyCircuitActive = false;
-let wins = 0;
 
 class Jeu extends Phaser.Scene {
   constructor() {
@@ -382,6 +381,7 @@ class Jeu extends Phaser.Scene {
           explosion.play("explode");
           explosion.on("animationcomplete", () => {
             explosion.destroy();
+            wins++;
           });
         } else {
           // Bullet does not affect the enemy
@@ -653,8 +653,8 @@ class Jeu extends Phaser.Scene {
       } else if (this.enemy.pointsDeVie <= 20) {
         //------------------------------------------------------------------------------------------Mouvement aléatoire plus rapide------------------------------------------------------------------------------------------
 
-        this.enemy.x += (this.randomX - this.enemy.x) * 0.02;
-        this.enemy.y += (this.randomY - this.enemy.y) * 0.02;
+        this.enemy.x += (this.randomX - this.enemy.x) * 0.2;
+        this.enemy.y += (this.randomY - this.enemy.y) * 0.2;
 
         //------------------------------------------------------------------------------------------Régénérer de nouvelles positions aléatoires------------------------------------------------------------------------------------------
         if (

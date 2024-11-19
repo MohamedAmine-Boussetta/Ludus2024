@@ -36,11 +36,9 @@ class Mode extends Phaser.Scene {
     normalMode.setInteractive();
 
     //cauchemar
-    let nightmareMode = this.add.image(
-      config.width / 2,
-      config.height / 2 + 100,
-      "cauchemarBtn"
-    );
+    let nightmareMode = this.add
+      .image(config.width / 2, config.height / 2 + 100, "cauchemarBtn")
+      .setTint(0x808080);
     hudContainer.add(nightmareMode);
     nightmareMode.setInteractive();
 

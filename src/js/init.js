@@ -13,3 +13,5 @@ const config = {
   },
 };
 const game = new Phaser.Game(config);
+
+let wins = 0;
