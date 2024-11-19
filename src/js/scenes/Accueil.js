@@ -24,6 +24,12 @@ class Accueil extends Phaser.Scene {
   }
 
   create() {
+    //sauvegarde
+    const sauvegarde = JSON.parse(localStorage.getItem("sauvegardeJeu"));
+    if (sauvegarde) {
+      wins = sauvegarde.wins;
+    }
+
     //HUD
     const hudContainer = this.add.container(0, 0).setDepth(1);
 

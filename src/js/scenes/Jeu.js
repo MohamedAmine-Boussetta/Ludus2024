@@ -381,7 +381,6 @@ class Jeu extends Phaser.Scene {
           explosion.play("explode");
           explosion.on("animationcomplete", () => {
             explosion.destroy();
-            wins++;
           });
         } else {
           // Bullet does not affect the enemy

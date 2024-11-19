@@ -62,5 +62,10 @@ class Victoire extends Phaser.Scene {
       this.scene.start("jeu");
       this.sound.stopAll();
     });
+    wins++;
+    const sauvegarde = {
+      wins: wins,
+    };
+    localStorage.setItem("sauvegardeJeu", JSON.stringify(sauvegarde));
   }
 }

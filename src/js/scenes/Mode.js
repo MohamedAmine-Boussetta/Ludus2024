@@ -18,6 +18,9 @@ class Mode extends Phaser.Scene {
   }
 
   create() {
+    //sauvegarde
+    const sauvegarde = JSON.parse(localStorage.getItem("sauvegardeJeu"));
+
     //HUD
     const hudContainer = this.add.container(0, 0).setDepth(1);
 
