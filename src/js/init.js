@@ -8,10 +8,10 @@ const config = {
   physics: {
     default: "arcade",
     arcade: {
-      debug: false,
+      debug: true,
     },
   },
 };
 const game = new Phaser.Game(config);
 
-let wins = 0;
+let wins = 1;

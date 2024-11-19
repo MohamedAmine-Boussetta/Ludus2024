@@ -443,13 +443,13 @@ class Jeu2 extends Phaser.Scene {
 
     //--------------------------------------------------------------------------------------------------Timer------------------------------------------------------------------------------------
     this.timerText = this.add
-      .text(config.width / 2, 20, "Temps restant: 3:00", {
+      .text(config.width / 2, 20, "Temps restant: 1:30", {
         font: "32px Arial",
         fill: "#FFFFFF",
       })
       .setOrigin(0.5);
 
-    this.timeLeft = 180;
+    this.timeLeft = 90
 
     this.timeEvent = this.time.addEvent({
       delay: 1000,
@@ -621,8 +621,8 @@ class Jeu2 extends Phaser.Scene {
     if (this.enemy.pointsDeVie !== 0) {
       if (this.enemy.pointsDeVie >= 21 && this.enemy.pointsDeVie <= 40) {
         //------------------------------------------------------------------------------------------Mouvement aléatoire plus lent------------------------------------------------------------------------------------------
-        this.enemy.x += (this.randomX - this.enemy.x) * 0.01;
-        this.enemy.y += (this.randomY - this.enemy.y) * 0.01;
+        this.enemy.x += (this.randomX - this.enemy.x) * 0.03;
+        this.enemy.y += (this.randomY - this.enemy.y) * 0.03;
 
         //------------------------------------------------------------------------------------------Régénérer de nouvelles positions aléatoires------------------------------------------------------------------------------------------
         if (
@@ -639,8 +639,8 @@ class Jeu2 extends Phaser.Scene {
       } else if (this.enemy.pointsDeVie <= 20) {
         //------------------------------------------------------------------------------------------Mouvement aléatoire plus rapide------------------------------------------------------------------------------------------
 
-        this.enemy.x += (this.randomX - this.enemy.x) * 0.02;
-        this.enemy.y += (this.randomY - this.enemy.y) * 0.02;
+        this.enemy.x += (this.randomX - this.enemy.x) * 0.06;
+        this.enemy.y += (this.randomY - this.enemy.y) * 0.06;
 
         //------------------------------------------------------------------------------------------Régénérer de nouvelles positions aléatoires------------------------------------------------------------------------------------------
         if (
