@@ -23,6 +23,7 @@ class Pause extends Phaser.Scene {
 
     exitBtn.on("pointerdown", () => {
       this.scene.stop("jeu");
+      this.scene.stop("jeu2");
       this.sound.stopAll();
       this.scene.start("accueil");
     });
@@ -45,7 +46,9 @@ class Pause extends Phaser.Scene {
     replay.on("pointerdown", () => {
       this.scene.stop();
       this.scene.resume("jeu");
+      this.scene.resume("jeu2");
       this.scene.get("jeu").resumeGame();
+      this.scene.get("jeu2").resumeGame();
     });
   }
 

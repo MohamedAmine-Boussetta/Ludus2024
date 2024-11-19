@@ -3,7 +3,7 @@ const config = {
   parent: "canvas-wrapper",
   width: 1280,
   height: 720,
-  scene: [Accueil, Jeu, Credits, Guide, Victoire, Terminer, Pause, Mode],
+  scene: [Accueil, Jeu, Jeu2, Credits, Guide, Victoire, Terminer, Pause, Mode],
   pixelArt: true,
   physics: {
     default: "arcade",

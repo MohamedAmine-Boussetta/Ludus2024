@@ -64,7 +64,7 @@ class Mode extends Phaser.Scene {
     if (wins >= 1) {
       this.nightmareMode.clearTint();
       this.nightmareMode.on("pointerdown", () => {
-        this.scene.start("jeuCauchemar");
+        this.scene.start("jeu2");
       });
     }
   }
