@@ -36,11 +36,11 @@ class Mode extends Phaser.Scene {
     normalMode.setInteractive();
 
     //cauchemar
-    let nightmareMode = this.add
+    this.nightmareMode = this.add
       .image(config.width / 2, config.height / 2 + 100, "cauchemarBtn")
       .setTint(0x808080);
-    hudContainer.add(nightmareMode);
-    nightmareMode.setInteractive();
+    hudContainer.add(this.nightmareMode);
+    this.nightmareMode.setInteractive();
 
     //closeBtn
     let closeBtn = this.add
@@ -57,5 +57,14 @@ class Mode extends Phaser.Scene {
     normalMode.on("pointerdown", () => {
       this.scene.start("jeu");
     });
+
+    if (wins >= 1) {
+      this.nightmareMode.clearTint();
+      this.nightmareMode.on("pointerdown", () => {
+        this.scene.start("jeu");
+      });
+    }
   }
+
+  update() {}
 }
