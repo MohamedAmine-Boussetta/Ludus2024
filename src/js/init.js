@@ -14,4 +14,4 @@ const config = {
 };
 const game = new Phaser.Game(config);
 
-let wins = 1;
+let wins = 0;
