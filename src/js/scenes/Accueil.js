@@ -10,16 +10,11 @@ class Accueil extends Phaser.Scene {
     this.load.image("startBtn", "./assets/images/ui/Main_Menu/Start_BTN.png");
     this.load.image("InfoBtn", "./assets/images/ui/Main_Menu/Info_BTN.png");
     this.load.image("faqBtn", "./assets/images/ui/Buttons/BTNs/FAQ_BTN.png");
-    this.load.image(
-      "soundBtn",
-      "./assets/images/ui/Buttons/BTNs/Sound_BTN.png"
-    );
-    this.load.image(
-      "soundBtnOff",
-      "assets/images/ui/Setting/Sound_BTN_OFF.png"
-    );
+    this.load.image("soundBtn", "./assets/images/ui/Buttons/BTNs/Sound_BTN.png");
+    this.load.image("soundBtnOff", "assets/images/ui/Setting/Sound_BTN_OFF.png");
     this.load.image("logo", "./assets/images/ui/Logo.png");
     this.load.image("titre", "assets/images/ui/Main_Menu/titre.png");
+    this.load.image("reset", "assets/images/ui/Main_Menu/Reset.png");
     this.load.audio("bgMusic", "assets/audios/music/music_menu.mp3");
   }
 
@@ -45,6 +40,10 @@ class Accueil extends Phaser.Scene {
       "startBtn"
     );
     hudContainer.add(startBtn);
+
+    //reset
+    let resetBtn = this.add.image(config.width / 2, config.height / 2 + 195, "reset").setScale(0.7);
+    hudContainer.add(resetBtn);
 
     //logo
     let logo = this.add
@@ -110,6 +109,10 @@ class Accueil extends Phaser.Scene {
     faqBtn.on("pointerdown", () => {
       this.scene.start("guide");
       this.sound.stopAll();
+    });
+
+    resetBtn.on("pointerdown", () => {
+      localStorage.clear()
     });
 
     this.musicPause = false;
