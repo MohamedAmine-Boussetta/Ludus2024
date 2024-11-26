@@ -17,9 +17,9 @@ class Jeu extends Phaser.Scene {
     this.load.image("shipDamage1", "assets/images/characters/Main_Ship/Main_Ship_Bases/PNGs/Main_Ship_Slight_damage.png");
     this.load.image("shipDamage2", "assets/images/characters/Main_Ship/Main_Ship_Bases/PNGs/Main_Ship_Damaged.png");
     this.load.image("shipDamage3", "assets/images/characters/Main_Ship/Main_Ship_Bases/PNGs/Main_Ship_Very_damaged.png");
-    this.load.image("engine", "assets/images/characters/Main_Ship/Main_Ship_Engines/PNGs/Main_Ship_ Engines_Engine.png");
+    this.load.image("engine", "assets/images/characters/Main_Ship/Main_Ship_Engines/PNGs/Main_Ship_Engines_Engine.png");
     this.load.image("enemy", "assets/images/enemy/Nautolan/Designs_Base/PNGs/Nautolan_Ship_Dreadnought.png");
-    this.load.image("asteroid", "assets/images/prop/Asteroids/PNGs/Asteroid 01 - Base.png");
+    this.load.image("asteroid", "assets/images/prop/Asteroids/PNGs/Asteroid 01_Base.png");
     this.load.spritesheet("engineStart", "assets/images/characters/Main_Ship/Main_Ship_Engine_Effects/PNGs/Main_Ship_Engines_Spritesheet.png", {
       frameWidth: 48,
       frameHeight: 48,
