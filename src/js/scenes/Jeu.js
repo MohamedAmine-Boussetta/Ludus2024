@@ -220,81 +220,15 @@ class Jeu extends Phaser.Scene {
 
     //------------------------------------------------------------------------------------------animations------------------------------------------------------------------------------------------
     this.createAnimation("idle", "engineStart", 0, 2, 10);
-
-    this.anims.create({
-      key: "fly",
-      frames: this.anims.generateFrameNumbers("engineStart", {
-        start: 4,
-        end: 7,
-      }),
-      frameRate: 8,
-      repeat: -1,
-    });
-
+    this.createAnimation("fly", "engineStart", 0, 7);
     this.engineStart.anims.play("idle");
-
-    this.anims.create({
-      key: "shoot",
-      frames: this.anims.generateFrameNumbers("launcher", {
-        start: 0,
-        end: 11,
-      }),
-      frameRate: 8,
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: "bulletLauncher",
-      frames: this.anims.generateFrameNumbers("launcherBullet", {
-        start: 0,
-        end: 3,
-      }),
-      frameRate: 8,
-    });
-    this.anims.create({
-      key: "enemyShooting",
-      frames: this.anims.generateFrameNames("enemyBullet", {
-        start: 0,
-        end: 5,
-      }),
-      frameRate: 8,
-    });
-    this.anims.create({
-      key: "enemyDead",
-      frames: this.anims.generateFrameNames("enemyDeath", {
-        start: 0,
-        end: 11,
-      }),
-      frameRate: 8,
-    });
-
-    this.anims.create({
-      key: "explode",
-      frames: this.anims.generateFrameNames("explosion", {
-        start: 0,
-        end: 6,
-      }),
-      frameRate: 8,
-    });
-    this.anims.create({
-      key: "iFrame",
-      frames: this.anims.generateFrameNames("invincibleFrame", {
-        start: 0,
-        end: 9,
-      }),
-      frameRate: 8,
-    });
-
-    this.anims.create({
-      key: "enemyCircuitAnim",
-      frames: this.anims.generateFrameNames("enemyCircuit", {
-        start: 0,
-        end: 14,
-      }),
-      frameRate: 8,
-      repeat: -1,
-    });
-
+    this.createAnimation("shoot", "launcher", 0, 11);
+    this.createAnimation("bulletLancher", "laucherBullet", 0, 3);
+    this.createAnimation("enemyShooting", "enemyBullet", 0, 2);
+    this.createAnimation("enemyDead", "enemyDeath", 0, 11);
+    this.createAnimation("explode", "explosion", 0, 6);
+    this.createAnimation("iFrame", "invincibleFrame", 0, 9);
+    this.createAnimation("enemyCircuitAnim", "enemyCircuit", 0, 14);
     //------------------------------------------------------------------------------------------bullet------------------------------------------------------------------------------------------
     this.launcherBullets = this.physics.add.group({
       defaultKey: "bullet",
@@ -718,7 +652,7 @@ class Jeu extends Phaser.Scene {
     spritesheet,
     firstFrame,
     lastFrame,
-    frameRate = 14,
+    frameRate = 8,
     loop = -1
   ) {
     this.anims.create({
