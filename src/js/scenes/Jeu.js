@@ -13,12 +13,12 @@ class Jeu extends Phaser.Scene {
 
   preload() {
     this.load.image("espace", "assets/images/ui/Main_Menu/starBg.webp");
-    this.load.image("ship", "./assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Full health.png");
-    this.load.image("shipDamage1", "assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Slight damage.png");
-    this.load.image("shipDamage2", "assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Damaged.png");
-    this.load.image("shipDamage3", "assets/images/characters/Main_Ship/Main Ship - Bases/PNGs/Main Ship - Base - Very damaged.png");
-    this.load.image("engine", "assets/images/characters/Main_Ship/Main Ship - Engines/PNGs/Main Ship - Engines - Base Engine.png");
-    this.load.image("enemy", "assets/images/enemy/Nautolan/Designs - Base/PNGs/Nautolan Ship - Dreadnought - Base.png");
+    this.load.image("ship", "assets/images/characters/Main_Ship/Main_Ship_Bases/PNGs/Main_Ship_Full health.png");
+    this.load.image("shipDamage1", "assets/images/characters/Main_Ship/Main_Ship_Bases/PNGs/Main_Ship_Slight damage.png");
+    this.load.image("shipDamage2", "assets/images/characters/Main_Ship/Main_Ship_Bases/PNGs/Main_Ship_ Damaged.png");
+    this.load.image("shipDamage3", "assets/images/characters/Main_Ship/Main_Ship_Bases/PNGs/Main_Ship_Very damaged.png");
+    this.load.image("engine", "assets/images/characters/Main_Ship/Main_Ship_Engine Effects/PNGs/Main Ship_ Engines_ Spritesheet.png");
+    this.load.image("enemy", "assets/images/enemy/Nautolan/Designs_Base/PNGs/Nautolan_Ship_ Dreadnought.png");
     this.load.image("asteroid", "assets/images/prop/Asteroids/PNGs/Asteroid 01 - Base.png");
     this.load.spritesheet("engineStart", "./assets/images/characters/Main_Ship/Main Ship - Engine Effects/PNGs/Main Ship - Engines - Base Engine - Spritesheet.png", {
       frameWidth: 48,
