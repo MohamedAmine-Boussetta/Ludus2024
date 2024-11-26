@@ -66,34 +66,10 @@ class Jeu extends Phaser.Scene {
     this.bonusActive = false;
     this.flyspeed = 500;
     //----------------------------------------------------------------------------------------Audio---------------------------------------------------------------
-    this.createSound("shootSound");
-    this.createSound("shootSound2");
-    this.createSound("enemyHit");
-    this.createSound("bossMusic");
-    /*this.shootSound = this.sound.add("shootSound", {
-      mute: false,
-      volume: 0.5,
-      rate: 1,
-      delay: 0,
-    });
-    this.shootSound2 = this.sound.add("shootSound2", {
-      mute: false,
-      volume: 0.5,
-      rate: 1,
-      delay: 0,
-    });
-    this.enemyHit = this.sound.add("enemyHit", {
-      mute: false,
-      volume: 0.5,
-      rate: 1,
-      delay: 0,
-    });
-    this.bossMusic = this.sound.add("bossMusic", {
-      mute: false,
-      volume: 0.5,
-      rate: 1,
-      delay: 0,
-    });*/
+    this.shootSound = this.createSound("shootSound");
+    this.shootSound2 = this.createSound("shootSound2");
+    this.enemyHit = this.createSound("enemyHit");
+    this.bossMusic = this.createSound("bossMusic");
     this.bossMusic.play();
 
     //------------------------------------------------------------------------------------------BG------------------------------------------------------------------------------------------
@@ -545,7 +521,7 @@ class Jeu extends Phaser.Scene {
   }
 
   createSound(name, volume = 0.5, rate = 1, delay = 0, mute = false) {
-    this.sound.add(name, {
+    return this.sound.add(name, {
       mute: mute,
       volume: volume,
       rate: rate,
