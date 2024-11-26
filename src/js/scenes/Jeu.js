@@ -24,7 +24,7 @@ class Jeu extends Phaser.Scene {
       frameWidth: 48,
       frameHeight: 48,
     });
-    this.load.spritesheet("launcher", "assets/images/characters/Main_Ship/Main_Ship_Weapons/PNGs/Main_Ship_ Weapons_Big_Space_Gun.png", {
+    this.load.spritesheet("launcher", "assets/images/characters/Main_Ship/Main_Ship_Weapons/PNGs/Main_Ship_Weapons_Big_Space_Gun.png", {
       frameWidth: 48,
       frameHeight: 48,
     });
