@@ -43,35 +43,40 @@ class Jeu extends Phaser.Scene {
     );
     this.load.spritesheet(
       "engineStart",
-      "./assets/images/characters/Main_Ship/Main Ship - Engine Effects/PNGs/Main Ship - Engines - Base Engine - Spritesheet.png", {
+      "./assets/images/characters/Main_Ship/Main Ship - Engine Effects/PNGs/Main Ship - Engines - Base Engine - Spritesheet.png",
+      {
         frameWidth: 48,
         frameHeight: 48,
       }
     );
     this.load.spritesheet(
       "launcher",
-      "assets/images/characters/Main_Ship/Main Ship - Weapons/PNGs/Main Ship - Weapons - Big Space Gun.png", {
+      "assets/images/characters/Main_Ship/Main Ship - Weapons/PNGs/Main Ship - Weapons - Big Space Gun.png",
+      {
         frameWidth: 48,
         frameHeight: 48,
       }
     );
     this.load.spritesheet(
       "launcherBullet",
-      "assets/images/characters/Main_Ship/Main ship - Weapons - Projectiles/PNGs/Main ship weapon - Projectile - Auto cannon bullet.png", {
+      "assets/images/characters/Main_Ship/Main ship - Weapons - Projectiles/PNGs/Main ship weapon - Projectile - Auto cannon bullet.png",
+      {
         frameWidth: 32,
         frameHeight: 32,
       }
     );
     this.load.spritesheet(
       "enemyBullet",
-      "assets/images/enemy/Nautolan/Weapon Effects - Projectiles/PNGs/Nautolan - Rocket.png", {
+      "assets/images/enemy/Nautolan/Weapon Effects - Projectiles/PNGs/Nautolan - Rocket.png",
+      {
         frameWidth: 16,
         frameHeight: 32,
       }
     );
     this.load.spritesheet(
       "enemyDeath",
-      "assets/images/enemy/Nautolan/Destruction/PNGs/Nautolan Ship - Dreadnought.png", {
+      "assets/images/enemy/Nautolan/Destruction/PNGs/Nautolan Ship - Dreadnought.png",
+      {
         frameWidth: 128,
         frameHeight: 128,
       }
@@ -79,14 +84,16 @@ class Jeu extends Phaser.Scene {
 
     this.load.spritesheet(
       "explosion",
-      "assets/images/fx/Explosions/explosion-1-g/spritesheet.png", {
+      "assets/images/fx/Explosions/explosion-1-g/spritesheet.png",
+      {
         frameWidth: 48,
         frameHeight: 48,
       }
     );
     this.load.spritesheet(
       "invincibleFrame",
-      "assets/images/characters/Main_Ship/Main Ship - Shields/PNGs/Main Ship - Shields - Invincibility Shield.png", {
+      "assets/images/characters/Main_Ship/Main Ship - Shields/PNGs/Main Ship - Shields - Invincibility Shield.png",
+      {
         frameWidth: 64,
         frameHeight: 64,
       }
@@ -94,7 +101,8 @@ class Jeu extends Phaser.Scene {
 
     this.load.spritesheet(
       "enemyCircuit",
-      "assets/images/prop/Foozle_2DS0016_Void_PickupsPack/Shield Generators/PNGs/Pickup Icon - Shield Generator - Front Shield.png", {
+      "assets/images/prop/Foozle_2DS0016_Void_PickupsPack/Shield Generators/PNGs/Pickup Icon - Shield Generator - Front Shield.png",
+      {
         frameWidth: 32,
         frameHeight: 32,
       }
@@ -211,15 +219,7 @@ class Jeu extends Phaser.Scene {
     this.shield.body.setSize(30, 32).setOffset(17, 18);
 
     //------------------------------------------------------------------------------------------animations------------------------------------------------------------------------------------------
-    this.anims.create({
-      key: "idle",
-      frames: this.anims.generateFrameNumbers("engineStart", {
-        start: 0,
-        end: 2,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
+    this.createAnimation("idle", "engineStart", 0, 2, 10);
 
     this.anims.create({
       key: "fly",
@@ -711,5 +711,24 @@ class Jeu extends Phaser.Scene {
       this.scene.start("perdu");
       this.bossMusic.stop();
     }
+  }
+
+  createAnimation(
+    key,
+    spritesheet,
+    firstFrame,
+    lastFrame,
+    frameRate = 14,
+    loop = -1
+  ) {
+    this.anims.create({
+      key: key,
+      frames: this.anims.generateFrameNumbers(spritesheet, {
+        start: firstFrame,
+        end: lastFrame,
+      }),
+      frameRate: frameRate,
+      repeat: loop,
+    });
   }
 }
