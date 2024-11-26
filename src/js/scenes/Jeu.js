@@ -28,7 +28,7 @@ class Jeu extends Phaser.Scene {
       frameWidth: 48,
       frameHeight: 48,
     });
-    this.load.spritesheet("launcherBullet", "assets/images/characters/Main_Ship/Main ship_Weapons_Projectiles/PNGs/Main_ship_weapon_Projectile_Auto_cannon_bullet.png", {
+    this.load.spritesheet("launcherBullet", "assets/images/characters/Main_Ship/Main_Ship_Weapons_Projectiles/PNGs/Main_ship_weapon_Projectile_Auto_cannon_bullet.png", {
       frameWidth: 32,
       frameHeight: 32,
     });
@@ -66,7 +66,11 @@ class Jeu extends Phaser.Scene {
     this.bonusActive = false;
     this.flyspeed = 500;
     //----------------------------------------------------------------------------------------Audio---------------------------------------------------------------
-    this.shootSound = this.sound.add("shootSound", {
+    this.createSound("shootSound");
+    this.createSound("shootSound2");
+    this.createSound("enemyHit");
+    this.createSound("bossMusic");
+    /*this.shootSound = this.sound.add("shootSound", {
       mute: false,
       volume: 0.5,
       rate: 1,
@@ -89,7 +93,7 @@ class Jeu extends Phaser.Scene {
       volume: 0.5,
       rate: 1,
       delay: 0,
-    });
+    });*/
     this.bossMusic.play();
 
     //------------------------------------------------------------------------------------------BG------------------------------------------------------------------------------------------
@@ -159,7 +163,7 @@ class Jeu extends Phaser.Scene {
     this.createAnimation("bulletLancher", "laucherBullet", 0, 3);
     this.createAnimation("enemyShooting", "enemyBullet", 0, 2);
     this.createAnimation("enemyDead", "enemyDeath", 0, 11);
-    this.createAnimation("explode", "explosion", 0, 6);
+    this.createAnimation("explode", "explosion", 0, 6, 8, 0);
     this.createAnimation("iFrame", "invincibleFrame", 0, 9);
     this.createAnimation("enemyCircuitAnim", "enemyCircuit", 0, 14);
     //------------------------------------------------------------------------------------------bullet------------------------------------------------------------------------------------------
@@ -537,6 +541,15 @@ class Jeu extends Phaser.Scene {
       }),
       frameRate: frameRate,
       repeat: loop,
+    });
+  }
+
+  createSound(name, volume = 0.5, rate = 1, delay = 0, mute = false) {
+    this.sound.add(name, {
+      mute: mute,
+      volume: volume,
+      rate: rate,
+      delay: delay,
     });
   }
 }
