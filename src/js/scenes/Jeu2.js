@@ -1,13 +1,7 @@
-let pdvTxt = 10;
-let pdvCounter;
-this.bonusActive = false;
-this.flyspeed = 500;
-let enemyCircuitActive = false;
-
-class Jeu extends Phaser.Scene {
+class Jeu2 extends Phaser.Scene {
   constructor() {
     super({
-      key: "jeu",
+      key: "jeu2",
     });
   }
 
@@ -247,10 +241,11 @@ class Jeu extends Phaser.Scene {
     });
 
     //------------------------------------------------------------------------------------------asteroid------------------------------------------------------------------------------------------
-    const asteroid = this.physics.add.image(config.width / 2, config.height / 2, "asteroid");
-    asteroid.setSize(30, 30);
-
-    this.moveAsteroid(asteroid);
+    for (let i = 0; i < 1 + wins; i++) {
+      this.asteroid = this.physics.add.image(config.width / 2, config.height / 2, "asteroid");
+      this.asteroid.setSize(30, 30);
+      this.moveAsteroid(this.asteroid);
+    }
 
     //------------------------------------------------------------------------------------------World Border------------------------------------------------------------------------------------------
     this.topBarrier = this.add.rectangle(config.width / 2, config.height / 2 - 370, 1280, 20, 0xff0000).setVisible(false);
@@ -271,7 +266,7 @@ class Jeu extends Phaser.Scene {
       pdvTxt--;
       pdvCounter.setText("PV: " + pdvTxt);
     });
-    this.physics.add.overlap(this.ship, asteroid, (ship, aseroid) => {
+    this.physics.add.overlap(this.ship, this.asteroid, (ship, aseroid) => {
       if (!this.player.invincible) {
         ship.pointsDeVie -= 1;
         pdvTxt--;
@@ -292,13 +287,13 @@ class Jeu extends Phaser.Scene {
 
     //--------------------------------------------------------------------------------------------------Timer------------------------------------------------------------------------------------
     this.timerText = this.add
-      .text(config.width / 2, 20, "Temps restant: 2:00", {
+      .text(config.width / 2, 20, "Temps restant: 1:30", {
         font: "32px Arial",
         fill: "#FFFFFF",
       })
       .setOrigin(0.5);
 
-    this.timeLeft = 120;
+    this.timeLeft = 90;
 
     this.timeEvent = this.time.addEvent({
       delay: 1000,
@@ -321,7 +316,7 @@ class Jeu extends Phaser.Scene {
     this.enemyCircuit = this.physics.add.sprite(config.width / 2, config.height / 2, "enemyCircuit", 0).setVisible(false);
     let canPickUp = false;
 
-    this.time.delayedCall(8000, () => {
+    this.time.delayedCall(16000, () => {
       canPickUp = true;
     });
     this.physics.add.overlap(this.ship, this.enemyCircuit, (ship, enemyCircuit) => {
@@ -341,12 +336,12 @@ class Jeu extends Phaser.Scene {
   }
 
   moveAsteroid(asteroid) {
-    asteroid.x = Phaser.Math.Between(100, 1200);
-    asteroid.y = -70;
-    asteroid.scale = Phaser.Math.Between(1, 4);
+    this.asteroid.x = Phaser.Math.Between(100, 1200);
+    this.asteroid.y = -70;
+    this.asteroid.scale = Phaser.Math.Between(1, 4);
 
     this.tweens.add({
-      targets: asteroid,
+      targets: this.asteroid,
       delay: Phaser.Math.Between(1000, 5000),
       y: 1300,
       x: Phaser.Math.Between(400, 800),
