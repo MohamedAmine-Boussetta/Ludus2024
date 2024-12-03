@@ -136,7 +136,7 @@ class Jeu extends Phaser.Scene {
     this.createAnimation("fly", "engineStart", 0, 7);
     this.engineStart.anims.play("idle");
     this.createAnimation("shoot", "launcher", 0, 11);
-    this.createAnimation("bulletLancher", "laucherBullet", 0, 3);
+    this.createAnimation("bulletLauncher", "launcherBullet", 0, 3);
     this.createAnimation("enemyShooting", "enemyBullet", 0, 2);
     this.createAnimation("enemyDead", "enemyDeath", 0, 11);
     this.createAnimation("explode", "explosion", 0, 6, 8, 0);
@@ -449,8 +449,8 @@ class Jeu extends Phaser.Scene {
       } else if (this.enemy.pointsDeVie <= 20) {
         //------------------------------------------------------------------------------------------Mouvement aléatoire plus rapide------------------------------------------------------------------------------------------
 
-        this.enemy.x += (this.randomX - this.enemy.x) * 0.04;
-        this.enemy.y += (this.randomY - this.enemy.y) * 0.04;
+        this.enemy.x += (this.randomX - this.enemy.x) * 0.06;
+        this.enemy.y += (this.randomY - this.enemy.y) * 0.06;
 
         //------------------------------------------------------------------------------------------Régénérer de nouvelles positions aléatoires------------------------------------------------------------------------------------------
         if (Phaser.Math.Distance.Between(this.enemy.x, this.enemy.y, this.randomX, this.randomY) < 0.5) {
