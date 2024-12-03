@@ -54,6 +54,10 @@ class Jeu extends Phaser.Scene {
       frameWidth: 32,
       frameHeight: 32,
     });
+    this.load.spritesheet("phase2", "./assets/images/enemy/Nautolan/Weapons/PNGs/Nautolan_Ship_Dreadnought_Weapons.png", {
+      frameWidth: 128,
+      frameHeight: 128,
+    });
     this.load.audio("shootSound", "./assets/audios/sfx/sfx_tir_player.wav");
     this.load.audio("enemyHit", "./assets/audios/sfx/enemy_Hit.wav");
     this.load.audio("bossMusic", "./assets/audios/music/boss_music.mp3");
@@ -138,10 +142,11 @@ class Jeu extends Phaser.Scene {
     this.createAnimation("shoot", "launcher", 0, 11);
     this.createAnimation("bulletLauncher", "launcherBullet", 0, 3);
     this.createAnimation("enemyShooting", "enemyBullet", 0, 2);
-    this.createAnimation("enemyDead", "enemyDeath", 0, 11);
+    this.createAnimation("enemyDead", "enemyDeath", 0, 11, 8, 0);
     this.createAnimation("explode", "explosion", 0, 6, 8, 0);
     this.createAnimation("iFrame", "invincibleFrame", 0, 9);
     this.createAnimation("enemyCircuitAnim", "enemyCircuit", 0, 14);
+    this.createAnimation("phase2Anim", "phase2", 0, 30, 10, 0);
     //------------------------------------------------------------------------------------------bullet------------------------------------------------------------------------------------------
     this.launcherBullets = this.physics.add.group({
       defaultKey: "bullet",
@@ -180,13 +185,23 @@ class Jeu extends Phaser.Scene {
       },
     });
     this.enemyFiringFaster = false;
-
+    this.enemy.secondPhase = false;
     //------------------------------------------------------------------------------------------Collisions balles------------------------------------------------------------------------------------------
+
     this.physics.add.overlap(this.enemy, this.launcherBullets, (enemy, bullet) => {
       // Check enemy health and item activation status
       if (enemy.pointsDeVie > 20 || (enemy.pointsDeVie <= 20 && enemyCircuitActive)) {
         // Enemy can take damage
         enemy.pointsDeVie -= 1;
+
+        if (!enemy.secondPhase && enemy.pointsDeVie == 20) {
+          enemy.secondPhase = true;
+          enemy.play("phase2Anim");
+          enemy.on("animationcomplete", () => {
+            enemy.setFrame(30);
+          });
+        }
+
         this.enemyHit.play();
         bullet.setActive(false);
         bullet.setVisible(false);
@@ -317,6 +332,8 @@ class Jeu extends Phaser.Scene {
         this.enemyCircuit.destroy();
       }
     });
+
+    //-----------------------------------------------------------------------------------------------------------Phase2Enemy-----------------------------------------------------------------------------------
   }
 
   resumeGame() {
