@@ -8,7 +8,7 @@ class Mode extends Phaser.Scene {
   preload() {
     this.load.image("normalBtn", "./assets/images/ui/Main_Menu/nomalBtn.png");
     this.load.image("cauchemarBtn", "./assets/images/ui/Main_Menu/cauchemarBtn.png");
-    this.load.image("closeBtn", "./assets/images/ui/Buttons/BTNs/Close_BTN.png");
+    this.load.image("closeBtn", "./assets/images/ui/Buttons/Close_BTN.png");
   }
 
   create() {

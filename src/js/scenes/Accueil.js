@@ -9,8 +9,8 @@ class Accueil extends Phaser.Scene {
     this.load.image("BG", "./assets/images/ui/Main_Menu/BG.png");
     this.load.image("startBtn", "./assets/images/ui/Main_Menu/Start_BTN.png");
     this.load.image("InfoBtn", "./assets/images/ui/Main_Menu/Info_BTN.png");
-    this.load.image("faqBtn", "./assets/images/ui/Buttons/BTNs/FAQ_BTN.png");
-    this.load.image("soundBtn", "./assets/images/ui/Buttons/BTNs/Sound_BTN.png");
+    this.load.image("faqBtn", "./assets/images/ui/Buttons/FAQ_BTN.png");
+    this.load.image("soundBtn", "./assets/images/ui/Buttons/Sound_BTN.png");
     this.load.image("soundBtnOff", "./assets/images/ui/Setting/Sound_BTN_OFF.png");
     this.load.image("logo", "./assets/images/ui/Logo.png");
     this.load.image("titre", "./assets/images/ui/Main_Menu/titre.png");

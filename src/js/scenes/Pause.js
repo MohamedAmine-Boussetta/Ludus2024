@@ -6,8 +6,8 @@ class Pause extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("mainMenu", "./assets/images/ui/Buttons/BTNs/Play_BTN.png");
-    this.load.image("replay", "./assets/images/ui/Buttons/BTNs/Replay_BTN.png");
+    this.load.image("mainMenu", "./assets/images/ui/Buttons/Play_BTN.png");
+    this.load.image("replay", "./assets/images/ui/Buttons/Replay_BTN.png");
   }
 
   create() {
@@ -36,9 +36,7 @@ class Pause extends Phaser.Scene {
       .setOrigin(0.5);
 
     //replay
-    let replay = this.add
-      .image(config.width / 2 + 50, config.height / 2, "replay")
-      .setScale(0.3);
+    let replay = this.add.image(config.width / 2 + 50, config.height / 2, "replay").setScale(0.3);
     hudContainer.add(replay);
 
     replay.setInteractive();

@@ -7,8 +7,8 @@ class Victoire extends Phaser.Scene {
 
   preload() {
     this.load.image("BG", "./assets/images/ui/Main_Menu/BG.png");
-    this.load.image("mainMenu", "./assets/images/ui/Buttons/BTNs/Play_BTN.png");
-    this.load.image("replay", "./assets/images/ui/Buttons/BTNs/Replay_BTN.png");
+    this.load.image("mainMenu", "./assets/images/ui/Buttons/Play_BTN.png");
+    this.load.image("replay", "./assets/images/ui/Buttons/Replay_BTN.png");
     this.load.image("victoire", "./assets/images/ui/You_Win/Victoire.png");
     this.load.audio("victoireSound", "./assets/audios/music/VictorySmall.mp3");
   }

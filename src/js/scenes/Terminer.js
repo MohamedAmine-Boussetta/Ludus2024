@@ -7,8 +7,8 @@ class Terminer extends Phaser.Scene {
 
   preload() {
     this.load.image("BG", "./assets/images/ui/Main_Menu/BG.png");
-    this.load.image("mainMenu", "./assets/images/ui/Buttons/BTNs/Play_BTN.png");
-    this.load.image("replay", "./assets/images/ui/Buttons/BTNs/Replay_BTN.png");
+    this.load.image("mainMenu", "./assets/images/ui/Buttons/Play_BTN.png");
+    this.load.image("replay", "./assets/images/ui/Buttons/Replay_BTN.png");
     this.load.image("perdu", "./assets/images/ui/You_Lose/Perdu.png");
     this.load.audio("defeatSound", "./assets/audios/music/Perdu.mp3");
   }
