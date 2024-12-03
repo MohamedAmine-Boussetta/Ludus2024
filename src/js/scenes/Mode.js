@@ -6,15 +6,9 @@ class Mode extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("normalBtn", "assets/images/ui/Main_Menu/nomalBtn.png");
-    this.load.image(
-      "cauchemarBtn",
-      "assets/images/ui/Main_Menu/cauchemarBtn.png"
-    );
-    this.load.image(
-      "closeBtn",
-      "./assets/images/ui/Buttons/BTNs/Close_BTN.png"
-    );
+    this.load.image("normalBtn", "./assets/images/ui/Main_Menu/nomalBtn.png");
+    this.load.image("cauchemarBtn", "./assets/images/ui/Main_Menu/cauchemarBtn.png");
+    this.load.image("closeBtn", "./assets/images/ui/Buttons/BTNs/Close_BTN.png");
   }
 
   create() {
@@ -25,23 +19,15 @@ class Mode extends Phaser.Scene {
     const hudContainer = this.add.container(0, 0).setDepth(1);
 
     //BG
-    let bg = this.add
-      .image(config.width / 2, config.height / 2, "BG")
-      .setAngle(90);
+    let bg = this.add.image(config.width / 2, config.height / 2, "BG").setAngle(90);
 
     //normal
-    let normalMode = this.add.image(
-      config.width / 2,
-      config.height / 2 - 100,
-      "normalBtn"
-    );
+    let normalMode = this.add.image(config.width / 2, config.height / 2 - 100, "normalBtn");
     hudContainer.add(normalMode);
     normalMode.setInteractive();
 
     //cauchemar
-    this.nightmareMode = this.add
-      .image(config.width / 2, config.height / 2 + 100, "cauchemarBtn")
-      .setTint(0x808080);
+    this.nightmareMode = this.add.image(config.width / 2, config.height / 2 + 100, "cauchemarBtn").setTint(0x808080);
     hudContainer.add(this.nightmareMode);
     this.nightmareMode.setInteractive();
 

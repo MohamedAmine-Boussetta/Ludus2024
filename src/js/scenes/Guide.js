@@ -1,19 +1,14 @@
 class Guide extends Phaser.Scene {
   constructor() {
     super({
-      key: "guide"
+      key: "guide",
     });
   }
 
   preload() {
-    this.load.image(
-      "closeBtn",
-      "./assets/images/ui/Buttons/BTNs/Close_BTN.png"
-    );
-    this.load.image(
-      this.load.image("commentJouer", "assets/images/ui/Main_Menu/Comment jouer.png")
-    );
-    this.load.image("bg", "assets/images/background/bg.png")
+    this.load.image("closeBtn", "./assets/images/ui/Buttons/BTNs/Close_BTN.png");
+    this.load.image(this.load.image("commentJouer", "./assets/images/ui/Main_Menu/Comment jouer.png"));
+    this.load.image("bg", "./assets/images/background/bg.png");
   }
 
   create() {
@@ -21,7 +16,7 @@ class Guide extends Phaser.Scene {
     const hudContainer = this.add.container(0, 0).setDepth(1);
 
     //BG
-    let bg = this.add.image(config.width / 2, config.height / 2, "bg").setScale(0.7)
+    let bg = this.add.image(config.width / 2, config.height / 2, "bg").setScale(0.7);
 
     //closeBtn
     let closeBtn = this.add

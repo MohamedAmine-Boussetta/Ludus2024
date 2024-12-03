@@ -12,52 +12,52 @@ class Jeu extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("espace", "assets/images/ui/Main_Menu/starBg.webp");
-    this.load.image("ship", "assets/images/characters/Main_Ship/Main_Ship_Bases/PNGs/Main_Ship_Full_health.png");
-    this.load.image("shipDamage1", "assets/images/characters/Main_Ship/Main_Ship_Bases/PNGs/Main_Ship_Slight_damage.png");
-    this.load.image("shipDamage2", "assets/images/characters/Main_Ship/Main_Ship_Bases/PNGs/Main_Ship_Damaged.png");
-    this.load.image("shipDamage3", "assets/images/characters/Main_Ship/Main_Ship_Bases/PNGs/Main_Ship_Very_damaged.png");
-    this.load.image("engine", "assets/images/characters/Main_Ship/Main_Ship_Engines/PNGs/Main_Ship_Engines_Engine.png");
-    this.load.image("enemy", "assets/images/enemy/Nautolan/Designs_Base/PNGs/Nautolan_Ship_Dreadnought.png");
-    this.load.image("asteroid", "assets/images/prop/Asteroids/PNGs/Asteroid 01_Base.png");
-    this.load.spritesheet("engineStart", "assets/images/characters/Main_Ship/Main_Ship_Engine_Effects/PNGs/Main_Ship_Engines_Spritesheet.png", {
+    this.load.image("espace", "./assets/images/ui/Main_Menu/starBg.webp");
+    this.load.image("ship", "./assets/images/characters/Main_Ship/Main_Ship_Bases/PNGs/Main_Ship_Full_health.png");
+    this.load.image("shipDamage1", "./assets/images/characters/Main_Ship/Main_Ship_Bases/PNGs/Main_Ship_Slight_damage.png");
+    this.load.image("shipDamage2", "./assets/images/characters/Main_Ship/Main_Ship_Bases/PNGs/Main_Ship_Damaged.png");
+    this.load.image("shipDamage3", "./assets/images/characters/Main_Ship/Main_Ship_Bases/PNGs/Main_Ship_Very_damaged.png");
+    this.load.image("engine", "./assets/images/characters/Main_Ship/Main_Ship_Engines/PNGs/Main_Ship_Engines_Engine.png");
+    this.load.image("enemy", "./assets/images/enemy/Nautolan/Designs_Base/PNGs/Nautolan_Ship_Dreadnought.png");
+    this.load.image("asteroid", "./assets/images/prop/Asteroids/PNGs/Asteroid 01_Base.png");
+    this.load.spritesheet("engineStart", "./assets/images/characters/Main_Ship/Main_Ship_Engine_Effects/PNGs/Main_Ship_Engines_Spritesheet.png", {
       frameWidth: 48,
       frameHeight: 48,
     });
-    this.load.spritesheet("launcher", "assets/images/characters/Main_Ship/Main_Ship_Weapons/PNGs/Main_Ship_Weapons_Big_Space_Gun.png", {
+    this.load.spritesheet("launcher", "./assets/images/characters/Main_Ship/Main_Ship_Weapons/PNGs/Main_Ship_Weapons_Big_Space_Gun.png", {
       frameWidth: 48,
       frameHeight: 48,
     });
-    this.load.spritesheet("launcherBullet", "assets/images/characters/Main_Ship/Main_Ship_Weapons_Projectiles/PNGs/Main_ship_weapon_Projectile_Auto_cannon_bullet.png", {
+    this.load.spritesheet("launcherBullet", "./assets/images/characters/Main_Ship/Main_Ship_Weapons_Projectiles/PNGs/Main_ship_weapon_Projectile_Auto_cannon_bullet.png", {
       frameWidth: 32,
       frameHeight: 32,
     });
-    this.load.spritesheet("enemyBullet", "assets/images/enemy/Nautolan/Weapon_Effects_Projectiles/PNGs/Nautolan_Rocket.png", {
+    this.load.spritesheet("enemyBullet", "./assets/images/enemy/Nautolan/Weapon_Effects_Projectiles/PNGs/Nautolan_Rocket.png", {
       frameWidth: 16,
       frameHeight: 32,
     });
-    this.load.spritesheet("enemyDeath", "assets/images/enemy/Nautolan/Destruction/PNGs/Nautolan_Ship_Dreadnought.png", {
+    this.load.spritesheet("enemyDeath", "./assets/images/enemy/Nautolan/Destruction/PNGs/Nautolan_Ship_Dreadnought.png", {
       frameWidth: 128,
       frameHeight: 128,
     });
 
-    this.load.spritesheet("explosion", "assets/images/fx/Explosions/explosion-1-g/spritesheet.png", {
+    this.load.spritesheet("explosion", "./assets/images/fx/Explosions/explosion-1-g/spritesheet.png", {
       frameWidth: 48,
       frameHeight: 48,
     });
-    this.load.spritesheet("invincibleFrame", "assets/images/characters/Main_Ship/Main_Ship_Shields/PNGs/Main_Ship_Shields_Invincibility_Shield.png", {
+    this.load.spritesheet("invincibleFrame", "./assets/images/characters/Main_Ship/Main_Ship_Shields/PNGs/Main_Ship_Shields_Invincibility_Shield.png", {
       frameWidth: 64,
       frameHeight: 64,
     });
 
-    this.load.spritesheet("enemyCircuit", "assets/images/prop/Foozle_2DS0016_Void_PickupsPack/Shield_Generators/PNGs/Pickup_Icon_Shield_Generator_Front_Shield.png", {
+    this.load.spritesheet("enemyCircuit", "./assets/images/prop/Foozle_2DS0016_Void_PickupsPack/Shield_Generators/PNGs/Pickup_Icon_Shield_Generator_Front_Shield.png", {
       frameWidth: 32,
       frameHeight: 32,
     });
-    this.load.audio("shootSound", "assets/audios/sfx/sfx_tir_player.wav");
-    this.load.audio("enemyHit", "assets/audios/sfx/enemy_Hit.wav");
-    this.load.audio("bossMusic", "assets/audios/music/boss_music.mp3");
-    this.load.audio("shootSound2", "assets/audios/sfx/sfx_tir_boss.wav");
+    this.load.audio("shootSound", "./assets/audios/sfx/sfx_tir_player.wav");
+    this.load.audio("enemyHit", "./assets/audios/sfx/enemy_Hit.wav");
+    this.load.audio("bossMusic", "./assets/audios/music/boss_music.mp3");
+    this.load.audio("shootSound2", "./assets/audios/sfx/sfx_tir_boss.wav");
   }
 
   create() {

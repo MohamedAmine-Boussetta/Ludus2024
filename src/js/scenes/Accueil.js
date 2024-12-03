@@ -11,11 +11,11 @@ class Accueil extends Phaser.Scene {
     this.load.image("InfoBtn", "./assets/images/ui/Main_Menu/Info_BTN.png");
     this.load.image("faqBtn", "./assets/images/ui/Buttons/BTNs/FAQ_BTN.png");
     this.load.image("soundBtn", "./assets/images/ui/Buttons/BTNs/Sound_BTN.png");
-    this.load.image("soundBtnOff", "assets/images/ui/Setting/Sound_BTN_OFF.png");
+    this.load.image("soundBtnOff", "./assets/images/ui/Setting/Sound_BTN_OFF.png");
     this.load.image("logo", "./assets/images/ui/Logo.png");
-    this.load.image("titre", "assets/images/ui/Main_Menu/titre.png");
-    this.load.image("reset", "assets/images/ui/Main_Menu/Reset.png");
-    this.load.audio("bgMusic", "assets/audios/music/music_menu.mp3");
+    this.load.image("titre", "./assets/images/ui/Main_Menu/titre.png");
+    this.load.image("reset", "./assets/images/ui/Main_Menu/Reset.png");
+    this.load.audio("bgMusic", "./assets/audios/music/music_menu.mp3");
   }
 
   create() {
@@ -29,16 +29,10 @@ class Accueil extends Phaser.Scene {
     const hudContainer = this.add.container(0, 0).setDepth(1);
 
     //BG
-    let bg = this.add
-      .image(config.width / 2, config.height / 2, "BG")
-      .setAngle(90);
+    let bg = this.add.image(config.width / 2, config.height / 2, "BG").setAngle(90);
 
     //Btn start
-    let startBtn = this.add.image(
-      config.width / 2,
-      config.height / 2 + 100,
-      "startBtn"
-    );
+    let startBtn = this.add.image(config.width / 2, config.height / 2 + 100, "startBtn");
     hudContainer.add(startBtn);
 
     //reset
@@ -46,12 +40,8 @@ class Accueil extends Phaser.Scene {
     hudContainer.add(resetBtn);
 
     //logo
-    let logo = this.add
-      .image(config.width / 2, config.height / 2 - 200, "logo")
-      .setScale(0.7);
-    let titre = this.add
-      .image(config.width / 2, config.height / 2 - 220, "titre")
-      .setScale(2);
+    let logo = this.add.image(config.width / 2, config.height / 2 - 200, "logo").setScale(0.7);
+    let titre = this.add.image(config.width / 2, config.height / 2 - 220, "titre").setScale(2);
 
     //Btn credits
     let creditsBtn = this.add
@@ -112,7 +102,7 @@ class Accueil extends Phaser.Scene {
     });
 
     resetBtn.on("pointerdown", () => {
-      localStorage.clear()
+      localStorage.clear();
     });
 
     this.musicPause = false;
