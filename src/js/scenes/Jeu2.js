@@ -1,15 +1,21 @@
-class Jeu2 extends Phaser.Scene {
+let pdvTxt = 10;
+let pdvCounter;
+this.bonusActive = false;
+this.flyspeed = 500;
+let enemyCircuitActive = false;
+
+class Jeu extends Phaser.Scene {
   constructor() {
     super({
-      key: "jeu2",
+      key: "jeu",
     });
   }
 
   preload() {
     this.load.image("espace", "./assets/images/ui/Main_Menu/starBg.webp");
     this.load.image("ship", "./assets/images/characters/Main_Ship/Main_Ship_Bases/Main_Ship_Full_health.png");
-    this.load.image("shipDamage1", "./assets/images/characters/Main_Ship/Main_Ship_Bases/PNGs/Main_Ship_Slight_damage.png");
-    this.load.image("shipDamage2", "./assets/images/characters/Main_Ship/Main_Ship_Bases/Main_Ship_Slight_damage.png");
+    this.load.image("shipDamage1", "./assets/images/characters/Main_Ship/Main_Ship_Bases/Main_Ship_Slight_damage.png");
+    this.load.image("shipDamage2", "./assets/images/characters/Main_Ship/Main_Ship_Bases/Main_Ship_Damaged.png");
     this.load.image("shipDamage3", "./assets/images/characters/Main_Ship/Main_Ship_Bases/Main_Ship_Very_damaged.png");
     this.load.image("engine", "./assets/images/characters/Main_Ship/Main_Ship_Engines/Main_Ship_Engines_Engine.png");
     this.load.image("enemy", "./assets/images/enemy/Nautolan/Designs_Base/Nautolan_Ship_Dreadnought.png");
@@ -64,30 +70,10 @@ class Jeu2 extends Phaser.Scene {
     this.bonusActive = false;
     this.flyspeed = 500;
     //----------------------------------------------------------------------------------------Audio---------------------------------------------------------------
-    this.shootSound = this.sound.add("shootSound", {
-      mute: false,
-      volume: 0.5,
-      rate: 1,
-      delay: 0,
-    });
-    this.shootSound2 = this.sound.add("shootSound2", {
-      mute: false,
-      volume: 0.5,
-      rate: 1,
-      delay: 0,
-    });
-    this.enemyHit = this.sound.add("enemyHit", {
-      mute: false,
-      volume: 0.5,
-      rate: 1,
-      delay: 0,
-    });
-    this.bossMusic = this.sound.add("bossMusic", {
-      mute: false,
-      volume: 0.5,
-      rate: 1,
-      delay: 0,
-    });
+    this.shootSound = this.createSound("shootSound");
+    this.shootSound2 = this.createSound("shootSound2");
+    this.enemyHit = this.createSound("enemyHit");
+    this.bossMusic = this.createSound("bossMusic");
     this.bossMusic.play();
 
     //------------------------------------------------------------------------------------------BG------------------------------------------------------------------------------------------
@@ -150,90 +136,17 @@ class Jeu2 extends Phaser.Scene {
     this.shield.body.setSize(30, 32).setOffset(17, 18);
 
     //------------------------------------------------------------------------------------------animations------------------------------------------------------------------------------------------
-    this.anims.create({
-      key: "idle",
-      frames: this.anims.generateFrameNumbers("engineStart", {
-        start: 0,
-        end: 2,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: "fly",
-      frames: this.anims.generateFrameNumbers("engineStart", {
-        start: 4,
-        end: 7,
-      }),
-      frameRate: 8,
-      repeat: -1,
-    });
-
+    this.createAnimation("idle", "engineStart", 0, 2, 10);
+    this.createAnimation("fly", "engineStart", 0, 7);
     this.engineStart.anims.play("idle");
-
-    this.anims.create({
-      key: "shoot",
-      frames: this.anims.generateFrameNumbers("launcher", {
-        start: 0,
-        end: 11,
-      }),
-      frameRate: 8,
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: "bulletLauncher",
-      frames: this.anims.generateFrameNumbers("launcherBullet", {
-        start: 0,
-        end: 3,
-      }),
-      frameRate: 8,
-    });
-    this.anims.create({
-      key: "enemyShooting",
-      frames: this.anims.generateFrameNames("enemyBullet", {
-        start: 0,
-        end: 5,
-      }),
-      frameRate: 8,
-    });
-    this.anims.create({
-      key: "enemyDead",
-      frames: this.anims.generateFrameNames("enemyDeath", {
-        start: 0,
-        end: 11,
-      }),
-      frameRate: 8,
-    });
-
-    this.anims.create({
-      key: "explode",
-      frames: this.anims.generateFrameNames("explosion", {
-        start: 0,
-        end: 6,
-      }),
-      frameRate: 8,
-    });
-    this.anims.create({
-      key: "iFrame",
-      frames: this.anims.generateFrameNames("invincibleFrame", {
-        start: 0,
-        end: 9,
-      }),
-      frameRate: 8,
-    });
-
-    this.anims.create({
-      key: "enemyCircuitAnim",
-      frames: this.anims.generateFrameNames("enemyCircuit", {
-        start: 0,
-        end: 14,
-      }),
-      frameRate: 8,
-      repeat: -1,
-    });
-
+    this.createAnimation("shoot", "launcher", 0, 11);
+    this.createAnimation("bulletLauncher", "launcherBullet", 0, 3);
+    this.createAnimation("enemyShooting", "enemyBullet", 0, 2);
+    this.createAnimation("enemyDead", "enemyDeath", 0, 11, 8, 0);
+    this.createAnimation("explode", "explosion", 0, 6, 8, 0);
+    this.createAnimation("iFrame", "invincibleFrame", 0, 9);
+    this.createAnimation("enemyCircuitAnim", "enemyCircuit", 0, 14);
+    this.createAnimation("phase2Anim", "phase2", 0, 30, 10, 0);
     //------------------------------------------------------------------------------------------bullet------------------------------------------------------------------------------------------
     this.launcherBullets = this.physics.add.group({
       defaultKey: "bullet",
@@ -272,13 +185,23 @@ class Jeu2 extends Phaser.Scene {
       },
     });
     this.enemyFiringFaster = false;
-
+    this.enemy.secondPhase = false;
     //------------------------------------------------------------------------------------------Collisions balles------------------------------------------------------------------------------------------
+
     this.physics.add.overlap(this.enemy, this.launcherBullets, (enemy, bullet) => {
       // Check enemy health and item activation status
       if (enemy.pointsDeVie > 20 || (enemy.pointsDeVie <= 20 && enemyCircuitActive)) {
         // Enemy can take damage
         enemy.pointsDeVie -= 1;
+
+        if (!enemy.secondPhase && enemy.pointsDeVie == 20) {
+          enemy.secondPhase = true;
+          enemy.play("phase2Anim");
+          enemy.on("animationcomplete", () => {
+            enemy.setFrame(30);
+          });
+        }
+
         this.enemyHit.play();
         bullet.setActive(false);
         bullet.setVisible(false);
@@ -324,11 +247,10 @@ class Jeu2 extends Phaser.Scene {
     });
 
     //------------------------------------------------------------------------------------------asteroid------------------------------------------------------------------------------------------
-    for (let i = 0; i < 1 + wins; i++) {
-      this.asteroid = this.physics.add.image(config.width / 2, config.height / 2, "asteroid");
-      this.asteroid.setSize(30, 30);
-      this.moveAsteroid(this.asteroid);
-    }
+    const asteroid = this.physics.add.image(config.width / 2, config.height / 2, "asteroid");
+    asteroid.setSize(30, 30);
+
+    this.moveAsteroid(asteroid);
 
     //------------------------------------------------------------------------------------------World Border------------------------------------------------------------------------------------------
     this.topBarrier = this.add.rectangle(config.width / 2, config.height / 2 - 370, 1280, 20, 0xff0000).setVisible(false);
@@ -349,7 +271,7 @@ class Jeu2 extends Phaser.Scene {
       pdvTxt--;
       pdvCounter.setText("PV: " + pdvTxt);
     });
-    this.physics.add.overlap(this.ship, this.asteroid, (ship, aseroid) => {
+    this.physics.add.overlap(this.ship, asteroid, (ship, aseroid) => {
       if (!this.player.invincible) {
         ship.pointsDeVie -= 1;
         pdvTxt--;
@@ -370,13 +292,13 @@ class Jeu2 extends Phaser.Scene {
 
     //--------------------------------------------------------------------------------------------------Timer------------------------------------------------------------------------------------
     this.timerText = this.add
-      .text(config.width / 2, 20, "Temps restant: 1:30", {
+      .text(config.width / 2, 20, "Temps restant: 2:00", {
         font: "32px Arial",
         fill: "#FFFFFF",
       })
       .setOrigin(0.5);
 
-    this.timeLeft = 90;
+    this.timeLeft = 120;
 
     this.timeEvent = this.time.addEvent({
       delay: 1000,
@@ -399,7 +321,7 @@ class Jeu2 extends Phaser.Scene {
     this.enemyCircuit = this.physics.add.sprite(config.width / 2, config.height / 2, "enemyCircuit", 0).setVisible(false);
     let canPickUp = false;
 
-    this.time.delayedCall(15000, () => {
+    this.time.delayedCall(8000, () => {
       canPickUp = true;
     });
     this.physics.add.overlap(this.ship, this.enemyCircuit, (ship, enemyCircuit) => {
@@ -410,6 +332,8 @@ class Jeu2 extends Phaser.Scene {
         this.enemyCircuit.destroy();
       }
     });
+
+    //-----------------------------------------------------------------------------------------------------------Phase2Enemy-----------------------------------------------------------------------------------
   }
 
   resumeGame() {
@@ -531,8 +455,8 @@ class Jeu2 extends Phaser.Scene {
     if (this.enemy.pointsDeVie !== 0) {
       if (this.enemy.pointsDeVie >= 21 && this.enemy.pointsDeVie <= 40) {
         //------------------------------------------------------------------------------------------Mouvement aléatoire plus lent------------------------------------------------------------------------------------------
-        this.enemy.x += (this.randomX - this.enemy.x) * 0.03;
-        this.enemy.y += (this.randomY - this.enemy.y) * 0.03;
+        this.enemy.x += (this.randomX - this.enemy.x) * 0.02;
+        this.enemy.y += (this.randomY - this.enemy.y) * 0.02;
 
         //------------------------------------------------------------------------------------------Régénérer de nouvelles positions aléatoires------------------------------------------------------------------------------------------
         if (Phaser.Math.Distance.Between(this.enemy.x, this.enemy.y, this.randomX, this.randomY) < 0.6) {
@@ -561,7 +485,7 @@ class Jeu2 extends Phaser.Scene {
         if (this.enemyFiring) {
           this.enemyFiring.remove();
         }
-        this.enemyBullets.maxSize = 5;
+        this.enemyBullets.maxSize = 3;
 
         this.enemyFiring = this.time.addEvent({
           delay: 400,
@@ -599,5 +523,26 @@ class Jeu2 extends Phaser.Scene {
       this.scene.start("perdu");
       this.bossMusic.stop();
     }
+  }
+
+  createAnimation(key, spritesheet, firstFrame, lastFrame, frameRate = 8, loop = -1) {
+    this.anims.create({
+      key: key,
+      frames: this.anims.generateFrameNumbers(spritesheet, {
+        start: firstFrame,
+        end: lastFrame,
+      }),
+      frameRate: frameRate,
+      repeat: loop,
+    });
+  }
+
+  createSound(name, volume = 0.5, rate = 1, delay = 0, mute = false) {
+    return this.sound.add(name, {
+      mute: mute,
+      volume: volume,
+      rate: rate,
+      delay: delay,
+    });
   }
 }

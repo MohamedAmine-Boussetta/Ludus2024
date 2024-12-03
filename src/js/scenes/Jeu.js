@@ -14,8 +14,8 @@ class Jeu extends Phaser.Scene {
   preload() {
     this.load.image("espace", "./assets/images/ui/Main_Menu/starBg.webp");
     this.load.image("ship", "./assets/images/characters/Main_Ship/Main_Ship_Bases/Main_Ship_Full_health.png");
-    this.load.image("shipDamage1", "./assets/images/characters/Main_Ship/Main_Ship_Bases/PNGs/Main_Ship_Slight_damage.png");
-    this.load.image("shipDamage2", "./assets/images/characters/Main_Ship/Main_Ship_Bases/Main_Ship_Slight_damage.png");
+    this.load.image("shipDamage1", "./assets/images/characters/Main_Ship/Main_Ship_Bases/Main_Ship_Slight_damage.png");
+    this.load.image("shipDamage2", "./assets/images/characters/Main_Ship/Main_Ship_Bases/Main_Ship_Damaged.png");
     this.load.image("shipDamage3", "./assets/images/characters/Main_Ship/Main_Ship_Bases/Main_Ship_Very_damaged.png");
     this.load.image("engine", "./assets/images/characters/Main_Ship/Main_Ship_Engines/Main_Ship_Engines_Engine.png");
     this.load.image("enemy", "./assets/images/enemy/Nautolan/Designs_Base/Nautolan_Ship_Dreadnought.png");
